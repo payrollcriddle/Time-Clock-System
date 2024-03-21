@@ -28,6 +28,7 @@ loginForm.addEventListener('submit', function(event) {
     loginSection.style.display = 'none';
     dashboardSection.style.display = 'block';
     employeeNameElement.textContent = username;
+    updateCurrentTime(); // Update current time immediately after login
   } else {
     // Invalid login
     alert('Invalid username or password');
@@ -46,15 +47,49 @@ setInterval(updateCurrentTime, 1000);
 // Event listener for time zone selection change
 timeZoneSelect.addEventListener('change', updateCurrentTime);
 
-// Event listeners for time entry buttons
+// Function to create a time entry
+function createTimeEntry(text) {
+  const currentTime = new Date().toLocaleString('en-US', { timeZone: timeZoneSelect.value });
+  const timeEntry = document.createElement('div');
+  timeEntry.className = 'time-entry';
+  timeEntry.textContent = `${text}: ${currentTime}`;
+  timeEntriesContainer.appendChild(timeEntry);
+}
+
+// Event listener for clock-in button click
 clockInButton.addEventListener('click', function() {
-  // ...
+  createTimeEntry('Clocked In');
 });
 
-// ...
+// Event listener for clock-out button click
+clockOutButton.addEventListener('click', function() {
+  createTimeEntry('Clocked Out');
+});
 
+// Event listener for start break button click
+startBreakButton.addEventListener('click', function() {
+  createTimeEntry('Break Started');
+});
+
+// Event listener for end break button click
+endBreakButton.addEventListener('click', function() {
+  createTimeEntry('Break Ended');
+});
+
+// Event listener for start lunch button click
+startLunchButton.addEventListener('click', function() {
+  createTimeEntry('Lunch Started');
+});
+
+// Event listener for end lunch button click
+endLunchButton.addEventListener('click', function() {
+  createTimeEntry('Lunch Ended');
+});
+
+// Event listener for logout button click
 logoutButton.addEventListener('click', function() {
   // Perform logout logic
   loginSection.style.display = 'block';
   dashboardSection.style.display = 'none';
+  timeEntriesContainer.innerHTML = ''; // Clear time entries
 });
