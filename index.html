@@ -24,17 +24,30 @@
     </section>
 
     <section id="dashboard-section" style="display: none;">
-      <!-- Dashboard content remains the same -->
+      <h2>Dashboard</h2>
+      <p>Welcome, <span id="employee-name"></span>!</p>
+      <p>Current Time: <span id="current-time"></span></p>
+      <select id="time-zone-select">
+        <option value="UTC">UTC</option>
+        <option value="America/New_York">Eastern Time (US & Canada)</option>
+        <option value="America/Chicago">Central Time (US & Canada)</option>
+        <option value="America/Denver">Mountain Time (US & Canada)</option>
+        <option value="America/Los_Angeles">Pacific Time (US & Canada)</option>
+      </select>
+      <button id="clock-in-btn">Clock In</button>
+      <button id="clock-out-btn">Clock Out</button>
+      <button id="start-break-btn">Start Break</button>
+      <button id="end-break-btn">End Break</button>
+      <button id="start-lunch-btn">Start Lunch</button>
+      <button id="end-lunch-btn">End Lunch</button>
+      <button id="logout-btn">Logout</button>
+      <div id="time-entries"></div>
     </section>
   </main>
 
   <footer>
     <p>&copy; 2023 Time Clock System. All rights reserved.</p>
   </footer>
-
-  <script src="script.js"></script>
-</body>
-</html>
 
   <script src="script.js"></script>
 </body>
