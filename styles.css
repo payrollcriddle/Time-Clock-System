@@ -46,3 +46,12 @@ footer {
   text-align: center;
   margin-top: 20px;
 }
+/* Existing styles remain the same */
+
+#time-entries {
+  margin-top: 20px;
+}
+
+.time-entry {
+  margin-bottom: 10px;
+}
