@@ -15,9 +15,34 @@ const employeeSection = document.getElementById('employee-section');
 const supervisorSection = document.getElementById('supervisor-section');
 // Get other necessary DOM elements
 
-// Event listeners
-loginForm.addEventListener('submit', login);
-// Add other event listeners for various actions
+// Event listener for login form submission
+loginForm.addEventListener('submit', event => {
+  event.preventDefault();
+
+  const username = document.getElementById('username').value;
+  const password = document.getElementById('password').value;
+
+  const userRole = login(username, password);
+
+  if (userRole) {
+    // Hide the login section
+    loginSection.style.display = 'none';
+
+    // Display the appropriate dashboard based on user role
+    if (userRole === 'admin') {
+      adminSection.style.display = 'block';
+    } else if (userRole === 'supervisor') {
+      supervisorSection.style.display = 'block';
+    } else if (userRole === 'employee') {
+      employeeSection.style.display = 'block';
+    }
+
+    // Clear the login form
+    loginForm.reset();
+  } else {
+    alert('Invalid username or password');
+  }
+});
 
 // Function to render employee table
 function renderEmployeeTable() {
