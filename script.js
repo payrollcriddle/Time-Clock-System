@@ -29,6 +29,15 @@ let employees = [  {
     department: 'Administration',
     employeeId: '1001',
     accessLevel: 'admin'
+    },
+  {
+    name: 'Jane Smith',
+    username: 'janesmith',
+    password: 'password456',
+    location: 'Branch B',
+    department: 'Marketing',
+    employeeId: '1003',
+    accessLevel: 'supervisor'
   }
 ];
 
