@@ -15,92 +15,8 @@
     </form>
   </section>
 
-  <!-- Admin Dashboard -->
-  <section id="admin-section" style="display: none;">
-    <h2>Admin Dashboard</h2>
-    
-    <!-- Employee Management -->
-    <h3>Employee Management</h3>
-    <form id="employee-form">
-      <input type="text" id="employee-name" placeholder="Name" required>
-      <input type="text" id="employee-username" placeholder="Username" required>
-      <input type="password" id="employee-password" placeholder="Password" required>
-      <input type="text" id="employee-id" placeholder="Employee ID" required>
-      <select id="employee-role" required>
-        <option value="">Select Role</option>
-        <option value="employee">Employee</option>
-        <option value="supervisor">Supervisor</option>
-        <option value="admin">Admin</option>
-      </select>
-      <select id="employee-state" required>
-        <option value="">Select State</option>
-        <option value="California">California</option>
-        <option value="Oregon">Oregon</option>
-        <!-- Add more states -->
-      </select>
-      <button type="submit">Add Employee</button>
-    </form>
-    <table id="employee-table">
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Username</th>
-          <th>Employee ID</th>
-          <th>Role</th>
-          <th>State</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- Employee rows will be dynamically added -->
-      </tbody>
-    </table>
-    
-    <!-- Activity Type Management -->
-    <h3>Activity Type Management</h3>
-    <form id="activity-type-form">
-      <input type="text" id="activity-type-name" placeholder="Activity Type" required>
-      <button type="submit">Add Activity Type</button>
-    </form>
-    <ul id="activity-type-list">
-      <!-- Activity types will be dynamically added -->
-    </ul>
-    
-    <!-- Job Management -->
-    <h3>Job Management</h3>
-    <form id="job-form">
-      <input type="text" id="job-name" placeholder="Job Name" required>
-      <button type="submit">Add Job</button>
-    </form>
-    <ul id="job-list">
-      <!-- Jobs will be dynamically added -->
-    </ul>
-  </section>
-
-  <!-- Supervisor Dashboard -->
-  <section id="supervisor-section" style="display: none;">
-    <h2>Supervisor Dashboard</h2>
-    
-    <!-- Timecard Review and Approval -->
-    <h3>Timecard Review and Approval</h3>
-    <table id="timecard-review-table">
-      <thead>
-        <tr>
-          <th>Employee</th>
-          <th>Start Date</th>
-          <th>End Date</th>
-          <th>Status</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- Timecard rows will be dynamically added -->
-      </tbody>
-    </table>
-  </section>
-
   <!-- Employee Dashboard -->
-  <section id="employee-section" style="display: none;">
+  <section id="employee-dashboard" style="display: none;">
     <h2>Employee Dashboard</h2>
     <p>Welcome, <span id="employee-name"></span>!</p>
     
@@ -108,11 +24,9 @@
     <div id="clock-inout">
       <select id="job-select" required>
         <option value="">Select Job</option>
-        <!-- Jobs will be dynamically added -->
       </select>
       <select id="activity-type-select" required>
         <option value="">Select Activity Type</option>
-        <!-- Activity types will be dynamically added -->
       </select>
       <button id="clock-in-btn">Clock In</button>
       <button id="clock-out-btn">Clock Out</button>
@@ -132,9 +46,7 @@
             <th>Duration</th>
           </tr>
         </thead>
-        <tbody>
-          <!-- Timecard rows will be dynamically added -->
-        </tbody>
+        <tbody></tbody>
       </table>
     </div>
     
@@ -150,9 +62,7 @@
             <th>Double Time Hours</th>
           </tr>
         </thead>
-        <tbody>
-          <!-- Daily hours rows will be dynamically added -->
-        </tbody>
+        <tbody></tbody>
       </table>
     </div>
     
@@ -168,9 +78,7 @@
             <th>Double Time Hours</th>
           </tr>
         </thead>
-        <tbody>
-          <!-- Weekly hours rows will be dynamically added -->
-        </tbody>
+        <tbody></tbody>
       </table>
     </div>
     
@@ -191,6 +99,87 @@
       <button id="confirm-submission-btn">Confirm</button>
       <button id="cancel-submission-btn">Cancel</button>
     </div>
+  </section>
+
+  <!-- Supervisor Dashboard -->
+  <section id="supervisor-dashboard" style="display: none;">
+    <h2>Supervisor Dashboard</h2>
+    
+    <!-- Timecard Review and Approval -->
+    <h3>Timecard Review and Approval</h3>
+    <table id="timecard-review-table">
+      <thead>
+        <tr>
+          <th>Employee</th>
+          <th>Start Date</th>
+          <th>End Date</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </section>
+
+  <!-- Admin Dashboard -->
+  <section id="admin-dashboard" style="display: none;">
+    <h2>Admin Dashboard</h2>
+    
+    <!-- Employee Management -->
+    <h3>Employee Management</h3>
+    <form id="employee-form">
+      <input type="text" id="employee-name" placeholder="Name" required>
+      <input type="text" id="employee-username" placeholder="Username" required>
+      <input type="password" id="employee-password" placeholder="Password" required>
+      <input type="text" id="employee-id" placeholder="Employee ID" required>
+      <select id="employee-role" required>
+        <option value="">Select Role</option>
+        <option value="employee">Employee</option>
+        <option value="supervisor">Supervisor</option>
+        <option value="admin">Admin</option>
+      </select>
+      <select id="employee-state" required>
+        <option value="">Select State</option>
+        <option value="California">California</option>
+        <option value="Oregon">Oregon</option>
+        <option value="Washington">Washington</option>
+        <option value="Nevada">Nevada</option>
+        <option value="Idaho">Idaho</option>
+        <option value="Montana">Montana</option>
+        <option value="Wyoming">Wyoming</option>
+        <option value="Colorado">Colorado</option>
+      </select>
+      <button type="submit">Add Employee</button>
+    </form>
+    <table id="employee-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Username</th>
+          <th>Employee ID</th>
+          <th>Role</th>
+          <th>State</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+    
+    <!-- Activity Type Management -->
+    <h3>Activity Type Management</h3>
+    <form id="activity-type-form">
+      <input type="text" id="activity-type-name" placeholder="Activity Type" required>
+      <button type="submit">Add Activity Type</button>
+    </form>
+    <ul id="activity-type-list"></ul>
+    
+    <!-- Job Management -->
+    <h3>Job Management</h3>
+    <form id="job-form">
+      <input type="text" id="job-name" placeholder="Job Name" required>
+      <button type="submit">Add Job</button>
+    </form>
+    <ul id="job-list"></ul>
   </section>
 
   <script type="module" src="app.js"></script>
