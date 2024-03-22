@@ -1,12 +1,14 @@
+// auth.js
+
+// Simulate user data retrieval from a database or API
+const users = [
+  { id: 1, username: 'employee1', password: 'password1', role: 'employee' },
+  { id: 2, username: 'admin1', password: 'password2', role: 'admin' },
+  { id: 3, username: 'supervisor1', password: 'password3', role: 'supervisor' },
+];
+
 // Function to handle user login
 export function login(username, password) {
-  // Simulate user data retrieval from a database or API
-  const users = [
-    { id: 1, username: 'employee1', password: 'password1', role: 'employee' },
-    { id: 2, username: 'admin1', password: 'password2', role: 'admin' },
-    { id: 3, username: 'supervisor1', password: 'password3', role: 'supervisor' },
-  ];
-
   // Find the user with the provided username and password
   const user = users.find(user => user.username === username && user.password === password);
 
