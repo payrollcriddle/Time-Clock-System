@@ -93,3 +93,41 @@ logoutButton.addEventListener('click', function() {
   dashboardSection.style.display = 'none';
   timeEntriesContainer.innerHTML = ''; // Clear time entries
 });
+// Add event listeners and functions for new features
+
+// Employee comments
+const commentInput = document.getElementById('comment-input');
+function saveComment() {
+  const comment = commentInput.value;
+  // Save the comment with the time entry
+}
+
+// Work type selection
+const workTypeSelect = document.getElementById('work-type-select');
+function saveWorkType() {
+  const workType = workTypeSelect.value;
+  // Save the selected work type with the time entry
+}
+
+// Supervisor review and approval
+function reviewTimecard(timecardId) {
+  // Retrieve the timecard data based on the timecardId
+  // Display the timecard details for review
+  // Allow the supervisor to approve or reject the timecard
+}
+
+// Admin manage work types
+function addWorkType() {
+  // Add a new work type to the list
+}
+
+function deleteWorkType(workTypeId) {
+  // Remove a work type from the list
+}
+
+// Reporting
+function generateReport() {
+  // Retrieve the relevant timecard data based on filters
+  // Process the data and generate visual representations
+  // Display the report
+}
