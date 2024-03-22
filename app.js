@@ -1,19 +1,16 @@
-// Import necessary modules and functions
-import { login, logout } from './auth.js';
-import { addEmployee, updateEmployee, deleteEmployee, getEmployees } from './employeeManagement.js';
-import { addActivityType, deleteActivityType, getActivityTypes } from './activityTypeManagement.js';
-import { addJob, deleteJob, getJobs } from './jobManagement.js';
-import { clockIn, clockOut, getTimecard, submitTimecard, calculateDailyHours, calculateWeeklyHours } from './timecard.js';
-import { reviewTimecard, approveTimecard, rejectTimecard } from './timecardReview.js';
+// app.js
+
+import { login, logout, isAuthenticated, getUser } from './auth.js';
 import { calculateHours } from './hoursCalculation.js';
-import { sendTeamsNotification } from './teamsNotification.js';
+import mealPeriodPolicies from './mealPeriodPolicies.js';
+import sendTeamsNotification from './teamsNotification.js';
 
 // Get DOM elements
 const loginForm = document.getElementById('login-form');
-const adminSection = document.getElementById('admin-section');
-const employeeSection = document.getElementById('employee-section');
-const supervisorSection = document.getElementById('supervisor-section');
-// Get other necessary DOM elements
+const loginSection = document.getElementById('login-section');
+const employeeDashboard = document.getElementById('employee-dashboard');
+const supervisorDashboard = document.getElementById('supervisor-dashboard');
+const adminDashboard = document.getElementById('admin-dashboard');
 
 // Event listener for login form submission
 loginForm.addEventListener('submit', event => {
@@ -25,93 +22,105 @@ loginForm.addEventListener('submit', event => {
   const userRole = login(username, password);
 
   if (userRole) {
-    // Hide the login section
     loginSection.style.display = 'none';
 
-    // Display the appropriate dashboard based on user role
-    if (userRole === 'admin') {
-      adminSection.style.display = 'block';
+    if (userRole === 'employee') {
+      employeeDashboard.style.display = 'block';
+      renderEmployeeDashboard();
     } else if (userRole === 'supervisor') {
-      supervisorSection.style.display = 'block';
-    } else if (userRole === 'employee') {
-      employeeSection.style.display = 'block';
+      supervisorDashboard.style.display = 'block';
+      renderSupervisorDashboard();
+    } else if (userRole === 'admin') {
+      adminDashboard.style.display = 'block';
+      renderAdminDashboard();
     }
-
-    // Clear the login form
-    loginForm.reset();
   } else {
     alert('Invalid username or password');
   }
 });
 
-// Function to render employee table
-function renderEmployeeTable() {
-  const employees = getEmployees();
-  // Render employee table based on employee data
+// Function to render employee dashboard
+function renderEmployeeDashboard() {
+  const user = getUser();
+  // Display employee information
+  // Render timeclock, timecard, and other employee-specific features
+  // Example:
+  // document.getElementById('employee-name').textContent = user.name;
+  // ...
 }
 
-// Function to render activity type list
-function renderActivityTypeList() {
-  const activityTypes = getActivityTypes();
-  // Render activity type list based on activity type data
+// Function to render supervisor dashboard
+function renderSupervisorDashboard() {
+  const user = getUser();
+  // Display supervisor information
+  // Render timecard approval, employee management, and other supervisor-specific features
+  // Example:
+  // document.getElementById('supervisor-name').textContent = user.name;
+  // ...
 }
 
-// Function to render job list
-function renderJobList() {
-  const jobs = getJobs();
-  // Render job list based on job data
+// Function to render admin dashboard
+function renderAdminDashboard() {
+  const user = getUser();
+  // Display admin information
+  // Render user management, activity management, job management, and other admin-specific features
+  // Example:
+  // document.getElementById('admin-name').textContent = user.name;
+  // ...
 }
 
-// Function to render timecard table
-function renderTimecardTable() {
+// Function to handle clocking in
+function clockIn() {
+  const user = getUser();
+  const state = user.state;
+  const jobId = document.getElementById('job-select').value;
+  const activityId = document.getElementById('activity-select').value;
+
+  // Record clock-in entry with job and activity details
+  // ...
+
+  // Calculate meal period based on state policies
+  const mealPeriodPolicy = mealPeriodPolicies[state];
+  // Implement meal period logic based on the policy
+  // ...
+}
+
+// Function to handle clocking out
+function clockOut() {
+  const user = getUser();
+  const state = user.state;
+
+  // Record clock-out entry
+  // ...
+
+  // Calculate hours worked and apply state-specific regulations
+  const dailyHours = getDailyHours();
+  const weeklyHours = getWeeklyHours();
+  const hourlyRate = user.hourlyRate;
+
+  const calculatedHours = calculateHours(state, dailyHours, weeklyHours, hourlyRate);
+  // Update timecard with calculated hours
+  // ...
+}
+
+// Function to submit timecard
+function submitTimecard() {
+  const user = getUser();
   const timecard = getTimecard();
-  // Render timecard table based on timecard data
+
+  // Perform validation and submission logic
+  // ...
+
+  // Send notification to supervisor
+  const supervisor = getSupervisor(user);
+  const discrepancies = getDiscrepancies(timecard);
+  sendTeamsNotification(supervisor, user, timecard, discrepancies);
 }
 
-// Function to render daily hours table
-function renderDailyHoursTable() {
-  const dailyHours = calculateDailyHours();
-  // Render daily hours table based on daily hours data
-}
+// Event listeners for clock-in, clock-out, and timecard submission
+document.getElementById('clock-in-btn').addEventListener('click', clockIn);
+document.getElementById('clock-out-btn').addEventListener('click', clockOut);
+document.getElementById('submit-timecard-btn').addEventListener('click', submitTimecard);
 
-// Function to render weekly hours table
-function renderWeeklyHoursTable() {
-  const weeklyHours = calculateWeeklyHours();
-  // Render weekly hours table based on weekly hours data
-}
-
-// Function to handle meal period waiver
-function handleMealPeriodWaiver() {
-  const isMealPeriodWaived = document.getElementById('meal-period-waiver-checkbox').checked;
-  // Handle meal period waiver based on checkbox state
-}
-
-// Function to show timecard submission dialog
-function showTimecardSubmissionDialog() {
-  const timecardSubmissionDialog = document.getElementById('timecard-submission-dialog');
-  timecardSubmissionDialog.style.display = 'block';
-}
-
-// Function to handle timecard submission confirmation
-function handleTimecardSubmissionConfirmation() {
-  submitTimecard();
-  // Hide timecard submission dialog and perform necessary actions
-}
-
-// Function to handle timecard submission cancellation
-function handleTimecardSubmissionCancellation() {
-  const timecardSubmissionDialog = document.getElementById('timecard-submission-dialog');
-  timecardSubmissionDialog.style.display = 'none';
-}
-
-// Initialize the application
-function init() {
-  renderEmployeeTable();
-  renderActivityTypeList();
-  renderJobList();
-  renderTimecardTable();
-  renderDailyHoursTable();
-  renderWeeklyHoursTable();
-}
-
-init();
+// Other necessary functions and event listeners
+// ...
