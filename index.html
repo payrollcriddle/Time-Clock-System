@@ -5,106 +5,61 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <header>
-    <h1>Time Clock System</h1>
-  </header>
+  <!-- Login Section -->
+  <section id="login-section">
+    <!-- ... -->
+  </section>
 
-  <main>
-    <section id="login-section">
-      <h2>Login</h2>
-      <form id="login-form">
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" required>
+  <!-- Admin Dashboard -->
+  <section id="admin-section" style="display: none;">
+    <!-- Employee Management -->
+    <!-- ... -->
+    
+    <!-- Activity Type Management -->
+    <!-- ... -->
+    
+    <!-- Job Management -->
+    <!-- ... -->
+  </section>
 
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required>
+  <!-- Supervisor Dashboard -->
+  <section id="supervisor-section" style="display: none;">
+    <!-- Timecard Review and Approval -->
+    <!-- ... -->
+  </section>
 
-        <button type="submit">Login</button>
-      </form>
-    </section>
+  <!-- Employee Dashboard -->
+  <section id="employee-section" style="display: none;">
+    <!-- Clock In/Out -->
+    <!-- ... -->
+    
+    <!-- Timecard -->
+    <div id="timecard">
+      <!-- ... -->
+    </div>
+    
+    <!-- Daily Hours -->
+    <div id="daily-hours">
+      <!-- ... -->
+    </div>
+    
+    <!-- Weekly Hours -->
+    <div id="weekly-hours">
+      <!-- ... -->
+    </div>
+    
+    <!-- Meal Period Notation -->
+    <div id="meal-period-notation" style="display: none;">
+      <!-- ... -->
+    </div>
+    
+    <!-- Timecard Submission -->
+    <button id="submit-timecard">Submit Timecard</button>
+    <div id="timecard-submission-dialog" style="display: none;">
+      <!-- ... -->
+    </div>
+  </section>
 
-    <section id="admin-section" style="display: none;">
-      <h2>Admin Dashboard</h2>
-      <form id="employee-form">
-        <input type="text" id="employee-name" placeholder="Employee Name" required>
-        <input type="text" id="employee-username" placeholder="Username" required>
-        <input type="password" id="employee-password" placeholder="Password" required>
-        <input type="text" id="employee-location" placeholder="Location" required>
-        <input type="text" id="employee-department" placeholder="Department" required>
-        <input type="text" id="employee-id" placeholder="Employee ID" required>
-        <select id="employee-access">
-          <option value="employee">Employee</option>
-          <option value="supervisor">Supervisor</option>
-          <option value="admin">Admin</option>
-        </select>
-        <button type="submit">Add Employee</button>
-      </form>
-      <table id="employee-table">
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Username</th>
-            <th>Location</th>
-            <th>Department</th>
-            <th>Employee ID</th>
-            <th>Access Level</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-    </section>
-
-    <section id="employee-section" style="display: none;">
-      <h2>Employee Dashboard</h2>
-      <p>Welcome, <span id="employee-name"></span>!</p>
-      <p>Current Time: <span id="current-time"></span></p>
-      <select id="time-zone-select">
-        <option value="UTC">UTC</option>
-        <option value="America/New_York">Eastern Time (US & Canada)</option>
-        <option value="America/Chicago">Central Time (US & Canada)</option>
-        <option value="America/Denver">Mountain Time (US & Canada)</option>
-        <option value="America/Los_Angeles">Pacific Time (US & Canada)</option>
-      </select>
-      <select id="working-status">
-        <option value="working">Working</option>
-        <option value="off">Off</option>
-        <option value="leave">Leave</option>
-      </select>
-      <button id="clock-in-btn">Clock In</button>
-      <button id="clock-out-btn">Clock Out</button>
-      <button id="start-break-btn">Start Break</button>
-      <button id="end-break-btn">End Break</button>
-      <button id="start-lunch-btn">Start Lunch</button>
-      <button id="end-lunch-btn">End Lunch</button>
-      <button id="logout-btn">Logout</button>
-      <textarea id="comment-input" placeholder="Enter a comment"></textarea>
-      <div id="time-entries"></div>
-      <div id="timecard">
-        <table>
-          <thead>
-            <tr>
-              <th>Monday</th>
-              <th>Tuesday</th>
-              <th>Wednesday</th>
-              <th>Thursday</th>
-              <th>Friday</th>
-              <th>Saturday</th>
-              <th>Sunday</th>
-            </tr>
-          </thead>
-          <tbody>
-            <!-- Timecard entries will be dynamically added here -->
-          </tbody>
-        </table>
-      </div>
-    </section>
-  </main>
-
-  <footer>
-    <p>&copy; 2023 Time Clock System. All rights reserved.</p>
-  </footer>
-
-  <script src="script.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>
