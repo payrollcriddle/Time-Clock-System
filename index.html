@@ -7,56 +7,189 @@
 <body>
   <!-- Login Section -->
   <section id="login-section">
-    <!-- ... -->
+    <h2>Login</h2>
+    <form id="login-form">
+      <input type="text" id="username" placeholder="Username" required>
+      <input type="password" id="password" placeholder="Password" required>
+      <button type="submit">Login</button>
+    </form>
   </section>
 
   <!-- Admin Dashboard -->
   <section id="admin-section" style="display: none;">
+    <h2>Admin Dashboard</h2>
+    
     <!-- Employee Management -->
-    <!-- ... -->
+    <h3>Employee Management</h3>
+    <form id="employee-form">
+      <input type="text" id="employee-name" placeholder="Name" required>
+      <input type="text" id="employee-username" placeholder="Username" required>
+      <input type="password" id="employee-password" placeholder="Password" required>
+      <input type="text" id="employee-id" placeholder="Employee ID" required>
+      <select id="employee-role" required>
+        <option value="">Select Role</option>
+        <option value="employee">Employee</option>
+        <option value="supervisor">Supervisor</option>
+        <option value="admin">Admin</option>
+      </select>
+      <select id="employee-state" required>
+        <option value="">Select State</option>
+        <option value="California">California</option>
+        <option value="Oregon">Oregon</option>
+        <!-- Add more states -->
+      </select>
+      <button type="submit">Add Employee</button>
+    </form>
+    <table id="employee-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Username</th>
+          <th>Employee ID</th>
+          <th>Role</th>
+          <th>State</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Employee rows will be dynamically added -->
+      </tbody>
+    </table>
     
     <!-- Activity Type Management -->
-    <!-- ... -->
+    <h3>Activity Type Management</h3>
+    <form id="activity-type-form">
+      <input type="text" id="activity-type-name" placeholder="Activity Type" required>
+      <button type="submit">Add Activity Type</button>
+    </form>
+    <ul id="activity-type-list">
+      <!-- Activity types will be dynamically added -->
+    </ul>
     
     <!-- Job Management -->
-    <!-- ... -->
+    <h3>Job Management</h3>
+    <form id="job-form">
+      <input type="text" id="job-name" placeholder="Job Name" required>
+      <button type="submit">Add Job</button>
+    </form>
+    <ul id="job-list">
+      <!-- Jobs will be dynamically added -->
+    </ul>
   </section>
 
   <!-- Supervisor Dashboard -->
   <section id="supervisor-section" style="display: none;">
+    <h2>Supervisor Dashboard</h2>
+    
     <!-- Timecard Review and Approval -->
-    <!-- ... -->
+    <h3>Timecard Review and Approval</h3>
+    <table id="timecard-review-table">
+      <thead>
+        <tr>
+          <th>Employee</th>
+          <th>Start Date</th>
+          <th>End Date</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Timecard rows will be dynamically added -->
+      </tbody>
+    </table>
   </section>
 
   <!-- Employee Dashboard -->
   <section id="employee-section" style="display: none;">
+    <h2>Employee Dashboard</h2>
+    <p>Welcome, <span id="employee-name"></span>!</p>
+    
     <!-- Clock In/Out -->
-    <!-- ... -->
+    <div id="clock-inout">
+      <select id="job-select" required>
+        <option value="">Select Job</option>
+        <!-- Jobs will be dynamically added -->
+      </select>
+      <select id="activity-type-select" required>
+        <option value="">Select Activity Type</option>
+        <!-- Activity types will be dynamically added -->
+      </select>
+      <button id="clock-in-btn">Clock In</button>
+      <button id="clock-out-btn">Clock Out</button>
+    </div>
     
     <!-- Timecard -->
     <div id="timecard">
-      <!-- ... -->
+      <h3>Timecard</h3>
+      <table id="timecard-table">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Job</th>
+            <th>Activity Type</th>
+            <th>Clock In</th>
+            <th>Clock Out</th>
+            <th>Duration</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Timecard rows will be dynamically added -->
+        </tbody>
+      </table>
     </div>
     
     <!-- Daily Hours -->
     <div id="daily-hours">
-      <!-- ... -->
+      <h3>Daily Hours</h3>
+      <table id="daily-hours-table">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Regular Hours</th>
+            <th>Overtime Hours</th>
+            <th>Double Time Hours</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Daily hours rows will be dynamically added -->
+        </tbody>
+      </table>
     </div>
     
     <!-- Weekly Hours -->
     <div id="weekly-hours">
-      <!-- ... -->
+      <h3>Weekly Hours</h3>
+      <table id="weekly-hours-table">
+        <thead>
+          <tr>
+            <th>Week</th>
+            <th>Regular Hours</th>
+            <th>Overtime Hours</th>
+            <th>Double Time Hours</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Weekly hours rows will be dynamically added -->
+        </tbody>
+      </table>
     </div>
     
-    <!-- Meal Period Notation -->
-    <div id="meal-period-notation" style="display: none;">
-      <!-- ... -->
+    <!-- Meal Period Waiver -->
+    <div id="meal-period-waiver">
+      <h3>Meal Period Waiver</h3>
+      <input type="checkbox" id="meal-period-waiver-checkbox">
+      <label for="meal-period-waiver-checkbox">Waive Meal Period</label>
     </div>
     
     <!-- Timecard Submission -->
-    <button id="submit-timecard">Submit Timecard</button>
+    <button id="submit-timecard-btn">Submit Timecard</button>
+    
+    <!-- Timecard Submission Dialog -->
     <div id="timecard-submission-dialog" style="display: none;">
-      <!-- ... -->
+      <h3>Timecard Submission</h3>
+      <p>By submitting this timecard, you acknowledge that all information provided is accurate and complete.</p>
+      <button id="confirm-submission-btn">Confirm</button>
+      <button id="cancel-submission-btn">Cancel</button>
     </div>
   </section>
 
