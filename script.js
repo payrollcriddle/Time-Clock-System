@@ -37,7 +37,7 @@ let employees = [  {
     location: 'Branch B',
     department: 'Marketing',
     employeeId: '1003',
-    accessLevel: 'supervisor'
+    accessLevel: 'employee'
   }
 ];
 
