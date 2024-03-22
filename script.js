@@ -21,7 +21,16 @@ const employeeTableBody = document.querySelector('#employee-table tbody');
 const timecardTable = document.querySelector('#timecard table tbody');
 
 // Sample employee data (replace with actual data from server/database)
-let employees = [];
+let employees = [  {
+    name: 'Admin User',
+    username: 'admin',
+    password: 'adminpassword',
+    location: 'Head Office',
+    department: 'Administration',
+    employeeId: '1001',
+    accessLevel: 'admin'
+  }
+];
 
 // Function to render employee table
 function renderEmployeeTable() {
