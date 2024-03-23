@@ -53,6 +53,56 @@ function renderEmployeeDashboard() {
   renderDailyHoursTable();
   renderWeeklyHoursTable();
 }
+// Function to display current time
+function displayCurrentTime() {
+  const currentTimeElement = document.getElementById('current-time');
+  const currentTime = new Date().toLocaleString();
+  currentTimeElement.textContent = currentTime;
+}
+
+// Update current time every second
+setInterval(displayCurrentTime, 1000);
+
+// Function to handle meal start
+function handleMealStart() {
+  const user = getUser();
+  const timestamp = new Date().toLocaleString();
+  // Record meal start entry in the database or data store
+  // ...
+  renderTimecard();
+}
+
+// Function to handle meal end
+function handleMealEnd() {
+  const user = getUser();
+  const timestamp = new Date().toLocaleString();
+  // Record meal end entry in the database or data store
+  // ...
+  renderTimecard();
+}
+
+// Function to handle comment submission
+function handleCommentSubmission() {
+  const user = getUser();
+  const commentInput = document.getElementById('comment-input');
+  const comment = commentInput.value.trim();
+  if (comment !== '') {
+    // Save the comment in the database or data store
+    // ...
+    commentInput.value = '';
+    renderTimecard();
+  }
+}
+
+// Event listener for meal start button click
+document.getElementById('meal-start-btn').addEventListener('click', handleMealStart);
+
+// Event listener for meal end button click
+document.getElementById('meal-end-btn').addEventListener('click', handleMealEnd);
+
+// Event listener for comment submission
+document.getElementById('submit-comment-btn').addEventListener('click', handleCommentSubmission);
+  }
 
 // Function to render job list
 function renderJobList() {
