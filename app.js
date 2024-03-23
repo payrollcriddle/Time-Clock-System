@@ -232,3 +232,14 @@ function renderEmployeeTable() {
     row.innerHTML = `
       <td>${employee.name}</td>
       <td>${employee.username}</td>
+      <td>${employee.employeeId}</td>
+      <td>${employee.role}</td>
+      <td>${employee.state}</td>
+      <td>
+        <button class="edit-btn" data-employee-id="${employee.id}">Edit</button>
+        <button class="delete-btn" data-employee-id="${employee.id}">Delete</button>
+      </td>
+    `;
+    employeeTableBody.appendChild(row);
+  });
+}
