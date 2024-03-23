@@ -102,7 +102,6 @@ document.getElementById('meal-end-btn').addEventListener('click', handleMealEnd)
 
 // Event listener for comment submission
 document.getElementById('submit-comment-btn').addEventListener('click', handleCommentSubmission);
-  }
 
 // Function to render job list
 function renderJobList() {
