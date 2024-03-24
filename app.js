@@ -80,6 +80,28 @@ renderCalendar(calendarElement, currentPayPeriodStartDate, currentPayPeriodEndDa
 payPeriodDatesElement.textContent = `${formatDate(currentPayPeriodStartDate)} - ${formatDate(currentPayPeriodEndDate)}`;
 nextPayDateElement.textContent = formatDate(nextPayDate);
 
+// Function to render the calendar
+function renderCalendar(calendarElement, startDate, endDate) {
+  // Clear existing calendar content
+  calendarElement.innerHTML = '';
+
+  // Create a new calendar instance
+  const calendar = new Calendar(calendarElement, startDate, endDate);
+
+  // Highlight the current day
+  const currentDate = new Date();
+  calendar.highlightDay(currentDate);
+
+  // Highlight the pay period dates
+  calendar.highlightDates(startDate, endDate);
+}
+
+// Function to format dates
+function formatDate(date) {
+  const options = { month: 'long', day: 'numeric', year: 'numeric' };
+  return date.toLocaleDateString('en-US', options);
+}
+
 // Event listener for login form submission
 loginForm.addEventListener('submit', event => {
   event.preventDefault();
@@ -427,26 +449,4 @@ function sendNotification(recipient, message) {
   // Placeholder function for sending notifications
   console.log(`Sending notification to ${recipient}: ${message}`);
   // Replace this with the actual implementation using the Teams API or any other notification system
-}
-
-// Function to render the calendar
-function renderCalendar(calendarElement, startDate, endDate) {
-  // Clear existing calendar content
-  calendarElement.innerHTML = '';
-
-  // Create a new calendar instance
-  const calendar = new Calendar(calendarElement, startDate, endDate);
-
-  // Highlight the current day
-  const currentDate = new Date();
-  calendar.highlightDay(currentDate);
-
-  // Highlight the pay period dates
-  calendar.highlightDates(startDate, endDate);
-}
-
-// Function to format dates
-function formatDate(date) {
-  const options = { month: 'long', day: 'numeric', year: 'numeric' };
-  return date.toLocaleDateString('en-US', options);
 }
