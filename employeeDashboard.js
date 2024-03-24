@@ -280,7 +280,8 @@ export function renderEmployeeDashboard() {
   const payPeriodEndDate = getPayPeriodEndDate(payPeriodStartDate);
   const nextPayDate = getNextPayDate(payPeriodEndDate);
 
-  const calendar = new Calendar(calendarElement, payPeriodStartDate, payPeriodEndDate);
+   const calendar = new Calendar(calendarElement, payPeriodStartDate, payPeriodEndDate);
+  calendar.renderCalendar();
 
   payPeriodDatesElement.textContent = `${formatDate(payPeriodStartDate)} - ${formatDate(payPeriodEndDate)}`;
   nextPayDateElement.textContent = formatDate(nextPayDate);
@@ -411,6 +412,7 @@ function handleClockIn() {
     document.getElementById('clock-out-btn').disabled = false;
     document.getElementById('meal-start-btn').disabled = false;
     renderWeeklyHoursTable();
+    displayTimestamp(timestamp);
   } else {
     alert('Please select a day status.');
   }
@@ -426,6 +428,7 @@ function handleClockOut() {
   document.getElementById('meal-start-btn').disabled = true;
   document.getElementById('meal-end-btn').disabled = true;
   renderWeeklyHoursTable();
+  displayTimestamp(timestamp);
 }
 
 // Function to handle meal start
@@ -437,6 +440,7 @@ function handleMealStart() {
   document.getElementById('meal-start-btn').disabled = true;
   document.getElementById('meal-end-btn').disabled = false;
   renderWeeklyHoursTable();
+  displayTimestamp(timestamp);
 }
 
 // Function to handle meal end
@@ -448,12 +452,20 @@ function handleMealEnd() {
   document.getElementById('meal-start-btn').disabled = false;
   document.getElementById('meal-end-btn').disabled = true;
   renderWeeklyHoursTable();
+  displayTimestamp(timestamp);
 }
 
 // Function to handle timecard submission
 function handleTimecardSubmission() {
   const timecardSubmissionDialog = document.getElementById('timecard-submission-dialog');
   timecardSubmissionDialog.style.display = 'block';
+}
+
+// Function to display timestamp
+function displayTimestamp(timestamp) {
+  const timestampElement = document.createElement('p');
+  timestampElement.textContent = `Timestamp: ${timestamp}`;
+  document.getElementById('time-clock').appendChild(timestampElement);
 }
 
 // Function to confirm timecard submission
