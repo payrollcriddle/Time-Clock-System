@@ -31,6 +31,7 @@ export function login(username, password) {
 export function logout() {
   // Remove the user object from local storage or session storage
   localStorage.removeItem('user');
+  console.log('User logged out');
 }
 
 // Function to check if the user is authenticated
