@@ -3,7 +3,7 @@ import { login, logout, isAuthenticated, getUser } from './auth.js';
 import { addEmployee, updateEmployee, deleteEmployee, getEmployees } from './employeeManagement.js';
 import { addActivityType, deleteActivityType, getActivityTypes } from './activityTypeManagement.js';
 import { addJob, deleteJob, getJobs } from './jobManagement.js';
-import { clockIn, clockOut, getTimecard, submitTimecard, calculateDailyHours, calculateWeeklyHours } from './timecard.js';
+import { clockIn, clockOut, getTimecard, submitTimecard, calculateDailyHours, calculateWeeklyHours, submitLeaveHours } from './timecard.js';
 import { reviewTimecard, approveTimecard, rejectTimecard } from './timecardReview.js';
 import { calculateHours } from './hoursCalculation.js';
 import mealPeriodPolicies from './mealPeriodPolicies.js';
@@ -47,78 +47,41 @@ loginForm.addEventListener('submit', event => {
 function renderEmployeeDashboard() {
   const user = getUser();
   document.getElementById('employee-name').textContent = user.name;
-  renderJobList();
-  renderActivityTypeList();
-  renderTimecard();
-  renderDailyHoursTable();
+  
+  renderActivityTypeSelect();
+  renderJobSelect();
   renderWeeklyHoursTable();
-}
-// Function to display current time
-function displayCurrentTime() {
-  const currentTimeElement = document.getElementById('current-time');
-  const currentTime = new Date().toLocaleString();
-  currentTimeElement.textContent = currentTime;
-}
 
-// Update current time every second
-setInterval(displayCurrentTime, 1000);
+  // Event listener for day status change
+  document.getElementById('day-status').addEventListener('change', handleDayStatusChange);
 
-// Function to handle meal start
-function handleMealStart() {
-  const user = getUser();
-  const timestamp = new Date().toLocaleString();
-  // Record meal start entry in the database or data store
-  // ...
-  renderTimecard();
-}
+  // Event listener for clock in button click
+  document.getElementById('clock-in-btn').addEventListener('click', handleClockIn);
 
-// Function to handle meal end
-function handleMealEnd() {
-  const user = getUser();
-  const timestamp = new Date().toLocaleString();
-  // Record meal end entry in the database or data store
-  // ...
-  renderTimecard();
+  // Event listener for clock out button click
+  document.getElementById('clock-out-btn').addEventListener('click', handleClockOut);
+
+  // Event listener for meal start button click
+  document.getElementById('meal-start-btn').addEventListener('click', handleMealStart);
+
+  // Event listener for meal end button click
+  document.getElementById('meal-end-btn').addEventListener('click', handleMealEnd);
+
+  // Event listener for timecard submission
+  document.getElementById('submit-timecard-btn').addEventListener('click', handleTimecardSubmission);
+
+  // Event listener for timecard submission confirmation
+  document.getElementById('confirm-submission-btn').addEventListener('click', confirmTimecardSubmission);
+
+  // Event listener for timecard submission cancellation
+  document.getElementById('cancel-submission-btn').addEventListener('click', cancelTimecardSubmission);
 }
 
-// Function to handle comment submission
-function handleCommentSubmission() {
-  const user = getUser();
-  const commentInput = document.getElementById('comment-input');
-  const comment = commentInput.value.trim();
-  if (comment !== '') {
-    // Save the comment in the database or data store
-    // ...
-    commentInput.value = '';
-    renderTimecard();
-  }
-}
-
-// Event listener for meal start button click
-document.getElementById('meal-start-btn').addEventListener('click', handleMealStart);
-
-// Event listener for meal end button click
-document.getElementById('meal-end-btn').addEventListener('click', handleMealEnd);
-
-// Event listener for comment submission
-document.getElementById('submit-comment-btn').addEventListener('click', handleCommentSubmission);
-
-// Function to render job list
-function renderJobList() {
-  const jobSelect = document.getElementById('job-select');
-  const jobs = getJobs();
-  jobs.forEach(job => {
-    const option = document.createElement('option');
-    option.value = job.id;
-    option.textContent = job.name;
-    jobSelect.appendChild(option);
-  });
-}
-
-// Function to render activity type list
-function renderActivityTypeList() {
-  const activityTypeSelect = document.getElementById('activity-type-select');
+// Function to render activity type select options
+function renderActivityTypeSelect() {
+  const activityTypeSelect = document.getElementById('activity-type');
   const activityTypes = getActivityTypes();
+  
   activityTypes.forEach(activityType => {
     const option = document.createElement('option');
     option.value = activityType.id;
@@ -127,88 +90,114 @@ function renderActivityTypeList() {
   });
 }
 
-// Function to render timecard
-function renderTimecard() {
-  const user = getUser();
-  const timecard = getTimecard(user.id);
-  const timecardTableBody = document.getElementById('timecard-table').getElementsByTagName('tbody')[0];
-  timecardTableBody.innerHTML = '';
-
-  timecard.forEach(entry => {
-    const row = document.createElement('tr');
-    row.innerHTML = `
-      <td>${entry.date}</td>
-      <td>${entry.job}</td>
-      <td>${entry.activityType}</td>
-      <td>${entry.clockInTime}</td>
-      <td>${entry.clockOutTime}</td>
-      <td>${entry.duration}</td>
-    `;
-    timecardTableBody.appendChild(row);
-  });
-}
-
-// Function to render daily hours table
-function renderDailyHoursTable() {
-  const user = getUser();
-  const dailyHours = calculateDailyHours(user.id);
-  const dailyHoursTableBody = document.getElementById('daily-hours-table').getElementsByTagName('tbody')[0];
-  dailyHoursTableBody.innerHTML = '';
-
-  dailyHours.forEach(entry => {
-    const row = document.createElement('tr');
-    row.innerHTML = `
-      <td>${entry.date}</td>
-      <td>${entry.regularHours}</td>
-      <td>${entry.overtimeHours}</td>
-      <td>${entry.doubleTimeHours}</td>
-    `;
-    dailyHoursTableBody.appendChild(row);
+// Function to render job select options
+function renderJobSelect() {
+  const jobSelect = document.getElementById('job');
+  const jobs = getJobs();
+  
+  jobs.forEach(job => {
+    const option = document.createElement('option');
+    option.value = job.id;
+    option.textContent = job.name;
+    jobSelect.appendChild(option);
   });
 }
 
 // Function to render weekly hours table
 function renderWeeklyHoursTable() {
   const user = getUser();
-  const weeklyHours = calculateWeeklyHours(user.id);
+  const timecard = getTimecard(user.id);
   const weeklyHoursTableBody = document.getElementById('weekly-hours-table').getElementsByTagName('tbody')[0];
   weeklyHoursTableBody.innerHTML = '';
 
-  weeklyHours.forEach(entry => {
-    const row = document.createElement('tr');
-    row.innerHTML = `
-      <td>${entry.week}</td>
-      <td>${entry.regularHours}</td>
-      <td>${entry.overtimeHours}</td>
-      <td>${entry.doubleTimeHours}</td>
-    `;
-    weeklyHoursTableBody.appendChild(row);
-  });
+  // Render table rows based on activities and hours
+  // ...
+
+  updateTotalWeeklyHours();
+}
+
+// Function to handle day status change
+function handleDayStatusChange() {
+  const dayStatus = document.getElementById('day-status').value;
+  const leaveHoursSection = document.getElementById('leave-hours');
+  const jobSelect = document.getElementById('job');
+
+  if (dayStatus === 'leave') {
+    leaveHoursSection.style.display = 'block';
+    jobSelect.style.display = 'none';
+  } else {
+    leaveHoursSection.style.display = 'none';
+    jobSelect.style.display = 'block';
+  }
 }
 
 // Function to handle clock in
 function handleClockIn() {
   const user = getUser();
-  const jobId = document.getElementById('job-select').value;
-  const activityTypeId = document.getElementById('activity-type-select').value;
+  const dayStatus = document.getElementById('day-status').value;
+  const activityTypeId = document.getElementById('activity-type').value;
+  const jobId = document.getElementById('job').value;
+  const timecardNote = document.getElementById('timecard-note').value;
 
-  if (jobId && activityTypeId) {
-    const timestamp = new Date().toLocaleString();
-    clockIn(user.id, jobId, activityTypeId, timestamp);
-    renderTimecard();
+  if (dayStatus && activityTypeId) {
+    clockIn(user.id, dayStatus, activityTypeId, jobId, timecardNote);
+    renderWeeklyHoursTable();
   } else {
-    alert('Please select a job and activity type.');
+    alert('Please select a day status and activity type.');
   }
 }
 
 // Function to handle clock out
 function handleClockOut() {
   const user = getUser();
-  const timestamp = new Date().toLocaleString();
-  clockOut(user.id, timestamp);
-  renderTimecard();
-  renderDailyHoursTable();
+  clockOut(user.id);
   renderWeeklyHoursTable();
+}
+
+// Function to handle meal start
+function handleMealStart() {
+  const user = getUser();
+  const timestamp = new Date().toLocaleString();
+  // Record meal start entry in the database or data store
+  // ...
+  renderWeeklyHoursTable();
+}
+
+// Function to handle meal end
+function handleMealEnd() {
+  const user = getUser();
+  const timestamp = new Date().toLocaleString();
+  // Record meal end entry in the database or data store
+  // ...
+  renderWeeklyHoursTable();
+}
+
+// Function to handle timecard submission
+function handleTimecardSubmission() {
+  const timecardSubmissionDialog = document.getElementById('timecard-submission-dialog');
+  timecardSubmissionDialog.style.display = 'block';
+}
+
+// Function to confirm timecard submission
+function confirmTimecardSubmission() {
+  const user = getUser();
+  submitTimecard(user.id);
+  alert('Timecard submitted successfully.');
+  // Send notification to supervisor
+  const supervisor = getSupervisor(user.id);
+  sendTeamsNotification(supervisor, `${user.name} has submitted their timecard.`);
+  closeTimecardSubmissionDialog();
+}
+
+// Function to cancel timecard submission
+function cancelTimecardSubmission() {
+  closeTimecardSubmissionDialog();
+}
+
+// Function to close timecard submission dialog
+function closeTimecardSubmissionDialog() {
+  const timecardSubmissionDialog = document.getElementById('timecard-submission-dialog');
+  timecardSubmissionDialog.style.display = 'none';
 }
 
 // Function to handle meal period waiver
@@ -224,18 +213,16 @@ function handleMealPeriodWaiver() {
   }
 }
 
-// Function to handle timecard submission
-function handleTimecardSubmission() {
+// Function to update total weekly hours
+function updateTotalWeeklyHours() {
   const user = getUser();
-  const confirmed = confirm('Are you sure you want to submit your timecard?');
+  const timecard = getTimecard(user.id);
+  const { regularHours, overtimeHours, doubleTimeHours } = calculateHours(user.state, timecard);
 
-  if (confirmed) {
-    submitTimecard(user.id);
-    alert('Timecard submitted successfully.');
-    // Send notification to supervisor
-    const supervisor = getSupervisor(user.id);
-    sendTeamsNotification(supervisor, `${user.name} has submitted their timecard.`);
-  }
+  document.getElementById('total-hours').textContent = regularHours + overtimeHours + doubleTimeHours;
+  document.getElementById('regular-hours').textContent = regularHours;
+  document.getElementById('ot-hours').textContent = overtimeHours;
+  document.getElementById('dt-hours').textContent = doubleTimeHours;
 }
 
 // Function to render supervisor dashboard
