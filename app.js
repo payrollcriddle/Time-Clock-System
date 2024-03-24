@@ -401,11 +401,14 @@ class Calendar {
   }
 
   renderCalendar() {
-    const currentDate = new Date(this.startDate);
-    const endDate = new Date(this.endDate);
+  const currentDate = new Date(this.startDate);
+  const endDate = new Date(this.endDate);
 
-    while (currentDate <= endDate) {
-      const day = document.createElement('div');
-      day.classList.add('day');
-      day.textContent = currentDate.getDate();
-      this.calendarElement.appendChild(
+  while (currentDate <= endDate) {
+    const day = document.createElement('div');
+    day.classList.add('day');
+    day.textContent = currentDate.getDate();
+    this.calendarElement.appendChild(day); // Added closing parenthesis here
+    currentDate.setDate(currentDate.getDate() + 1);
+  }
+}
