@@ -3,6 +3,11 @@ export function clockIn(userId, dayStatus, activityTypeId, jobId, timecardNote, 
   // Record clock in entry in the database or data store
   // Save the clock in entry with the provided data
   console.log(`Clocked in at ${timestamp}`);
+  
+  if (activityTypeId === 'meal') {
+    console.log(`Meal started at ${timestamp}`);
+  }
+  
   // ...
 }
 
