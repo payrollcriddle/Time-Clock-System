@@ -401,14 +401,52 @@ class Calendar {
   }
 
   renderCalendar() {
-  const currentDate = new Date(this.startDate);
-  const endDate = new Date(this.endDate);
+    const currentDate = new Date(this.startDate);
+    const endDate = new Date(this.endDate);
 
-  while (currentDate <= endDate) {
-    const day = document.createElement('div');
-    day.classList.add('day');
-    day.textContent = currentDate.getDate();
-    this.calendarElement.appendChild(day); // Added closing parenthesis here
-    currentDate.setDate(currentDate.getDate() + 1);
+    while (currentDate <= endDate) {
+      const day = document.createElement('div');
+      day.classList.add('day');
+      day.textContent = currentDate.getDate();
+      this.calendarElement.appendChild(day);
+      currentDate.setDate(currentDate.getDate() + 1);
+    }
+  } // Added closing curly brace here
+
+  highlightDay(date) {
+    const days = this.calendarElement.querySelectorAll('.day');
+    const currentDay = Array.from(days).find(day => {
+      const dayDate = new Date(this.startDate);
+      dayDate.setDate(parseInt(day.textContent));
+      return dayDate.toDateString() === date.toDateString();
+    });
+
+    if (currentDay) {
+      currentDay.classList.add('current-day');
+    }
+  }
+
+  highlightDates(startDate, endDate) {
+    const days = this.calendarElement.querySelectorAll('.day');
+    const startDay = Array.from(days).find(day => {
+      const dayDate = new Date(this.startDate);
+      dayDate.setDate(parseInt(day.textContent));
+      return dayDate.toDateString() === startDate.toDateString();
+    });
+
+    const endDay = Array.from(days).find(day => {
+      const dayDate = new Date(this.startDate);
+      dayDate.setDate(parseInt(day.textContent));
+      return dayDate.toDateString() === endDate.toDateString();
+    });
+
+    if (startDay && endDay) {
+      let currentDay = startDay;
+      while (currentDay !== endDay) {
+        currentDay.classList.add('highlighted');
+        currentDay = currentDay.nextElementSibling;
+      }
+      endDay.classList.add('highlighted');
+    }
   }
 }
