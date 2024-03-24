@@ -6,15 +6,15 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <!-- Login Section -->
-  <section id="login-section">
-    <h2>Login</h2>
-    <form id="login-form">
-      <input type="text" id="username" placeholder="Username" required>
-      <input type="password" id="password" placeholder="Password" required>
-      <button type="submit" class="btn">Login</button>
-    </form>
-  </section>
+<!-- Login Section -->
+<section id="login-section">
+  <h2>Login</h2>
+  <form id="login-form">
+    <input type="text" id="username" placeholder="Username" autocomplete="username" required>
+    <input type="password" id="password" placeholder="Password" autocomplete="current-password" required>
+    <button type="submit" class="btn">Login</button>
+  </form>
+</section>
 
   <!-- Employee Dashboard -->
   <section id="employee-dashboard" class="dashboard" style="display: none;">
@@ -200,7 +200,7 @@
     <input type="text" id="employee-username" placeholder="Username" required>
 
     <label for="employee-password">Password:</label>
-    <input type="password" id="employee-password" placeholder="Password" required>
+    <input type="password" id="employee-password" placeholder="Password" autocomplete="new-password" required>
 
     <label for="employee-id">Employee ID:</label>
     <input type="text" id="employee-id" placeholder="Employee ID" required>
