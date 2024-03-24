@@ -8,7 +8,79 @@ import { sendTeamsNotification } from './teamsNotification.js';
 
 // Calendar class
 class Calendar {
-  // ...
+  constructor(calendarElement, payPeriodStartDate, payPeriodEndDate) {
+    this.calendarElement = calendarElement;
+    this.payPeriodStartDate = payPeriodStartDate;
+    this.payPeriodEndDate = payPeriodEndDate;
+    this.currentDate = new Date();
+    this.renderCalendar();
+  }
+
+  renderCalendar() {
+    const monthYear = document.createElement('div');
+    monthYear.classList.add('month-year');
+    monthYear.textContent = `${this.getMonthName()} ${this.currentDate.getFullYear()}`;
+    this.calendarElement.appendChild(monthYear);
+
+    const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    const daysOfWeekElement = document.createElement('div');
+    daysOfWeekElement.classList.add('days-of-week');
+    daysOfWeek.forEach(day => {
+      const dayElement = document.createElement('div');
+      dayElement.textContent = day;
+      daysOfWeekElement.appendChild(dayElement);
+    });
+    this.calendarElement.appendChild(daysOfWeekElement);
+
+    const daysElement = document.createElement('div');
+    daysElement.classList.add('days');
+
+    const firstDay = new Date(this.currentDate.getFullYear(), this.currentDate.getMonth(), 1);
+    const lastDay = new Date(this.currentDate.getFullYear(), this.currentDate.getMonth() + 1, 0);
+    const prevMonthDays = firstDay.getDay();
+    const nextMonthDays = 6 - lastDay.getDay();
+
+    for (let i = 1; i <= prevMonthDays; i++) {
+      const dayElement = document.createElement('div');
+      dayElement.classList.add('prev-month');
+      daysElement.appendChild(dayElement);
+    }
+
+    for (let i = 1; i <= lastDay.getDate(); i++) {
+      const dayElement = document.createElement('div');
+      dayElement.textContent = i;
+      dayElement.dataset.date = new Date(this.currentDate.getFullYear(), this.currentDate.getMonth(), i).toISOString();
+
+      if (i === this.currentDate.getDate()) {
+        dayElement.classList.add('current-day');
+      }
+
+      if (
+        new Date(dayElement.dataset.date) >= this.payPeriodStartDate &&
+        new Date(dayElement.dataset.date) <= this.payPeriodEndDate
+      ) {
+        dayElement.classList.add('pay-period');
+      }
+
+      daysElement.appendChild(dayElement);
+    }
+
+    for (let i = 1; i <= nextMonthDays; i++) {
+      const dayElement = document.createElement('div');
+      dayElement.classList.add('next-month');
+      daysElement.appendChild(dayElement);
+    }
+
+    this.calendarElement.appendChild(daysElement);
+  }
+
+  getMonthName() {
+    const monthNames = [
+      'January', 'February', 'March', 'April', 'May', 'June',
+      'July', 'August', 'September', 'October', 'November', 'December'
+    ];
+    return monthNames[this.currentDate.getMonth()];
+  }
 }
 
 // Function to render employee dashboard
@@ -199,16 +271,39 @@ export function renderEmployeeDashboard() {
   document.getElementById('logout-btn').addEventListener('click', handleLogout);
 
   // Render calendar
-  const currentPayPeriodStartDate = new Date('2024-03-11');
-  const currentPayPeriodEndDate = new Date('2024-03-24');
-  const nextPayDate = new Date('2024-03-29');
   const calendarElement = document.getElementById('calendar');
   const payPeriodDatesElement = document.getElementById('pay-period-dates');
   const nextPayDateElement = document.getElementById('next-pay-date');
 
-  renderCalendar(calendarElement, currentPayPeriodStartDate, currentPayPeriodEndDate);
-  payPeriodDatesElement.textContent = `${formatDate(currentPayPeriodStartDate)} - ${formatDate(currentPayPeriodEndDate)}`;
+  const currentDate = new Date();
+  const payPeriodStartDate = getPayPeriodStartDate(currentDate);
+  const payPeriodEndDate = getPayPeriodEndDate(payPeriodStartDate);
+  const nextPayDate = getNextPayDate(payPeriodEndDate);
+
+  const calendar = new Calendar(calendarElement, payPeriodStartDate, payPeriodEndDate);
+
+  payPeriodDatesElement.textContent = `${formatDate(payPeriodStartDate)} - ${formatDate(payPeriodEndDate)}`;
   nextPayDateElement.textContent = formatDate(nextPayDate);
+
+  // Update calendar after the end of the pay period
+  const updateCalendar = () => {
+    const today = new Date();
+    if (today > payPeriodEndDate) {
+      const newPayPeriodStartDate = getPayPeriodStartDate(today);
+      const newPayPeriodEndDate = getPayPeriodEndDate(newPayPeriodStartDate);
+      const newNextPayDate = getNextPayDate(newPayPeriodEndDate);
+
+      calendar.payPeriodStartDate = newPayPeriodStartDate;
+      calendar.payPeriodEndDate = newPayPeriodEndDate;
+      calendar.currentDate = today;
+      calendar.renderCalendar();
+
+      payPeriodDatesElement.textContent = `${formatDate(newPayPeriodStartDate)} - ${formatDate(newPayPeriodEndDate)}`;
+      nextPayDateElement.textContent = formatDate(newNextPayDate);
+    }
+  };
+
+  setInterval(updateCalendar, 24 * 60 * 60 * 1000); // Update every 24 hours
 
   // Display current time
   displayCurrentTime();
@@ -217,77 +312,191 @@ export function renderEmployeeDashboard() {
 
 // Function to display current time
 function displayCurrentTime() {
-  // ...
+  const currentTimeElement = document.getElementById('current-time');
+  const currentTime = new Date().toLocaleString();
+  currentTimeElement.textContent = currentTime;
 }
 
 // Function to get the time zone based on the employee's state
 function getTimeZone(state) {
-  // ...
+  // Define the time zone mapping for each state
+  const timeZoneMap = {
+    California: 'America/Los_Angeles',
+    Oregon: 'America/Los_Angeles',
+    Washington: 'America/Los_Angeles',
+    Montana: 'America/Denver',
+    Wyoming: 'America/Denver',
+    Nevada: 'America/Los_Angeles',
+    Idaho: 'America/Boise',
+    Colorado: 'America/Denver',
+    // Add more states and their corresponding time zones
+  };
+
+  return timeZoneMap[state] || 'America/New_York'; // Default to Eastern Time if state is not found
 }
 
 // Function to render activity type select options
 function renderActivityTypeSelect() {
-  // ...
+  const activityTypeSelect = document.getElementById('activity-type');
+  const activityTypes = getActivityTypes();
+  
+  activityTypes.forEach(activityType => {
+    const option = document.createElement('option');
+    option.value = activityType.id;
+    option.textContent = activityType.name;
+    activityTypeSelect.appendChild(option);
+  });
 }
 
 // Function to render job select options
 function renderJobSelect() {
-  // ...
+  const jobSelect = document.getElementById('job');
+  const jobs = getJobs();
+  
+  jobs.forEach(job => {
+    const option = document.createElement('option');
+    option.value = job.id;
+    option.textContent = job.name;
+    jobSelect.appendChild(option);
+  });
 }
 
 // Function to render weekly hours table
 function renderWeeklyHoursTable() {
+  const user = getUser();
+  const timecard = getTimecard(user.id);
+  const weeklyHoursTableBody = document.getElementById('weekly-hours-table').getElementsByTagName('tbody')[0];
+  weeklyHoursTableBody.innerHTML = '';
+
+  // Render table rows based on activities and hours
   // ...
+
+  updateTotalWeeklyHours();
 }
 
 // Function to handle day status change
 function handleDayStatusChange() {
-  // ...
+  const dayStatus = document.getElementById('day-status').value;
+  const activityJobSection = document.getElementById('activity-job-section');
+  const leaveHoursSection = document.getElementById('leave-hours-section');
+  const mealPeriodWaiver = document.getElementById('meal-period-waiver');
+
+  if (dayStatus === 'working') {
+    activityJobSection.style.display = 'block';
+    leaveHoursSection.style.display = 'none';
+    mealPeriodWaiver.style.display = 'block';
+  } else if (dayStatus === 'leave') {
+    activityJobSection.style.display = 'none';
+    leaveHoursSection.style.display = 'block';
+    mealPeriodWaiver.style.display = 'none';
+  } else {
+    activityJobSection.style.display = 'none';
+    leaveHoursSection.style.display = 'none';
+    mealPeriodWaiver.style.display = 'none';
+  }
 }
 
 // Function to handle clock in
 function handleClockIn() {
-  // ...
+  const user = getUser();
+  const dayStatus = document.getElementById('day-status').value;
+  const activityTypeId = document.getElementById('activity-type').value || 'working';
+  const jobId = document.getElementById('job').value;
+  const timecardNote = document.getElementById('timecard-note').value;
+
+  if (dayStatus) {
+    const timestamp = new Date().toLocaleString('en-US', { timeZone: getTimeZone(user.state) });
+    clockIn(user.id, dayStatus, activityTypeId, jobId, timecardNote, timestamp);
+    document.getElementById('clock-in-btn').disabled = true;
+    document.getElementById('clock-out-btn').disabled = false;
+    document.getElementById('meal-start-btn').disabled = false;
+    renderWeeklyHoursTable();
+  } else {
+    alert('Please select a day status.');
+  }
 }
 
 // Function to handle clock out
 function handleClockOut() {
-  // ...
+  const user = getUser();
+  const timestamp = new Date().toLocaleString('en-US', { timeZone: getTimeZone(user.state) });
+  clockOut(user.id, timestamp);
+  document.getElementById('clock-in-btn').disabled = false;
+  document.getElementById('clock-out-btn').disabled = true;
+  document.getElementById('meal-start-btn').disabled = true;
+  document.getElementById('meal-end-btn').disabled = true;
+  renderWeeklyHoursTable();
 }
 
 // Function to handle meal start
 function handleMealStart() {
-  // ...
+  const user = getUser();
+  const timestamp = new Date().toLocaleString('en-US', { timeZone: getTimeZone(user.state) });
+  const activityTypeId = 'meal';
+  clockIn(user.id, 'working', activityTypeId, null, null, timestamp);
+  document.getElementById('meal-start-btn').disabled = true;
+  document.getElementById('meal-end-btn').disabled = false;
+  renderWeeklyHoursTable();
 }
 
 // Function to handle meal end
 function handleMealEnd() {
-  // ...
+  const user = getUser();
+  const timestamp = new Date().toLocaleString('en-US', { timeZone: getTimeZone(user.state) });
+  const activityTypeId = 'working';
+  clockIn(user.id, 'working', activityTypeId, null, null, timestamp);
+  document.getElementById('meal-start-btn').disabled = false;
+  document.getElementById('meal-end-btn').disabled = true;
+  renderWeeklyHoursTable();
 }
 
 // Function to handle timecard submission
 function handleTimecardSubmission() {
-  // ...
+  const timecardSubmissionDialog = document.getElementById('timecard-submission-dialog');
+  timecardSubmissionDialog.style.display = 'block';
 }
 
 // Function to confirm timecard submission
 function confirmTimecardSubmission() {
-  // ...
+  const user = getUser();
+  const leaveType = document.getElementById('leave-type').value;
+  const leaveHours = document.getElementById('leave-hours').value;
+
+  if (leaveType && leaveHours) {
+    submitLeaveHours(user.id, leaveType, leaveHours);
+  }
+
+  submitTimecard(user.id);
+  alert('Timecard submitted successfully.');
+  closeTimecardSubmissionDialog();
+  
+  // Send notification to supervisor
+  const supervisor = getSupervisor(user.id);
+  const notificationMessage = getNotificationMessage('timecardSubmitted');
+  sendTeamsNotification(supervisor, notificationMessage);
 }
 
 // Function to cancel timecard submission
 function cancelTimecardSubmission() {
-  // ...
+  closeTimecardSubmissionDialog();
 }
 
 // Function to close timecard submission dialog
 function closeTimecardSubmissionDialog() {
-  // ...
+  const timecardSubmissionDialog = document.getElementById('timecard-submission-dialog');
+  timecardSubmissionDialog.style.display = 'none';
 }
 
 // Function to update total weekly hours
 function updateTotalWeeklyHours() {
-  // ...
+  const user = getUser();
+  const timecard = getTimecard(user.id);
+  const { regularHours, overtimeHours, doubleTimeHours } = calculateHours(user.state, timecard);
+
+  document.getElementById('total-hours').textContent = regularHours + overtimeHours + doubleTimeHours;
+  document.getElementById('regular-hours').textContent = regularHours;
+  document.getElementById('ot-hours').textContent = overtimeHours;
+  document.getElementById('dt-hours').textContent = doubleTimeHours;
 }
 
 // Function to handle logout
@@ -298,12 +507,31 @@ function handleLogout() {
   loginSection.style.display = 'block';
 }
 
-// Function to render the calendar
-function renderCalendar(calendarElement, startDate, endDate) {
-  // ...
+// Function to get the pay period start date
+function getPayPeriodStartDate(date) {
+  const dayOfWeek = date.getDay();
+  const daysToSubtract = (dayOfWeek + 6) % 7; // Adjust to start on Monday
+  const startDate = new Date(date);
+  startDate.setDate(date.getDate() - daysToSubtract);
+  return startDate;
+}
+
+// Function to get the pay period end date
+function getPayPeriodEndDate(startDate) {
+  const endDate = new Date(startDate);
+  endDate.setDate(startDate.getDate() + 13); // 14 days including start date
+  return endDate;
+}
+
+// Function to get the next pay date
+function getNextPayDate(endDate) {
+  const payDate = new Date(endDate);
+  payDate.setDate(endDate.getDate() + 5); // 5 days after the end of the pay period
+  return payDate;
 }
 
 // Function to format dates
 function formatDate(date) {
-  // ...
+  const options = { month: 'long', day: 'numeric', year: 'numeric' };
+  return date.toLocaleDateString('en-US', options);
 }
