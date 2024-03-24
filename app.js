@@ -1,3 +1,63 @@
+// Calendar class
+class Calendar {
+  constructor(calendarElement, startDate, endDate) {
+    this.calendarElement = calendarElement;
+    this.startDate = startDate;
+    this.endDate = endDate;
+    this.renderCalendar();
+  }
+
+  renderCalendar() {
+    const currentDate = new Date(this.startDate);
+    const endDate = new Date(this.endDate);
+
+    while (currentDate <= endDate) {
+      const day = document.createElement('div');
+      day.classList.add('day');
+      day.textContent = currentDate.getDate();
+      this.calendarElement.appendChild(day);
+      currentDate.setDate(currentDate.getDate() + 1);
+    }
+  }
+
+  highlightDay(date) {
+    const days = this.calendarElement.querySelectorAll('.day');
+    const currentDay = Array.from(days).find(day => {
+      const dayDate = new Date(this.startDate);
+      dayDate.setDate(parseInt(day.textContent));
+      return dayDate.toDateString() === date.toDateString();
+    });
+
+    if (currentDay) {
+      currentDay.classList.add('current-day');
+    }
+  }
+
+  highlightDates(startDate, endDate) {
+    const days = this.calendarElement.querySelectorAll('.day');
+    const startDay = Array.from(days).find(day => {
+      const dayDate = new Date(this.startDate);
+      dayDate.setDate(parseInt(day.textContent));
+      return dayDate.toDateString() === startDate.toDateString();
+    });
+
+    const endDay = Array.from(days).find(day => {
+      const dayDate = new Date(this.startDate);
+      dayDate.setDate(parseInt(day.textContent));
+      return dayDate.toDateString() === endDate.toDateString();
+    });
+
+    if (startDay && endDay) {
+      let currentDay = startDay;
+      while (currentDay !== endDay) {
+        currentDay.classList.add('highlighted');
+        currentDay = currentDay.nextElementSibling;
+      }
+      endDay.classList.add('highlighted');
+    }
+  }
+}
+
 // Update these variables with your current pay period and next pay date
 const currentPayPeriodStartDate = new Date('2024-03-11');
 const currentPayPeriodEndDate = new Date('2024-03-24');
@@ -389,64 +449,4 @@ function renderCalendar(calendarElement, startDate, endDate) {
 function formatDate(date) {
   const options = { month: 'long', day: 'numeric', year: 'numeric' };
   return date.toLocaleDateString('en-US', options);
-}
-
-// Calendar class
-class Calendar {
-  constructor(calendarElement, startDate, endDate) {
-    this.calendarElement = calendarElement;
-    this.startDate = startDate;
-    this.endDate = endDate;
-    this.renderCalendar();
-  }
-
-  renderCalendar() {
-    const currentDate = new Date(this.startDate);
-    const endDate = new Date(this.endDate);
-
-    while (currentDate <= endDate) {
-      const day = document.createElement('div');
-      day.classList.add('day');
-      day.textContent = currentDate.getDate();
-      this.calendarElement.appendChild(day);
-      currentDate.setDate(currentDate.getDate() + 1);
-    }
-  } // Added closing curly brace here
-
-  highlightDay(date) {
-    const days = this.calendarElement.querySelectorAll('.day');
-    const currentDay = Array.from(days).find(day => {
-      const dayDate = new Date(this.startDate);
-      dayDate.setDate(parseInt(day.textContent));
-      return dayDate.toDateString() === date.toDateString();
-    });
-
-    if (currentDay) {
-      currentDay.classList.add('current-day');
-    }
-  }
-
-  highlightDates(startDate, endDate) {
-    const days = this.calendarElement.querySelectorAll('.day');
-    const startDay = Array.from(days).find(day => {
-      const dayDate = new Date(this.startDate);
-      dayDate.setDate(parseInt(day.textContent));
-      return dayDate.toDateString() === startDate.toDateString();
-    });
-
-    const endDay = Array.from(days).find(day => {
-      const dayDate = new Date(this.startDate);
-      dayDate.setDate(parseInt(day.textContent));
-      return dayDate.toDateString() === endDate.toDateString();
-    });
-
-    if (startDay && endDay) {
-      let currentDay = startDay;
-      while (currentDay !== endDay) {
-        currentDay.classList.add('highlighted');
-        currentDay = currentDay.nextElementSibling;
-      }
-      endDay.classList.add('highlighted');
-    }
-  }
 }
