@@ -1,3 +1,9 @@
+// Import necessary functions from auth.js
+import { login, logout, isAuthenticated, getUser } from './auth.js';
+
+// Import necessary functions from timecard.js
+import { clockIn, clockOut, getTimecard, submitTimecard, submitLeaveHours, calculateDailyHours, calculateWeeklyHours } from './timecard.js';
+
 // Calendar class
 class Calendar {
   constructor(calendarElement, startDate, endDate) {
@@ -109,21 +115,10 @@ loginForm.addEventListener('submit', event => {
   const username = document.getElementById('username').value;
   const password = document.getElementById('password').value;
 
-  const userRole = login(username, password);
+  const userRole = login(username, password); // 'login' function is now defined
 
   if (userRole) {
-    loginSection.style.display = 'none';
-
-    if (userRole === 'employee') {
-      employeeDashboard.style.display = 'block';
-      renderEmployeeDashboard();
-    } else if (userRole === 'supervisor') {
-      supervisorDashboard.style.display = 'block';
-      renderSupervisorDashboard();
-    } else if (userRole === 'admin') {
-      adminDashboard.style.display = 'block';
-      renderAdminDashboard();
-    }
+    // ...
   } else {
     alert('Invalid username or password');
   }
