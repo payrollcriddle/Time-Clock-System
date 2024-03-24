@@ -47,6 +47,7 @@ loginForm.addEventListener('submit', event => {
 function renderEmployeeDashboard() {
   const user = getUser();
   document.getElementById('employee-name').textContent = user.name;
+  document.getElementById('time-zone').textContent = getTimeZone(user.state);
   
   renderActivityTypeSelect();
   renderJobSelect();
@@ -86,6 +87,24 @@ function displayCurrentTime() {
 
 // Update current time every second
 setInterval(displayCurrentTime, 1000);
+
+// Function to get the time zone based on the employee's state
+function getTimeZone(state) {
+  // Define the time zone mapping for each state
+  const timeZoneMap = {
+    California: 'America/Los_Angeles',
+    Oregon: 'America/Los_Angeles',
+    Washington: 'America/Los_Angeles',
+    Montana: 'America/Denver',
+    Wyoming: 'America/Denver',
+    Nevada: 'America/Los_Angeles',
+    Idaho: 'America/Boise',
+    Colorado: 'America/Denver',
+    // Add more states and their corresponding time zones
+  };
+
+  return timeZoneMap[state] || 'America/New_York'; // Default to Eastern Time if state is not found
+}
 
 // Function to render activity type select options
 function renderActivityTypeSelect() {
@@ -129,15 +148,22 @@ function renderWeeklyHoursTable() {
 // Function to handle day status change
 function handleDayStatusChange() {
   const dayStatus = document.getElementById('day-status').value;
-  const leaveHoursSection = document.getElementById('leave-hours');
-  const jobSelect = document.getElementById('job');
+  const activityJobSection = document.getElementById('activity-job-section');
+  const leaveHoursSection = document.getElementById('leave-hours-section');
+  const mealPeriodWaiver = document.getElementById('meal-period-waiver');
 
-  if (dayStatus === 'leave') {
-    leaveHoursSection.style.display = 'block';
-    jobSelect.style.display = 'none';
-  } else {
+  if (dayStatus === 'working') {
+    activityJobSection.style.display = 'block';
     leaveHoursSection.style.display = 'none';
-    jobSelect.style.display = 'block';
+    mealPeriodWaiver.style.display = 'block';
+  } else if (dayStatus === 'leave') {
+    activityJobSection.style.display = 'none';
+    leaveHoursSection.style.display = 'block';
+    mealPeriodWaiver.style.display = 'none';
+  } else {
+    activityJobSection.style.display = 'none';
+    leaveHoursSection.style.display = 'none';
+    mealPeriodWaiver.style.display = 'none';
   }
 }
 
@@ -145,26 +171,27 @@ function handleDayStatusChange() {
 function handleClockIn() {
   const user = getUser();
   const dayStatus = document.getElementById('day-status').value;
-  const activityTypeId = document.getElementById('activity-type').value;
+  const activityTypeId = document.getElementById('activity-type').value || 'working';
   const jobId = document.getElementById('job').value;
   const timecardNote = document.getElementById('timecard-note').value;
 
-  if (dayStatus && activityTypeId) {
-    clockIn(user.id, dayStatus, activityTypeId, jobId, timecardNote);
+  if (dayStatus) {
+    const timestamp = new Date().toLocaleString('en-US', { timeZone: getTimeZone(user.state) });
+    clockIn(user.id, dayStatus, activityTypeId, jobId, timecardNote, timestamp);
     document.getElementById('clock-in-btn').disabled = true;
     document.getElementById('clock-out-btn').disabled = false;
     document.getElementById('meal-start-btn').disabled = false;
-    document.getElementById('meal-end-btn').disabled = true;
     renderWeeklyHoursTable();
   } else {
-    alert('Please select a day status and activity type.');
+    alert('Please select a day status.');
   }
 }
 
 // Function to handle clock out
 function handleClockOut() {
   const user = getUser();
-  clockOut(user.id);
+  const timestamp = new Date().toLocaleString('en-US', { timeZone: getTimeZone(user.state) });
+  clockOut(user.id, timestamp);
   document.getElementById('clock-in-btn').disabled = false;
   document.getElementById('clock-out-btn').disabled = true;
   document.getElementById('meal-start-btn').disabled = true;
@@ -175,9 +202,9 @@ function handleClockOut() {
 // Function to handle meal start
 function handleMealStart() {
   const user = getUser();
-  const timestamp = new Date().toLocaleString();
-  // Record meal start entry in the database or data store
-  // ...
+  const timestamp = new Date().toLocaleString('en-US', { timeZone: getTimeZone(user.state) });
+  const activityTypeId = 'meal';
+  clockIn(user.id, 'working', activityTypeId, null, null, timestamp);
   document.getElementById('meal-start-btn').disabled = true;
   document.getElementById('meal-end-btn').disabled = false;
   renderWeeklyHoursTable();
@@ -186,12 +213,154 @@ function handleMealStart() {
 // Function to handle meal end
 function handleMealEnd() {
   const user = getUser();
-  const timestamp = new Date().toLocaleString();
-  // Record meal end entry in the database or data store
-  // ...
+  const timestamp = new Date().toLocaleString('en-US', { timeZone: getTimeZone(user.state) });
+  const activityTypeId = 'working';
+  clockIn(user.id, 'working', activityTypeId, null, null, timestamp);
   document.getElementById('meal-start-btn').disabled = false;
   document.getElementById('meal-end-btn').disabled = true;
   renderWeeklyHoursTable();
 }
 
-// Function to handle timecard
+// Function to handle timecard submission
+function handleTimecardSubmission() {
+  const timecardSubmissionDialog = document.getElementById('timecard-submission-dialog');
+  timecardSubmissionDialog.style.display = 'block';
+}
+
+// Function to confirm timecard submission
+function confirmTimecardSubmission() {
+  const user = getUser();
+  const leaveType = document.getElementById('leave-type').value;
+  const leaveHours = document.getElementById('leave-hours').value;
+
+  if (leaveType && leaveHours) {
+    submitLeaveHours(user.id, leaveType, leaveHours);
+  }
+
+  submitTimecard(user.id);
+  alert('Timecard submitted successfully.');
+  closeTimecardSubmissionDialog();
+  
+  // Send notification to supervisor
+  const supervisor = getSupervisor(user.id);
+  const notificationMessage = getNotificationMessage('timecardSubmitted');
+  sendTeamsNotification(supervisor, notificationMessage);
+}
+
+// Function to cancel timecard submission
+function cancelTimecardSubmission() {
+  closeTimecardSubmissionDialog();
+}
+
+// Function to close timecard submission dialog
+function closeTimecardSubmissionDialog() {
+  const timecardSubmissionDialog = document.getElementById('timecard-submission-dialog');
+  timecardSubmissionDialog.style.display = 'none';
+}
+
+// Function to update total weekly hours
+function updateTotalWeeklyHours() {
+  const user = getUser();
+  const timecard = getTimecard(user.id);
+  const { regularHours, overtimeHours, doubleTimeHours } = calculateHours(user.state, timecard);
+
+  document.getElementById('total-hours').textContent = regularHours + overtimeHours + doubleTimeHours;
+  document.getElementById('regular-hours').textContent = regularHours;
+  document.getElementById('ot-hours').textContent = overtimeHours;
+  document.getElementById('dt-hours').textContent = doubleTimeHours;
+}
+
+// Function to render supervisor dashboard
+function renderSupervisorDashboard() {
+  const user = getUser();
+  const timecardReviewTableBody = document.getElementById('timecard-review-table').getElementsByTagName('tbody')[0];
+  timecardReviewTableBody.innerHTML = '';
+
+  const timecards = getTimecards(); // Get all timecards for review
+  timecards.forEach(timecard => {
+    const row = document.createElement('tr');
+    row.innerHTML = `
+      <td>${timecard.employeeName}</td>
+      <td>${timecard.startDate}</td>
+      <td>${timecard.endDate}</td>
+      <td>${timecard.status}</td>
+      <td>
+        <button class="review-btn" data-timecard-id="${timecard.id}">Review</button>
+        <button class="approve-btn" data-timecard-id="${timecard.id}">Approve</button>
+        <button class="reject-btn" data-timecard-id="${timecard.id}">Reject</button>
+      </td>
+    `;
+    timecardReviewTableBody.appendChild(row);
+  });
+}
+
+// Function to render admin dashboard
+function renderAdminDashboard() {
+  const user = getUser();
+  renderEmployeeTable();
+  renderActivityTypeList();
+  renderJobList();
+  renderNotificationForm();
+}
+
+// Function to render employee table
+function renderEmployeeTable() {
+  const employeeTableBody = document.getElementById('employee-table').getElementsByTagName('tbody')[0];
+  const employees = getEmployees();
+  employeeTableBody.innerHTML = '';
+
+  employees.forEach(employee => {
+    const row = document.createElement('tr');
+    row.innerHTML = `
+      <td>${employee.name}</td>
+      <td>${employee.username}</td>
+      <td>${employee.employeeId}</td>
+      <td>${employee.role}</td>
+      <td>${employee.state}</td>
+      <td>
+        <button class="edit-btn" data-employee-id="${employee.id}">Edit</button>
+        <button class="delete-btn" data-employee-id="${employee.id}">Delete</button>
+      </td>
+    `;
+    employeeTableBody.appendChild(row);
+  });
+}
+
+// Function to render notification form
+function renderNotificationForm() {
+  const notificationForm = document.getElementById('notification-form');
+
+  notificationForm.addEventListener('submit', event => {
+    event.preventDefault();
+
+    const notificationInstance = document.getElementById('notification-instance').value;
+    const notificationMessage = document.getElementById('notification-message').value;
+
+    // Save the notification message for the specific instance
+    saveNotificationMessage(notificationInstance, notificationMessage);
+
+    alert('Notification message saved successfully.');
+    notificationForm.reset();
+  });
+}
+
+// Function to save notification message
+function saveNotificationMessage(instance, message) {
+  // Save the notification message in the database or data store
+  // ...
+}
+
+// Function to get notification message
+function getNotificationMessage(instance) {
+  // Retrieve the notification message from the database or data store based on the instance
+  // ...
+  // Return the notification message
+  return notificationMessage;
+}
+
+// Function to send notification
+function sendNotification(recipient, message) {
+  // Placeholder function for sending notifications
+  console.log(`Sending notification to ${recipient}: ${message}`);
+  // Replace this with the actual implementation using the Teams API or any other notification system
+}
