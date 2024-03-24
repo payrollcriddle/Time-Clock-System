@@ -61,6 +61,17 @@ h3 {
   width: 300px;
 }
 
+/* Time Clock Styles */
+#time-clock {
+  text-align: center;
+}
+
+#current-time {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
 /* Calendar Styles */
 #calendar {
   width: 100%;
