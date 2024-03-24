@@ -77,6 +77,16 @@ function renderEmployeeDashboard() {
   document.getElementById('cancel-submission-btn').addEventListener('click', cancelTimecardSubmission);
 }
 
+// Function to display current time
+function displayCurrentTime() {
+  const currentTimeElement = document.getElementById('current-time');
+  const currentTime = new Date().toLocaleString();
+  currentTimeElement.textContent = currentTime;
+}
+
+// Update current time every second
+setInterval(displayCurrentTime, 1000);
+
 // Function to render activity type select options
 function renderActivityTypeSelect() {
   const activityTypeSelect = document.getElementById('activity-type');
@@ -141,6 +151,10 @@ function handleClockIn() {
 
   if (dayStatus && activityTypeId) {
     clockIn(user.id, dayStatus, activityTypeId, jobId, timecardNote);
+    document.getElementById('clock-in-btn').disabled = true;
+    document.getElementById('clock-out-btn').disabled = false;
+    document.getElementById('meal-start-btn').disabled = false;
+    document.getElementById('meal-end-btn').disabled = true;
     renderWeeklyHoursTable();
   } else {
     alert('Please select a day status and activity type.');
@@ -151,6 +165,10 @@ function handleClockIn() {
 function handleClockOut() {
   const user = getUser();
   clockOut(user.id);
+  document.getElementById('clock-in-btn').disabled = false;
+  document.getElementById('clock-out-btn').disabled = true;
+  document.getElementById('meal-start-btn').disabled = true;
+  document.getElementById('meal-end-btn').disabled = true;
   renderWeeklyHoursTable();
 }
 
@@ -160,6 +178,8 @@ function handleMealStart() {
   const timestamp = new Date().toLocaleString();
   // Record meal start entry in the database or data store
   // ...
+  document.getElementById('meal-start-btn').disabled = true;
+  document.getElementById('meal-end-btn').disabled = false;
   renderWeeklyHoursTable();
 }
 
@@ -169,113 +189,9 @@ function handleMealEnd() {
   const timestamp = new Date().toLocaleString();
   // Record meal end entry in the database or data store
   // ...
+  document.getElementById('meal-start-btn').disabled = false;
+  document.getElementById('meal-end-btn').disabled = true;
   renderWeeklyHoursTable();
 }
 
-// Function to handle timecard submission
-function handleTimecardSubmission() {
-  const timecardSubmissionDialog = document.getElementById('timecard-submission-dialog');
-  timecardSubmissionDialog.style.display = 'block';
-}
-
-// Function to confirm timecard submission
-function confirmTimecardSubmission() {
-  const user = getUser();
-  submitTimecard(user.id);
-  alert('Timecard submitted successfully.');
-  // Send notification to supervisor
-  const supervisor = getSupervisor(user.id);
-  sendTeamsNotification(supervisor, `${user.name} has submitted their timecard.`);
-  closeTimecardSubmissionDialog();
-}
-
-// Function to cancel timecard submission
-function cancelTimecardSubmission() {
-  closeTimecardSubmissionDialog();
-}
-
-// Function to close timecard submission dialog
-function closeTimecardSubmissionDialog() {
-  const timecardSubmissionDialog = document.getElementById('timecard-submission-dialog');
-  timecardSubmissionDialog.style.display = 'none';
-}
-
-// Function to handle meal period waiver
-function handleMealPeriodWaiver() {
-  const user = getUser();
-  const state = user.state;
-  const mealPeriodPolicy = mealPeriodPolicies[state];
-
-  if (mealPeriodPolicy && mealPeriodPolicy.waivable) {
-    const waived = document.getElementById('meal-period-waiver-checkbox').checked;
-    // Handle meal period waiver logic based on state policy
-    // ...
-  }
-}
-
-// Function to update total weekly hours
-function updateTotalWeeklyHours() {
-  const user = getUser();
-  const timecard = getTimecard(user.id);
-  const { regularHours, overtimeHours, doubleTimeHours } = calculateHours(user.state, timecard);
-
-  document.getElementById('total-hours').textContent = regularHours + overtimeHours + doubleTimeHours;
-  document.getElementById('regular-hours').textContent = regularHours;
-  document.getElementById('ot-hours').textContent = overtimeHours;
-  document.getElementById('dt-hours').textContent = doubleTimeHours;
-}
-
-// Function to render supervisor dashboard
-function renderSupervisorDashboard() {
-  const user = getUser();
-  const timecardReviewTableBody = document.getElementById('timecard-review-table').getElementsByTagName('tbody')[0];
-  timecardReviewTableBody.innerHTML = '';
-
-  const timecards = getTimecards(); // Get all timecards for review
-  timecards.forEach(timecard => {
-    const row = document.createElement('tr');
-    row.innerHTML = `
-      <td>${timecard.employeeName}</td>
-      <td>${timecard.startDate}</td>
-      <td>${timecard.endDate}</td>
-      <td>${timecard.status}</td>
-      <td>
-        <button class="review-btn" data-timecard-id="${timecard.id}">Review</button>
-        <button class="approve-btn" data-timecard-id="${timecard.id}">Approve</button>
-        <button class="reject-btn" data-timecard-id="${timecard.id}">Reject</button>
-      </td>
-    `;
-    timecardReviewTableBody.appendChild(row);
-  });
-}
-
-// Function to render admin dashboard
-function renderAdminDashboard() {
-  const user = getUser();
-  renderEmployeeTable();
-  renderActivityTypeList();
-  renderJobList();
-}
-
-// Function to render employee table
-function renderEmployeeTable() {
-  const employeeTableBody = document.getElementById('employee-table').getElementsByTagName('tbody')[0];
-  const employees = getEmployees();
-  employeeTableBody.innerHTML = '';
-
-  employees.forEach(employee => {
-    const row = document.createElement('tr');
-    row.innerHTML = `
-      <td>${employee.name}</td>
-      <td>${employee.username}</td>
-      <td>${employee.employeeId}</td>
-      <td>${employee.role}</td>
-      <td>${employee.state}</td>
-      <td>
-        <button class="edit-btn" data-employee-id="${employee.id}">Edit</button>
-        <button class="delete-btn" data-employee-id="${employee.id}">Delete</button>
-      </td>
-    `;
-    employeeTableBody.appendChild(row);
-  });
-}
+// Function to handle timecard
