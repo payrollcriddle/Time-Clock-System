@@ -2,6 +2,7 @@
 export function clockIn(userId, dayStatus, activityTypeId, jobId, timecardNote, timestamp) {
   // Record clock in entry in the database or data store
   // Save the clock in entry with the provided data
+  console.log(`Clocked in at ${timestamp}`);
   // ...
 }
 
@@ -9,6 +10,7 @@ export function clockIn(userId, dayStatus, activityTypeId, jobId, timecardNote, 
 export function clockOut(userId, timestamp) {
   // Record clock out entry in the database or data store
   // Save the clock out entry for the user
+  console.log(`Clocked out at ${timestamp}`);
   // ...
 }
 
