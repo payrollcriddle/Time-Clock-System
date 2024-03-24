@@ -1,20 +1,24 @@
-// Import necessary modules and functions
-import { login, logout, isAuthenticated, getUser } from './auth.js';
-import { addEmployee, updateEmployee, deleteEmployee, getEmployees } from './employeeManagement.js';
-import { addActivityType, deleteActivityType, getActivityTypes } from './activityTypeManagement.js';
-import { addJob, deleteJob, getJobs } from './jobManagement.js';
-import { clockIn, clockOut, getTimecard, submitTimecard, calculateDailyHours, calculateWeeklyHours, submitLeaveHours } from './timecard.js';
-import { reviewTimecard, approveTimecard, rejectTimecard } from './timecardReview.js';
-import { calculateHours } from './hoursCalculation.js';
-import mealPeriodPolicies from './mealPeriodPolicies.js';
-import { sendTeamsNotification } from './teamsNotification.js';
+// Update these variables with your current pay period and next pay date
+const currentPayPeriodStartDate = new Date('2024-03-11');
+const currentPayPeriodEndDate = new Date('2024-03-24');
+const nextPayDate = new Date('2024-03-29');
 
 // Get DOM elements
+const calendarElement = document.getElementById('calendar');
+const payPeriodDatesElement = document.getElementById('pay-period-dates');
+const nextPayDateElement = document.getElementById('next-pay-date');
 const loginForm = document.getElementById('login-form');
 const loginSection = document.getElementById('login-section');
 const employeeDashboard = document.getElementById('employee-dashboard');
 const supervisorDashboard = document.getElementById('supervisor-dashboard');
 const adminDashboard = document.getElementById('admin-dashboard');
+
+// Render calendar
+renderCalendar(calendarElement, currentPayPeriodStartDate, currentPayPeriodEndDate);
+
+// Display pay period dates and next pay date
+payPeriodDatesElement.textContent = `${formatDate(currentPayPeriodStartDate)} - ${formatDate(currentPayPeriodEndDate)}`;
+nextPayDateElement.textContent = formatDate(nextPayDate);
 
 // Event listener for login form submission
 loginForm.addEventListener('submit', event => {
@@ -364,3 +368,44 @@ function sendNotification(recipient, message) {
   console.log(`Sending notification to ${recipient}: ${message}`);
   // Replace this with the actual implementation using the Teams API or any other notification system
 }
+
+// Function to render the calendar
+function renderCalendar(calendarElement, startDate, endDate) {
+  // Clear existing calendar content
+  calendarElement.innerHTML = '';
+
+  // Create a new calendar instance
+  const calendar = new Calendar(calendarElement, startDate, endDate);
+
+  // Highlight the current day
+  const currentDate = new Date();
+  calendar.highlightDay(currentDate);
+
+  // Highlight the pay period dates
+  calendar.highlightDates(startDate, endDate);
+}
+
+// Function to format dates
+function formatDate(date) {
+  const options = { month: 'long', day: 'numeric', year: 'numeric' };
+  return date.toLocaleDateString('en-US', options);
+}
+
+// Calendar class
+class Calendar {
+  constructor(calendarElement, startDate, endDate) {
+    this.calendarElement = calendarElement;
+    this.startDate = startDate;
+    this.endDate = endDate;
+    this.renderCalendar();
+  }
+
+  renderCalendar() {
+    const currentDate = new Date(this.startDate);
+    const endDate = new Date(this.endDate);
+
+    while (currentDate <= endDate) {
+      const day = document.createElement('div');
+      day.classList.add('day');
+      day.textContent = currentDate.getDate();
+      this.calendarElement.appendChild(
