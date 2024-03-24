@@ -440,7 +440,7 @@ function handleMealStart() {
   document.getElementById('meal-start-btn').disabled = true;
   document.getElementById('meal-end-btn').disabled = false;
   renderWeeklyHoursTable();
-  displayTimestamp(timestamp);
+  displayTimestamp(timestamp, 'Meal Start');
 }
 
 // Function to handle meal end
@@ -452,7 +452,7 @@ function handleMealEnd() {
   document.getElementById('meal-start-btn').disabled = false;
   document.getElementById('meal-end-btn').disabled = true;
   renderWeeklyHoursTable();
-  displayTimestamp(timestamp);
+  displayTimestamp(timestamp, 'Meal End');
 }
 
 // Function to handle timecard submission
@@ -462,9 +462,9 @@ function handleTimecardSubmission() {
 }
 
 // Function to display timestamp
-function displayTimestamp(timestamp) {
+function displayTimestamp(timestamp, type) {
   const timestampElement = document.createElement('p');
-  timestampElement.textContent = `Timestamp: ${timestamp}`;
+  timestampElement.textContent = `${type} Timestamp: ${timestamp}`;
   document.getElementById('time-clock').appendChild(timestampElement);
 }
 
