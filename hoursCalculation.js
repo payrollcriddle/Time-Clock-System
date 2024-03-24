@@ -1,3 +1,12 @@
+import { californiaRegulations } from './stateRegulations/california.js';
+import { coloradoRegulations } from './stateRegulations/colorado.js';
+import { nevadaRegulations } from './stateRegulations/nevada.js';
+import { oregonRegulations } from './stateRegulations/oregon.js';
+import { washingtonRegulations } from './stateRegulations/washington.js';
+import { montanaRegulations } from './stateRegulations/montana.js';
+import { wyomingRegulations } from './stateRegulations/wyoming.js';
+import { idahoRegulations } from './stateRegulations/idaho.js';
+
 // Function to calculate hours based on state regulations
 export function calculateHours(state, dailyHours, weeklyHours, hourlyRate) {
   let regularHours = 0;
@@ -5,71 +14,32 @@ export function calculateHours(state, dailyHours, weeklyHours, hourlyRate) {
   let doubleTimeHours = 0;
 
   switch (state) {
+    case 'California':
+      // Apply California regulations
+      ({ regularHours, overtimeHours, doubleTimeHours } = californiaRegulations(dailyHours, weeklyHours));
+      break;
+    case 'Colorado':
+      // Apply Colorado regulations
+      ({ regularHours, overtimeHours } = coloradoRegulations(dailyHours, weeklyHours));
+      break;
+    case 'Nevada':
+      // Apply Nevada regulations
+      ({ regularHours, overtimeHours } = nevadaRegulations(dailyHours, weeklyHours, hourlyRate));
+      break;
     case 'Oregon':
     case 'Washington':
     case 'Montana':
-      // Oregon, Washington, and Montana labor regulations
-      regularHours = Math.min(40, weeklyHours);
-      if (weeklyHours > 40) {
-        overtimeHours = weeklyHours - 40;
-      }
+      // Apply Oregon, Washington, and Montana regulations
+      ({ regularHours, overtimeHours } = oregonRegulations(weeklyHours));
       break;
-
     case 'Wyoming':
     case 'Idaho':
-      // Wyoming and Idaho labor regulations (follow FLSA)
-      regularHours = Math.min(40, weeklyHours);
-      if (weeklyHours > 40) {
-        overtimeHours = weeklyHours - 40;
-      }
+      // Apply Wyoming and Idaho regulations (follow FLSA)
+      ({ regularHours, overtimeHours } = wyomingRegulations(weeklyHours));
       break;
-
-    case 'Nevada':
-      // Nevada labor regulations
-      if (hourlyRate < 1.5 * 8.25) { // Assuming minimum wage is $8.25
-        regularHours = Math.min(8, dailyHours);
-        if (dailyHours > 8) {
-          overtimeHours = dailyHours - 8;
-        }
-      } else {
-        regularHours = Math.min(40, weeklyHours);
-        if (weeklyHours > 40) {
-          overtimeHours = weeklyHours - 40;
-        }
-      }
-      break;
-
-    case 'California':
-      // California labor regulations
-      regularHours = Math.min(40, weeklyHours);
-      if (weeklyHours > 40) {
-        overtimeHours = weeklyHours - 40;
-      }
-      if (dailyHours > 8 && dailyHours <= 12) {
-        overtimeHours += dailyHours - 8;
-      } else if (dailyHours > 12) {
-        overtimeHours += 4;
-        doubleTimeHours = dailyHours - 12;
-      }
-      break;
-
-    case 'Colorado':
-      // Colorado labor regulations
-      regularHours = Math.min(40, weeklyHours);
-      if (weeklyHours > 40) {
-        overtimeHours = weeklyHours - 40;
-      }
-      if (dailyHours > 12) {
-        overtimeHours += dailyHours - 12;
-      }
-      break;
-
     default:
       // Default labor regulations (follow FLSA)
-      regularHours = Math.min(40, weeklyHours);
-      if (weeklyHours > 40) {
-        overtimeHours = weeklyHours - 40;
-      }
+      ({ regularHours, overtimeHours } = wyomingRegulations(weeklyHours));
   }
 
   return {
