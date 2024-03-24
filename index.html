@@ -15,105 +15,111 @@
     </form>
   </section>
 
-<!-- Employee Dashboard -->
-<section id="employee-dashboard" style="display: none;">
-  <h2>Employee Dashboard</h2>
-  <p>Welcome, <span id="employee-name"></span>!</p>
-  
-  <!-- Clock In/Out -->
-  <div id="clock-inout">
-    <select id="day-status" required>
-      <option value="">Select Day Status</option>
-      <option value="working">Working</option>
-      <option value="off">Off</option>
-      <option value="leave">Leave</option>
-    </select>
-    <select id="activity-type" required>
-      <option value="">Select Activity</option>
-      <!-- Dynamically populate activity types -->
-    </select>
-    <select id="job" required>
-      <option value="">Select Job</option>
-      <!-- Dynamically populate jobs -->
-    </select>
-    <input type="text" id="timecard-note" placeholder="Timecard Note">
-    <button id="clock-in-btn">Clock In</button>
-    <button id="clock-out-btn">Clock Out</button>
-    <button id="meal-start-btn">Meal Start</button>
-    <button id="meal-end-btn">Meal End</button>
-  </div>
-  
-  <!-- Leave Hours -->
-  <div id="leave-hours" style="display: none;">
-    <select id="leave-type" required>
-      <option value="">Select Leave Type</option>
-      <option value="paid-time-off">Paid Time Off</option>
-      <option value="bonus-pto">Bonus PTO</option>
-      <option value="sick-hours">Sick Hours</option>
-      <option value="flex-hours">Flex Hours</option>
-    </select>
-    <input type="number" id="leave-hours-input" placeholder="Enter Leave Hours">
-  </div>
-  
-  <!-- Weekly Hours Table -->
-  <table id="weekly-hours-table">
-    <thead>
-      <tr>
-        <th>Activity</th>
-        <th>Mon</th>
-        <th>Tue</th>
-        <th>Wed</th>
-        <th>Thu</th>
-        <th>Fri</th>
-        <th>Sat</th>
-        <th>Sun</th>
-        <th>Weekly Totals</th>
-      </tr>
-    </thead>
-    <tbody>
-      <!-- Dynamically populate table rows based on activities and hours -->
-    </tbody>
-    <tfoot>
-      <tr>
-        <td>Daily Totals</td>
-        <td id="mon-total">0</td>
-        <td id="tue-total">0</td>
-        <td id="wed-total">0</td>
-        <td id="thu-total">0</td>
-        <td id="fri-total">0</td>
-        <td id="sat-total">0</td>
-        <td id="sun-total">0</td>
-        <td id="weekly-total">0</td>
-      </tr>
-    </tfoot>
-  </table>
-  
-  <!-- Total Weekly Hours -->
-  <div id="total-weekly-hours">
-    <p>Total Hours: <span id="total-hours">0</span></p>
-    <p>Regular Hours: <span id="regular-hours">0</span></p>
-    <p>OT Hours: <span id="ot-hours">0</span></p>
-    <p>DT Hours: <span id="dt-hours">0</span></p>
-  </div>
-  
-  <!-- Meal Period Waiver -->
-  <div id="meal-period-waiver">
-    <h3>Meal Period Waiver</h3>
-    <input type="checkbox" id="meal-period-waiver-checkbox">
-    <label for="meal-period-waiver-checkbox">Waive Meal Period</label>
-  </div>
-  
-  <!-- Timecard Submission -->
-  <button id="submit-timecard-btn">Submit Timecard</button>
-  
-  <!-- Timecard Submission Dialog -->
-  <div id="timecard-submission-dialog" style="display: none;">
-    <h3>Timecard Submission</h3>
-    <p>By submitting this timecard, you acknowledge that all information provided is accurate and complete.</p>
-    <button id="confirm-submission-btn">Confirm</button>
-    <button id="cancel-submission-btn">Cancel</button>
-  </div>
-</section>
+  <!-- Employee Dashboard -->
+  <section id="employee-dashboard" style="display: none;">
+    <h2>Employee Dashboard</h2>
+    <p>Welcome, <span id="employee-name"></span>!</p>
+    
+    <!-- Time Clock -->
+    <div id="time-clock">
+      <h3>Time Clock</h3>
+      <p>Current Time: <span id="current-time"></span></p>
+      <button id="clock-in-btn">Clock In</button>
+      <button id="clock-out-btn" disabled>Clock Out</button>
+    </div>
+    
+    <!-- Clock In/Out -->
+    <div id="clock-inout">
+      <select id="day-status" required>
+        <option value="">Select Day Status</option>
+        <option value="working">Working</option>
+        <option value="off">Off</option>
+        <option value="leave">Leave</option>
+      </select>
+      <select id="activity-type" required>
+        <option value="">Select Activity</option>
+        <!-- Dynamically populate activity types -->
+      </select>
+      <select id="job" required>
+        <option value="">Select Job</option>
+        <!-- Dynamically populate jobs -->
+      </select>
+      <input type="text" id="timecard-note" placeholder="Timecard Note">
+      <button id="meal-start-btn" disabled>Meal Start</button>
+      <button id="meal-end-btn" disabled>Meal End</button>
+    </div>
+    
+    <!-- Leave Hours -->
+    <div id="leave-hours" style="display: none;">
+      <select id="leave-type" required>
+        <option value="">Select Leave Type</option>
+        <option value="paid-time-off">Paid Time Off</option>
+        <option value="bonus-pto">Bonus PTO</option>
+        <option value="sick-hours">Sick Hours</option>
+        <option value="flex-hours">Flex Hours</option>
+      </select>
+      <input type="number" id="leave-hours-input" placeholder="Enter Leave Hours">
+    </div>
+    
+    <!-- Weekly Hours Table -->
+    <table id="weekly-hours-table">
+      <thead>
+        <tr>
+          <th>Activity</th>
+          <th>Mon</th>
+          <th>Tue</th>
+          <th>Wed</th>
+          <th>Thu</th>
+          <th>Fri</th>
+          <th>Sat</th>
+          <th>Sun</th>
+          <th>Weekly Totals</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Dynamically populate table rows based on activities and hours -->
+      </tbody>
+      <tfoot>
+        <tr>
+          <td>Daily Totals</td>
+          <td id="mon-total">0</td>
+          <td id="tue-total">0</td>
+          <td id="wed-total">0</td>
+          <td id="thu-total">0</td>
+          <td id="fri-total">0</td>
+          <td id="sat-total">0</td>
+          <td id="sun-total">0</td>
+          <td id="weekly-total">0</td>
+        </tr>
+      </tfoot>
+    </table>
+    
+    <!-- Total Weekly Hours -->
+    <div id="total-weekly-hours">
+      <p>Total Hours: <span id="total-hours">0</span></p>
+      <p>Regular Hours: <span id="regular-hours">0</span></p>
+      <p>OT Hours: <span id="ot-hours">0</span></p>
+      <p>DT Hours: <span id="dt-hours">0</span></p>
+    </div>
+    
+    <!-- Meal Period Waiver -->
+    <div id="meal-period-waiver">
+      <h3>Meal Period Waiver</h3>
+      <input type="checkbox" id="meal-period-waiver-checkbox">
+      <label for="meal-period-waiver-checkbox">Waive Meal Period</label>
+    </div>
+    
+    <!-- Timecard Submission -->
+    <button id="submit-timecard-btn">Submit Timecard</button>
+    
+    <!-- Timecard Submission Dialog -->
+    <div id="timecard-submission-dialog" style="display: none;">
+      <h3>Timecard Submission</h3>
+      <p>By submitting this timecard, you acknowledge that all information provided is accurate and complete.</p>
+      <button id="confirm-submission-btn">Confirm</button>
+      <button id="cancel-submission-btn">Cancel</button>
+    </div>
+  </section>
   
   <!-- Supervisor Dashboard -->
   <section id="supervisor-dashboard" style="display: none;">
