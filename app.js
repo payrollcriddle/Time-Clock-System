@@ -111,6 +111,7 @@ function formatDate(date) {
 // Event listener for login form submission
 loginForm.addEventListener('submit', event => {
   event.preventDefault();
+  console.log('Login form submitted'); // Add this line
 
   const username = document.getElementById('username').value;
   const password = document.getElementById('password').value;
@@ -118,7 +119,23 @@ loginForm.addEventListener('submit', event => {
   const userRole = login(username, password); // 'login' function is now defined
 
   if (userRole) {
-    // ...
+    console.log('User role:', userRole); // Add this line
+    loginSection.style.display = 'none';
+    console.log('Login section hidden'); // Add this line
+
+    if (userRole === 'employee') {
+      console.log('Rendering employee dashboard'); // Add this line
+      employeeDashboard.style.display = 'block';
+      renderEmployeeDashboard();
+    } else if (userRole === 'supervisor') {
+      console.log('Rendering supervisor dashboard'); // Add this line
+      supervisorDashboard.style.display = 'block';
+      renderSupervisorDashboard();
+    } else if (userRole === 'admin') {
+      console.log('Rendering admin dashboard'); // Add this line
+      adminDashboard.style.display = 'block';
+      renderAdminDashboard();
+    }
   } else {
     alert('Invalid username or password');
   }
