@@ -1,15 +1,13 @@
 // Function to handle clock in
-export function clockIn(userId, dayStatus, activityTypeId, jobId, timecardNote) {
+export function clockIn(userId, dayStatus, activityTypeId, jobId, timecardNote, timestamp) {
   // Record clock in entry in the database or data store
-  const timestamp = new Date().toLocaleString();
   // Save the clock in entry with the provided data
   // ...
 }
 
 // Function to handle clock out
-export function clockOut(userId) {
+export function clockOut(userId, timestamp) {
   // Record clock out entry in the database or data store
-  const timestamp = new Date().toLocaleString();
   // Save the clock out entry for the user
   // ...
 }
