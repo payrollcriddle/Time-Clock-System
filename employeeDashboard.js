@@ -314,7 +314,7 @@ export function renderEmployeeDashboard() {
 // Function to display current time
 function displayCurrentTime() {
   const currentTimeElement = document.getElementById('current-time');
-  const currentTime = new Date().toLocaleString();
+  const currentTime = new Date().toLocaleString('en-US', { timeZone: getTimeZone(getUser().state) });
   currentTimeElement.textContent = currentTime;
 }
 
@@ -412,7 +412,7 @@ function handleClockIn() {
     document.getElementById('clock-out-btn').disabled = false;
     document.getElementById('meal-start-btn').disabled = false;
     renderWeeklyHoursTable();
-    displayTimestamp(timestamp);
+    displayTimestamp('Clock In', timestamp);
   } else {
     alert('Please select a day status.');
   }
@@ -428,7 +428,7 @@ function handleClockOut() {
   document.getElementById('meal-start-btn').disabled = true;
   document.getElementById('meal-end-btn').disabled = true;
   renderWeeklyHoursTable();
-  displayTimestamp(timestamp);
+  displayTimestamp('Clock Out', timestamp);
 }
 
 // Function to handle meal start
@@ -440,7 +440,7 @@ function handleMealStart() {
   document.getElementById('meal-start-btn').disabled = true;
   document.getElementById('meal-end-btn').disabled = false;
   renderWeeklyHoursTable();
-  displayTimestamp(timestamp, 'Meal Start');
+  displayTimestamp('Meal Start', timestamp);
 }
 
 // Function to handle meal end
@@ -452,7 +452,7 @@ function handleMealEnd() {
   document.getElementById('meal-start-btn').disabled = false;
   document.getElementById('meal-end-btn').disabled = true;
   renderWeeklyHoursTable();
-  displayTimestamp(timestamp, 'Meal End');
+  displayTimestamp('Meal End', timestamp);
 }
 
 // Function to handle timecard submission
@@ -462,7 +462,7 @@ function handleTimecardSubmission() {
 }
 
 // Function to display timestamp
-function displayTimestamp(timestamp, type) {
+function displayTimestamp(type, timestamp) {
   const timestampElement = document.createElement('p');
   timestampElement.textContent = `${type} Timestamp: ${timestamp}`;
   document.getElementById('time-clock').appendChild(timestampElement);
