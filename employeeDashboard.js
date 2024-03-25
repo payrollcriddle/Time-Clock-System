@@ -330,6 +330,7 @@ function getTimeZone(state) {
     Nevada: 'America/Los_Angeles',
     Idaho: 'America/Boise',
     Colorado: 'America/Denver',
+    New_York: 'America/New_York',
     // Add more states and their corresponding time zones
   };
 
@@ -407,6 +408,17 @@ function handleClockIn() {
 
   if (dayStatus) {
     const timestamp = new Date().toLocaleString('en-US', { timeZone: getTimeZone(user.state) });
+    
+    // Check if the employee is already clocked in
+    const timecard = getTimecard(user.id);
+    const lastEntry = timecard.entries[timecard.entries.length - 1];
+    if (lastEntry && !lastEntry.endTime) {
+      // Record the ending time stamp for the previous clock-in entry
+      lastEntry.endTime = timestamp;
+      updateTimecard(user.id, timecard);
+    }
+    
+    // Start a new clock-in entry
     clockIn(user.id, dayStatus, activityTypeId, jobId, timecardNote, timestamp);
     document.getElementById('clock-in-btn').disabled = true;
     document.getElementById('clock-out-btn').disabled = false;
