@@ -1,13 +1,29 @@
 // Function to handle clock in
 export function clockIn(userId, dayStatus, activityTypeId, jobId, timecardNote, timestamp) {
   // Record clock in entry in the database or data store
-  // Save the clock in entry with the provided data
+  // Save the clock in entry with the provided data, including the timecard note
   console.log(`Clocked in at ${timestamp}`);
-  
   if (activityTypeId === 'meal') {
     console.log(`Meal started at ${timestamp}`);
   }
+  // ...
   
+  // Save the timecard note along with the time stamp and other relevant data
+  const entry = {
+    userId,
+    dayStatus,
+    activityTypeId,
+    jobId,
+    timecardNote,
+    startTime: timestamp,
+    endTime: null
+  };
+  saveTimecardEntry(entry);
+}
+
+// Function to save timecard entry
+export function saveTimecardEntry(entry) {
+  // Save the timecard entry to the database or data store
   // ...
 }
 
@@ -57,4 +73,10 @@ export function calculateWeeklyHours(userId) {
   // ...
   // Return the calculated weekly hours
   return weeklyHours;
+}
+
+// Function to update timecard data
+export function updateTimecard(userId, timecard) {
+  // Update the timecard data in the database or data store for the specified user
+  // ...
 }
