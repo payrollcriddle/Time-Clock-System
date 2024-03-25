@@ -372,6 +372,17 @@ function renderWeeklyHoursTable() {
 
   // Render table rows based on activities and hours
   // ...
+  
+  // Display timecard notes alongside the corresponding time stamps
+  timecard.entries.forEach(entry => {
+    const row = document.createElement('tr');
+    // ...
+    const timecardNoteCell = document.createElement('td');
+    timecardNoteCell.textContent = entry.timecardNote;
+    row.appendChild(timecardNoteCell);
+    // ...
+    weeklyHoursTableBody.appendChild(row);
+  });
 
   updateTotalWeeklyHours();
 }
