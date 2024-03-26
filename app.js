@@ -45,7 +45,7 @@ loginForm.addEventListener('submit', event => {
 
 // Event listener for logout
 document.addEventListener('click', event => {
-  if (event.target.matches('#logout-btn')) {
+  if (event.target.matches('#logoutButton')) {
     logout();
     loginSection.style.display = 'block';
     employeeDashboard.style.display = 'none';
