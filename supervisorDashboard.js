@@ -1,9 +1,8 @@
 // supervisorDashboard.js
-import { getUser } from './auth.js';
+import { logout, redirectToLogin } from './auth.js';
 
 // Function to render the supervisor dashboard
 export function renderSupervisorDashboard() {
-  const user = getUser();
   const supervisorDashboard = document.getElementById('supervisor-dashboard');
   
   // Clear the existing content
@@ -47,12 +46,18 @@ export function renderSupervisorDashboard() {
 function fetchTimecardsForReview() {
   // Make an API call or retrieve data from the database to get the timecards for review
   // ...
-  
+
+  // For demonstration purposes, let's assume we have a static array of timecards
+  const timecards = [
+    { id: 1, employeeName: 'John Doe', startDate: '2024-03-01', endDate: '2024-03-07', status: 'Pending' },
+    { id: 2, employeeName: 'Jane Smith', startDate: '2024-03-01', endDate: '2024-03-07', status: 'Approved' },
+    { id: 3, employeeName: 'Alice Johnson', startDate: '2024-03-01', endDate: '2024-03-07', status: 'Rejected' }
+  ];
+
   // Render the timecards in the table
   const timecardTableBody = document.querySelector('#timecard-review-table tbody');
   timecardTableBody.innerHTML = '';
-  
-  // Assuming `timecards` is an array of timecard objects
+
   timecards.forEach(timecard => {
     const row = document.createElement('tr');
     row.innerHTML = `
@@ -68,25 +73,7 @@ function fetchTimecardsForReview() {
     `;
     timecardTableBody.appendChild(row);
   });
-  
+
   // Add event listeners for review, approve, and reject buttons
   // ...
-}
-
-// Function to handle logout
-function logout() {
-  // Perform logout actions, such as clearing session/local storage, and redirecting to login functionality
-  // Example:
-  // Clear session storage
-  sessionStorage.removeItem('loggedIn');
-  // Redirect to login functionality
-  redirectToLogin();
-}
-
-// Function to redirect to login functionality
-function redirectToLogin() {
-  // Implement your login functionality here, such as showing a login modal, navigating to a login route, etc.
-  // For example, if you're using a single-page application (SPA) framework like React or Vue.js, you might trigger a route change to the login page.
-  // For simplicity, let's just log a message to the console
-  console.log("Redirecting to login functionality...");
 }
