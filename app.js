@@ -17,20 +17,32 @@ function renderDashboard() {
   if (user) {
     loginSection.style.display = 'none';
     if (user.role === 'employee') {
-      employeeDashboard.style.display = 'block';
-      renderEmployeeDashboard();
+      if (employeeDashboard) {
+        employeeDashboard.style.display = 'block';
+        renderEmployeeDashboard();
+      }
     } else if (user.role === 'supervisor') {
-      supervisorDashboard.style.display = 'block';
-      renderSupervisorDashboard();
+      if (supervisorDashboard) {
+        supervisorDashboard.style.display = 'block';
+        renderSupervisorDashboard();
+      }
     } else if (user.role === 'admin') {
-      adminDashboard.style.display = 'block';
-      renderAdminDashboard();
+      if (adminDashboard) {
+        adminDashboard.style.display = 'block';
+        renderAdminDashboard();
+      }
     }
   } else {
     loginSection.style.display = 'block';
-    employeeDashboard.style.display = 'none';
-    supervisorDashboard.style.display = 'none';
-    adminDashboard.style.display = 'none';
+    if (employeeDashboard) {
+      employeeDashboard.style.display = 'none';
+    }
+    if (supervisorDashboard) {
+      supervisorDashboard.style.display = 'none';
+    }
+    if (adminDashboard) {
+      adminDashboard.style.display = 'none';
+    }
   }
 }
 
