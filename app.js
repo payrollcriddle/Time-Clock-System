@@ -6,7 +6,7 @@ import { renderAdminDashboard } from './adminDashboard.js';
 
 // Get DOM elements
 const loginForm = document.getElementById('login-form');
-const loginSection = document.getElementById('login-section');
+const loginPage = document.getElementById('login-page');
 const employeeDashboard = document.getElementById('employee-dashboard');
 const supervisorDashboard = document.getElementById('supervisor-dashboard');
 const adminDashboard = document.getElementById('admin-dashboard');
@@ -15,7 +15,7 @@ const adminDashboard = document.getElementById('admin-dashboard');
 function renderDashboard() {
   const user = getUser();
   if (user) {
-    loginSection.style.display = 'none';
+    loginPage.style.display = 'none';
     if (user.role === 'employee') {
       employeeDashboard.style.display = 'block';
       renderEmployeeDashboard();
@@ -27,7 +27,7 @@ function renderDashboard() {
       renderAdminDashboard();
     }
   } else {
-    loginSection.style.display = 'block';
+    loginPage.style.display = 'block';
     employeeDashboard.style.display = 'none';
     supervisorDashboard.style.display = 'none';
     adminDashboard.style.display = 'none';
@@ -43,5 +43,5 @@ loginForm.addEventListener('submit', event => {
   renderDashboard();
 });
 
-// Initial rendering of the dashboard
+// Initial rendering of the dashboard or login page
 renderDashboard();
