@@ -1,37 +1,18 @@
 // supervisorDashboard.js
 
-// Function to redirect to login functionality
-function redirectToLogin() {
-  // Implement your login functionality here, such as showing a login modal, navigating to a login route, etc.
-  // For example, if you're using a single-page application (SPA) framework like React or Vue.js, you might trigger a route change to the login page.
-  // For simplicity, let's just log a message to the console
-  console.log("Redirecting to login functionality...");
-}
-
-// Function to handle logout
-export function logout() {
-  // Perform logout actions, such as clearing session/local storage, and redirecting to login functionality
-  // Example:
-  // Clear session storage
-  sessionStorage.removeItem('loggedIn');
-  // Redirect to login functionality
-  redirectToLogin();
-}
-
-import { getUser } from './auth.js';
+import { getUser, logout } from './auth.js';
 
 // Function to render the supervisor dashboard
 export function renderSupervisorDashboard() {
   const supervisorDashboard = document.getElementById('supervisor-dashboard');
-  
   // Clear the existing content
   supervisorDashboard.innerHTML = '';
-  
+
   // Create and append the necessary elements for the supervisor dashboard
   const heading = document.createElement('h2');
   heading.textContent = 'Supervisor Dashboard';
   supervisorDashboard.appendChild(heading);
-  
+
   // Render the timecard review and approval section
   const timecardReviewSection = document.createElement('section');
   timecardReviewSection.innerHTML = `
@@ -50,13 +31,13 @@ export function renderSupervisorDashboard() {
     </table>
   `;
   supervisorDashboard.appendChild(timecardReviewSection);
-  
+
   // Render the logout button
   const logoutButton = document.createElement('button');
   logoutButton.textContent = 'Logout';
   logoutButton.addEventListener('click', logout);
   supervisorDashboard.appendChild(logoutButton);
-  
+
   // Fetch and display the timecards for review
   fetchTimecardsForReview();
 }
@@ -76,7 +57,6 @@ function fetchTimecardsForReview() {
   // Render the timecards in the table
   const timecardTableBody = document.querySelector('#timecard-review-table tbody');
   timecardTableBody.innerHTML = '';
-
   timecards.forEach(timecard => {
     const row = document.createElement('tr');
     row.innerHTML = `
@@ -96,4 +76,3 @@ function fetchTimecardsForReview() {
   // Add event listeners for review, approve, and reject buttons
   // ...
 }
-
