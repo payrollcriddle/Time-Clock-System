@@ -129,3 +129,4 @@ export function updateTimecard(userId, timecard) {
   });
   localStorage.setItem('timecardEntries', JSON.stringify(updatedEntries));
 }
+
