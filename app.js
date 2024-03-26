@@ -6,42 +6,36 @@ import { renderAdminDashboard } from './adminDashboard.js';
 
 // Get DOM elements
 const loginForm = document.getElementById('login-form');
-const loginPage = document.getElementById('login-page');
+const loginSection = document.getElementById('login-section');
 const employeeDashboard = document.getElementById('employee-dashboard');
 const supervisorDashboard = document.getElementById('supervisor-dashboard');
 const adminDashboard = document.getElementById('admin-dashboard');
 
-// Function to render the appropriate dashboard based on user role
-function renderDashboard() {
-  const user = getUser();
-  if (user) {
-    loginPage.style.display = 'none';
-    if (user.role === 'employee') {
+// Event listener for login form submission
+loginForm.addEventListener('submit', event => {
+  event.preventDefault();
+  console.log('Login form submitted');
+  const username = document.getElementById('username').value;
+  const password = document.getElementById('password').value;
+  const userRole = login(username, password);
+  if (userRole) {
+    console.log('User role:', userRole);
+    loginSection.style.display = 'none';
+    console.log('Login section hidden');
+    if (userRole === 'employee') {
+      console.log('Rendering employee dashboard');
       employeeDashboard.style.display = 'block';
       renderEmployeeDashboard();
-    } else if (user.role === 'supervisor') {
+    } else if (userRole === 'supervisor') {
+      console.log('Rendering supervisor dashboard');
       supervisorDashboard.style.display = 'block';
       renderSupervisorDashboard();
-    } else if (user.role === 'admin') {
+    } else if (userRole === 'admin') {
+      console.log('Rendering admin dashboard');
       adminDashboard.style.display = 'block';
       renderAdminDashboard();
     }
   } else {
-    loginPage.style.display = 'block';
-    employeeDashboard.style.display = 'none';
-    supervisorDashboard.style.display = 'none';
-    adminDashboard.style.display = 'none';
+    alert('Invalid username or password');
   }
-}
-
-// Event listener for login form submission
-loginForm.addEventListener('submit', event => {
-  event.preventDefault();
-  const username = document.getElementById('username').value;
-  const password = document.getElementById('password').value;
-  login(username, password);
-  renderDashboard();
 });
-
-// Initial rendering of the dashboard or login page
-renderDashboard();
