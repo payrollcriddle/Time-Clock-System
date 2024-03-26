@@ -8,10 +8,17 @@ import { wyomingRegulations } from './stateRegulations/wyoming.js';
 import { idahoRegulations } from './stateRegulations/idaho.js';
 
 // Function to calculate hours based on state regulations
-export function calculateHours(state, dailyHours, weeklyHours, hourlyRate) {
+export function calculateHours(state, timecard) {
   let regularHours = 0;
   let overtimeHours = 0;
   let doubleTimeHours = 0;
+
+  // Calculate daily hours and weekly hours from the timecard data
+  const dailyHours = timecard.entries.reduce((total, entry) => total + entry.hours, 0);
+  const weeklyHours = dailyHours; // Assuming the timecard represents a single week
+
+  // Get the hourly rate from the user or timecard data
+  const hourlyRate = timecard.hourlyRate || 0;
 
   switch (state) {
     case 'California':
@@ -43,8 +50,8 @@ export function calculateHours(state, dailyHours, weeklyHours, hourlyRate) {
   }
 
   return {
-    regularHours: regularHours,
-    overtimeHours: overtimeHours,
-    doubleTimeHours: doubleTimeHours
+    regularHours,
+    overtimeHours,
+    doubleTimeHours
   };
 }
