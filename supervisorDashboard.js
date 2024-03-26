@@ -33,6 +33,12 @@ export function renderSupervisorDashboard() {
   `;
   supervisorDashboard.appendChild(timecardReviewSection);
   
+  // Render the logout button
+  const logoutButton = document.createElement('button');
+  logoutButton.textContent = 'Logout';
+  logoutButton.addEventListener('click', logout);
+  supervisorDashboard.appendChild(logoutButton);
+  
   // Fetch and display the timecards for review
   fetchTimecardsForReview();
 }
@@ -66,3 +72,14 @@ function fetchTimecardsForReview() {
   // Add event listeners for review, approve, and reject buttons
   // ...
 }
+
+// Function to handle logout
+function logout() {
+  // Perform logout actions, such as clearing session/local storage, redirecting to login page, etc.
+  // Example:
+  // Clear session storage
+  sessionStorage.removeItem('loggedIn');
+  // Redirect to login page
+  window.location.href = 'login.html';
+}
+
