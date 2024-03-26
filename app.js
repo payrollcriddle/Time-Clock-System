@@ -1,5 +1,6 @@
 // app.js
-import { isAuthenticated, getUser } from './auth.js';
+
+import { isAuthenticated, getUser, login } from './auth.js';
 import { renderEmployeeDashboard } from './employeeDashboard.js';
 import { renderSupervisorDashboard } from './supervisorDashboard.js';
 import { renderAdminDashboard } from './adminDashboard.js';
@@ -28,6 +29,19 @@ function renderDashboard(userRole) {
     renderAdminDashboard();
   }
 }
+
+// Event listener for login form submission
+document.getElementById('login-form').addEventListener('submit', function(event) {
+  event.preventDefault();
+  const username = document.getElementById('username').value;
+  const password = document.getElementById('password').value;
+  const userRole = login(username, password);
+  if (userRole) {
+    renderDashboard(userRole);
+  } else {
+    alert('Invalid username or password');
+  }
+});
 
 // Check if the user is already logged in
 if (isAuthenticated()) {
