@@ -184,6 +184,66 @@ textarea {
   max-width: 400px;
 }
 
+/* Admin Dashboard Styles */
+.admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.admin-header h2 {
+  margin: 0;
+}
+
+.admin-header .btn {
+  margin-left: auto;
+}
+
+/* Employee Table Styles */
+#employee-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+#employee-table th,
+#employee-table td {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+#employee-table th {
+  background-color: #f2f2f2;
+}
+
+#employee-table td:last-child {
+  text-align: center;
+}
+
+/* Activity Type List Styles */
+#activity-type-list,
+#job-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+#activity-type-list li,
+#job-list li {
+  margin-bottom: 10px;
+}
+
+/* Notification Form Styles */
+#notification-form label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+#notification-form textarea {
+  height: 100px;
+}
+
 /* Responsive Styles */
 @media (max-width: 768px) {
   .dashboard-container {
