@@ -129,6 +129,13 @@ export function renderAdminDashboard() {
   }
 }
 
+// Function to handle logout
+function handleLogout() {
+  logout();
+  // Redirect to the login page or perform any necessary actions
+  window.location.href = '/';
+}
+
 // Function to render employee table
 function renderEmployeeTable() {
   try {
