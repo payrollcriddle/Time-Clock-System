@@ -603,9 +603,8 @@ function updateTotalWeeklyHours() {
 // Function to handle logout
 function handleLogout() {
   logout();
-  // Redirect to the login page or clear the dashboard
-  employeeDashboard.style.display = 'none';
-  loginSection.style.display = 'block';
+  // Redirect to the login page
+  window.location.href = '/';
 }
 
 // Function to get the pay period start date
