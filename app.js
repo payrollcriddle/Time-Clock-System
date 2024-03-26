@@ -7,38 +7,26 @@ import { renderAdminDashboard } from './adminDashboard.js';
 // Get DOM elements
 const loginForm = document.getElementById('login-form');
 const loginSection = document.getElementById('login-section');
-const dashboardSection = document.getElementById('dashboard-section');
 const employeeDashboard = document.getElementById('employee-dashboard');
 const supervisorDashboard = document.getElementById('supervisor-dashboard');
 const adminDashboard = document.getElementById('admin-dashboard');
 
 // Function to render the appropriate dashboard based on user role
-function renderDashboard() {
-  const user = getUser();
+function renderDashboard(userRole) {
+  loginSection.style.display = 'none';
+  employeeDashboard.style.display = 'none';
+  supervisorDashboard.style.display = 'none';
+  adminDashboard.style.display = 'none';
 
-  if (user && isAuthenticated()) {
-    loginSection.style.display = 'none';
-    dashboardSection.style.display = 'block';
-
-    if (user.role === 'employee') {
-      employeeDashboard.style.display = 'block';
-      supervisorDashboard.style.display = 'none';
-      adminDashboard.style.display = 'none';
-      renderEmployeeDashboard();
-    } else if (user.role === 'supervisor') {
-      employeeDashboard.style.display = 'none';
-      supervisorDashboard.style.display = 'block';
-      adminDashboard.style.display = 'none';
-      renderSupervisorDashboard();
-    } else if (user.role === 'admin') {
-      employeeDashboard.style.display = 'none';
-      supervisorDashboard.style.display = 'none';
-      adminDashboard.style.display = 'block';
-      renderAdminDashboard();
-    }
-  } else {
-    loginSection.style.display = 'block';
-    dashboardSection.style.display = 'none';
+  if (userRole === 'employee') {
+    employeeDashboard.style.display = 'block';
+    renderEmployeeDashboard();
+  } else if (userRole === 'supervisor') {
+    supervisorDashboard.style.display = 'block';
+    renderSupervisorDashboard();
+  } else if (userRole === 'admin') {
+    adminDashboard.style.display = 'block';
+    renderAdminDashboard();
   }
 }
 
@@ -47,10 +35,9 @@ loginForm.addEventListener('submit', event => {
   event.preventDefault();
   const username = document.getElementById('username').value;
   const password = document.getElementById('password').value;
-  const role = login(username, password);
-
-  if (role) {
-    renderDashboard();
+  const userRole = login(username, password);
+  if (userRole) {
+    renderDashboard(userRole);
   } else {
     alert('Invalid username or password');
   }
@@ -60,9 +47,20 @@ loginForm.addEventListener('submit', event => {
 document.addEventListener('click', event => {
   if (event.target.matches('#logout-btn')) {
     logout();
-    renderDashboard();
+    loginSection.style.display = 'block';
+    employeeDashboard.style.display = 'none';
+    supervisorDashboard.style.display = 'none';
+    adminDashboard.style.display = 'none';
   }
 });
 
-// Initial rendering of the login section
-renderDashboard();
+// Check if the user is already logged in
+if (isAuthenticated()) {
+  const user = getUser();
+  renderDashboard(user.role);
+} else {
+  loginSection.style.display = 'block';
+  employeeDashboard.style.display = 'none';
+  supervisorDashboard.style.display = 'none';
+  adminDashboard.style.display = 'none';
+}
