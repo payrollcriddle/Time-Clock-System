@@ -1,7 +1,7 @@
 // jobManagement.js
 
 // Simulate job data retrieval from a database or API
-let jobs = [
+const jobs = [
   { id: 1, name: 'Job 1' },
   { id: 2, name: 'Job 2' },
   { id: 3, name: 'Job 3' },
@@ -22,5 +22,8 @@ export function addJob(job) {
 // Function to delete a job
 export function deleteJob(jobId) {
   // Delete job from the database or data store
-  jobs = jobs.filter(job => job.id !== jobId);
+  const index = jobs.findIndex(job => job.id === jobId);
+  if (index !== -1) {
+    jobs.splice(index, 1);
+  }
 }
