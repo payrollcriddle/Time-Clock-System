@@ -11,31 +11,37 @@ const employeeDashboard = document.getElementById('employee-dashboard');
 const supervisorDashboard = document.getElementById('supervisor-dashboard');
 const adminDashboard = document.getElementById('admin-dashboard');
 
-// Event listener for login form submission
-loginForm.addEventListener('submit', event => {
-  event.preventDefault();
-  console.log('Login form submitted');
-  const username = document.getElementById('username').value;
-  const password = document.getElementById('password').value;
-  const userRole = login(username, password);
-  if (userRole) {
-    console.log('User role:', userRole);
+// Function to render the appropriate dashboard based on user role
+function renderDashboard() {
+  const user = getUser();
+  if (user) {
     loginSection.style.display = 'none';
-    console.log('Login section hidden');
-    if (userRole === 'employee') {
-      console.log('Rendering employee dashboard');
+    if (user.role === 'employee') {
       employeeDashboard.style.display = 'block';
       renderEmployeeDashboard();
-    } else if (userRole === 'supervisor') {
-      console.log('Rendering supervisor dashboard');
+    } else if (user.role === 'supervisor') {
       supervisorDashboard.style.display = 'block';
       renderSupervisorDashboard();
-    } else if (userRole === 'admin') {
-      console.log('Rendering admin dashboard');
+    } else if (user.role === 'admin') {
       adminDashboard.style.display = 'block';
       renderAdminDashboard();
     }
   } else {
-    alert('Invalid username or password');
+    loginSection.style.display = 'block';
+    employeeDashboard.style.display = 'none';
+    supervisorDashboard.style.display = 'none';
+    adminDashboard.style.display = 'none';
   }
+}
+
+// Event listener for login form submission
+loginForm.addEventListener('submit', event => {
+  event.preventDefault();
+  const username = document.getElementById('username').value;
+  const password = document.getElementById('password').value;
+  login(username, password);
+  renderDashboard();
 });
+
+// Initial rendering of the dashboard or login section
+renderDashboard();
