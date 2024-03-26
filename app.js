@@ -14,7 +14,7 @@ const adminDashboard = document.getElementById('admin-dashboard');
 // Function to render the appropriate dashboard based on user role
 function renderDashboard() {
   const user = getUser();
-  if (user) {
+  if (user && isAuthenticated()) {
     loginSection.style.display = 'none';
     if (user.role === 'employee') {
       if (employeeDashboard) {
