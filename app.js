@@ -14,35 +14,31 @@ const adminDashboard = document.getElementById('admin-dashboard');
 // Function to render the appropriate dashboard based on user role
 function renderDashboard() {
   const user = getUser();
+
   if (user && isAuthenticated()) {
     loginSection.style.display = 'none';
+
     if (user.role === 'employee') {
-      if (employeeDashboard) {
-        employeeDashboard.style.display = 'block';
-        renderEmployeeDashboard();
-      }
+      employeeDashboard.style.display = 'block';
+      supervisorDashboard.style.display = 'none';
+      adminDashboard.style.display = 'none';
+      renderEmployeeDashboard();
     } else if (user.role === 'supervisor') {
-      if (supervisorDashboard) {
-        supervisorDashboard.style.display = 'block';
-        renderSupervisorDashboard();
-      }
+      employeeDashboard.style.display = 'none';
+      supervisorDashboard.style.display = 'block';
+      adminDashboard.style.display = 'none';
+      renderSupervisorDashboard();
     } else if (user.role === 'admin') {
-      if (adminDashboard) {
-        adminDashboard.style.display = 'block';
-        renderAdminDashboard();
-      }
+      employeeDashboard.style.display = 'none';
+      supervisorDashboard.style.display = 'none';
+      adminDashboard.style.display = 'block';
+      renderAdminDashboard();
     }
   } else {
     loginSection.style.display = 'block';
-    if (employeeDashboard) {
-      employeeDashboard.style.display = 'none';
-    }
-    if (supervisorDashboard) {
-      supervisorDashboard.style.display = 'none';
-    }
-    if (adminDashboard) {
-      adminDashboard.style.display = 'none';
-    }
+    employeeDashboard.style.display = 'none';
+    supervisorDashboard.style.display = 'none';
+    adminDashboard.style.display = 'none';
   }
 }
 
@@ -51,8 +47,21 @@ loginForm.addEventListener('submit', event => {
   event.preventDefault();
   const username = document.getElementById('username').value;
   const password = document.getElementById('password').value;
-  login(username, password);
-  renderDashboard();
+  const role = login(username, password);
+
+  if (role) {
+    renderDashboard();
+  } else {
+    alert('Invalid username or password');
+  }
+});
+
+// Event listener for logout
+document.addEventListener('click', event => {
+  if (event.target.matches('#logout-btn')) {
+    logout();
+    renderDashboard();
+  }
 });
 
 // Initial rendering of the dashboard or login section
