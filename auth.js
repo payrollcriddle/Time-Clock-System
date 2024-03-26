@@ -23,6 +23,8 @@ export function login(username, password) {
 export function logout() {
   // Remove the user object from local storage or session storage
   localStorage.removeItem('user');
+  // Redirect to the login page
+  window.location.href = '/';
 }
 
 // Function to check if the user is authenticated
