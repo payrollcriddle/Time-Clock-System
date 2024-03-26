@@ -9,14 +9,8 @@ const users = [
 
 // Function to handle user login
 export function login(username, password) {
-  console.log('Inside login function'); // Add this line
-  console.log('Username:', username); // Add this line
-  console.log('Password:', password); // Add this line
-
   // Find the user with the provided username and password
   const user = users.find(user => user.username === username && user.password === password);
-
-  console.log('User:', user); // Add this line
 
   if (user) {
     // Store the user object in local storage or session storage
@@ -31,7 +25,6 @@ export function login(username, password) {
 export function logout() {
   // Remove the user object from local storage or session storage
   localStorage.removeItem('user');
-  console.log('User logged out');
 }
 
 // Function to check if the user is authenticated
