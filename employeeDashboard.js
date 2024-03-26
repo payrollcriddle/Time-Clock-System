@@ -109,13 +109,16 @@ export function renderEmployeeDashboard() {
         <div id="time-clock" class="card">
           <h3>Time Clock</h3>
           <p>Current Time: <span id="current-time"></span></p>
-          <p>Time Zone: <span id="time-zone"></span></p>
           <div class="btn-group">
             <button id="clock-in-btn" class="btn" disabled>Clock In</button>
             <button id="clock-out-btn" class="btn" disabled>Clock Out</button>
             <button id="meal-start-btn" class="btn" disabled>Meal Start</button>
             <button id="meal-end-btn" class="btn" disabled>Meal End</button>
           </div>
+          <div id="clock-in-time"></div>
+          <div id="clock-out-time"></div>
+          <div id="meal-start-time"></div>
+          <div id="meal-end-time"></div>
         </div>
         
         <!-- Activity and Job (Optional) -->
@@ -167,474 +170,167 @@ export function renderEmployeeDashboard() {
           <table id="weekly-hours-table">
             <thead>
               <tr>
-                <th>Activity</th>
-                <th>Mon</th>
-                <th>Tue</th>
-                <th>Wed</th>
-                <th>Thu</th>
-                <th>Fri</th>
-                <th>Sat</th>
-                <th>Sun</th>
-                <th>Weekly Totals</th>
+                <th>Date</th>
+                <th>Hours</th>
               </tr>
             </thead>
-            <tbody>
-              <!-- Dynamically populate table rows based on activities and hours -->
+            <tbody id="weekly-hours-body">
+              <!-- Weekly hours will be dynamically populated here -->
             </tbody>
-            <tfoot>
-              <tr>
-                <td>Daily Totals</td>
-                <td id="mon-total">0</td>
-                <td id="tue-total">0</td>
-                <td id="wed-total">0</td>
-                <td id="thu-total">0</td>
-                <td id="fri-total">0</td>
-                <td id="sat-total">0</td>
-                <td id="sun-total">0</td>
-                <td id="weekly-total">0</td>
-              </tr>
-            </tfoot>
           </table>
         </div>
         
-        <!-- Total Weekly Hours -->
-        <div id="total-weekly-hours" class="card">
-          <h3>Total Weekly Hours</h3>
-          <p>Total Hours: <span id="total-hours">0</span></p>
-          <p>Regular Hours: <span id="regular-hours">0</span></p>
-          <p>OT Hours: <span id="ot-hours">0</span></p>
-          <p>DT Hours: <span id="dt-hours">0</span></p>
-        </div>
+        <!-- Submit Button -->
+        <button id="submit-btn" class="btn" disabled>Submit</button>
         
-        <!-- Timecard Submission -->
-        <button id="submit-timecard-btn" class="btn">Submit Timecard</button>
-
         <!-- Logout Button -->
         <button id="logout-btn" class="btn">Logout</button>
-        
-        <!-- Timecard Submission Dialog -->
-        <div id="timecard-submission-dialog" class="modal" style="display: none;">
-          <div class="modal-content">
-            <h3>Timecard Submission</h3>
-            <p>By submitting this timecard, you acknowledge that all information provided is accurate and complete.</p>
-            <div class="btn-group">
-              <button id="confirm-submission-btn" class="btn">Confirm</button>
-              <button id="cancel-submission-btn" class="btn">Cancel</button>
-            </div>
-          </div>
-        </div>
       </div>
+      
+      <!-- Calendar Sidebar -->
       <div class="dashboard-sidebar">
-        <div class="card">
-          <h3>Calendar</h3>
-          <div id="calendar"></div>
-          <div id="pay-period-info">
-            <p>Pay Period: <span id="pay-period-dates"></span></p>
-            <p>Next Pay Date: <span id="next-pay-date"></span></p>
-          </div>
-        </div>
+        <div id="calendar" class="card"></div>
       </div>
     </div>
   `;
 
+  // Get user details and populate the welcome message
   const user = getUser();
-  document.getElementById('employee-name').textContent = user.name;
-  document.getElementById('time-zone').textContent = getTimeZone(user.state);
+  if (user) {
+    document.getElementById('employee-name').textContent = user.name;
+  }
 
-  renderActivityTypeSelect();
-  renderJobSelect();
-  renderWeeklyHoursTable();
-
-  // Event listener for day status change
-  document.getElementById('day-status').addEventListener('change', handleDayStatusChange);
-
-  // Event listener for clock in button click
-  document.getElementById('clock-in-btn').addEventListener('click', handleClockIn);
-
-  // Event listener for clock out button click
-  document.getElementById('clock-out-btn').addEventListener('click', handleClockOut);
-
-  // Event listener for meal start button click
-  document.getElementById('meal-start-btn').addEventListener('click', handleMealStart);
-
-  // Event listener for meal end button click
-  document.getElementById('meal-end-btn').addEventListener('click', handleMealEnd);
-
-  // Event listener for timecard submission
-  document.getElementById('submit-timecard-btn').addEventListener('click', handleTimecardSubmission);
-
-  // Event listener for timecard submission confirmation
-  document.getElementById('confirm-submission-btn').addEventListener('click', confirmTimecardSubmission);
-
-  // Event listener for timecard submission cancellation
-  document.getElementById('cancel-submission-btn').addEventListener('click', cancelTimecardSubmission);
-
-  // Event listener for logout button click
-  document.getElementById('logout-btn').addEventListener('click', handleLogout);
-
-  // Render calendar
-  const calendarElement = document.getElementById('calendar');
-  const payPeriodDatesElement = document.getElementById('pay-period-dates');
-  const nextPayDateElement = document.getElementById('next-pay-date');
-
-  const currentDate = new Date();
-  const payPeriodStartDate = getPayPeriodStartDate(currentDate);
-  const payPeriodEndDate = getPayPeriodEndDate(payPeriodStartDate);
-  const nextPayDate = getNextPayDate(payPeriodEndDate);
-
-  const calendar = new Calendar(calendarElement, payPeriodStartDate, payPeriodEndDate);
-  calendar.renderCalendar();
-
-  payPeriodDatesElement.textContent = `${formatDate(payPeriodStartDate)} - ${formatDate(payPeriodEndDate)}`;
-  nextPayDateElement.textContent = formatDate(nextPayDate);
-
-  // Update calendar after the end of the pay period
-  const updateCalendar = () => {
-    const today = new Date();
-    if (today > payPeriodEndDate) {
-      const newPayPeriodStartDate = getPayPeriodStartDate(today);
-      const newPayPeriodEndDate = getPayPeriodEndDate(newPayPeriodStartDate);
-      const newNextPayDate = getNextPayDate(newPayPeriodEndDate);
-
-      calendar.payPeriodStartDate = newPayPeriodStartDate;
-      calendar.payPeriodEndDate = newPayPeriodEndDate;
-      calendar.currentDate = today;
-      calendar.renderCalendar();
-
-      payPeriodDatesElement.textContent = `${formatDate(newPayPeriodStartDate)} - ${formatDate(newPayPeriodEndDate)}`;
-      nextPayDateElement.textContent = formatDate(newNextPayDate);
-    }
-  };
-
-  setInterval(updateCalendar, 24 * 60 * 60 * 1000); // Update every 24 hours
-
-  // Display current time
-  displayCurrentTime();
-  setInterval(displayCurrentTime, 1000);
-}
-
-// Function to display current time
-function displayCurrentTime() {
-  const currentTimeElement = document.getElementById('current-time');
-  const currentTime = new Date().toLocaleString('en-US', { timeZone: getTimeZone(getUser().state) });
-  currentTimeElement.textContent = currentTime;
-}
-
-// Function to get the time zone based on the employee's state
-function getTimeZone(state) {
-  // Define the time zone mapping for each state
-  const timeZoneMap = {
-    California: 'America/Los_Angeles',
-    Oregon: 'America/Los_Angeles',
-    Washington: 'America/Los_Angeles',
-    Montana: 'America/Denver',
-    Wyoming: 'America/Denver',
-    Nevada: 'America/Los_Angeles',
-    Idaho: 'America/Boise',
-    Colorado: 'America/Denver',
-    New_York: 'America/New_York',
-    // Add more states and their corresponding time zones
-  };
-
-  return timeZoneMap[state] || 'America/New_York'; // Default to Eastern Time if state is not found
-}
-
-// Function to render activity type select options
-function renderActivityTypeSelect() {
+  // Get activity types and populate the dropdown
   const activityTypeSelect = document.getElementById('activity-type');
-  const activityTypes = getActivityTypes();
-
-  activityTypes.forEach(activityType => {
+  getActivityTypes().forEach(activity => {
     const option = document.createElement('option');
-    option.value = activityType.id;
-    option.textContent = activityType.name;
+    option.value = activity.id;
+    option.textContent = activity.name;
     activityTypeSelect.appendChild(option);
   });
-}
 
-// Function to render job select options
-function renderJobSelect() {
+  // Get jobs and populate the dropdown
   const jobSelect = document.getElementById('job');
-  const jobs = getJobs();
-
-  jobs.forEach(job => {
+  getJobs().forEach(job => {
     const option = document.createElement('option');
     option.value = job.id;
     option.textContent = job.name;
     jobSelect.appendChild(option);
   });
-}
 
-// Function to render weekly hours table
-function renderWeeklyHoursTable() {
-  const user = getUser();
-  const timecard = getTimecard(user.id);
-  const weeklyHoursTableBody = document.getElementById('weekly-hours-table').getElementsByTagName('tbody')[0];
-  weeklyHoursTableBody.innerHTML = '';
+  // Initialize the calendar
+  const payPeriodStartDate = new Date(); // Replace with actual start date
+  const payPeriodEndDate = new Date(); // Replace with actual end date
+  const calendar = new Calendar(document.getElementById('calendar'), payPeriodStartDate, payPeriodEndDate);
 
-  // Render table rows based on activities and hours
-  const activities = getActivityTypes();
-  const daysOfWeek = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun']; // Define daysOfWeek array
-  activities.forEach(activity => {
-    const row = document.createElement('tr');
+  // Get current time and display
+  setInterval(() => {
+    const currentTime = new Date();
+    document.getElementById('current-time').textContent = currentTime.toLocaleTimeString();
+  }, 1000);
 
-    const activityCell = document.createElement('td');
-    activityCell.textContent = activity.name;
-    row.appendChild(activityCell);
-
-    daysOfWeek.forEach(day => {
-      const dayCell = document.createElement('td');
-      const hours = timecard.entries.reduce((total, entry) => {
-        if (entry.activityTypeId === activity.id && entry.dayOfWeek === day) {
-          return total + entry.hours;
-        }
-        return total;
-      }, 0);
-      dayCell.textContent = hours.toFixed(2);
-      row.appendChild(dayCell);
-    });
-
-    const weeklyTotalCell = document.createElement('td');
-    const weeklyTotal = daysOfWeek.reduce((total, day) => {
-      const hours = timecard.entries.reduce((subtotal, entry) => {
-        if (entry.activityTypeId === activity.id && entry.dayOfWeek === day) {
-          return subtotal + entry.hours;
-        }
-        return subtotal;
-      }, 0);
-      return total + hours;
-    }, 0);
-    weeklyTotalCell.textContent = weeklyTotal.toFixed(2);
-    row.appendChild(weeklyTotalCell);
-
-    weeklyHoursTableBody.appendChild(row);
+  // Event listeners for clock in, clock out, meal start, and meal end buttons
+  document.getElementById('clock-in-btn').addEventListener('click', () => {
+    clockIn();
   });
 
-  // Update daily totals
-  daysOfWeek.forEach(day => {
-    const dailyTotal = activities.reduce((total, activity) => {
-      const hours = timecard.entries.reduce((subtotal, entry) => {
-        if (entry.activityTypeId === activity.id && entry.dayOfWeek === day) {
-          return subtotal + entry.hours;
-        }
-        return subtotal;
-      }, 0);
-      return total + hours;
-    }, 0);
-    document.getElementById(`${day}-total`).textContent = dailyTotal.toFixed(2);
+  document.getElementById('clock-out-btn').addEventListener('click', () => {
+    clockOut();
   });
 
-  // Update weekly total
-  const weeklyTotal = daysOfWeek.reduce((total, day) => {
-    const dailyTotal = activities.reduce((subtotal, activity) => {
-      const hours = timecard.entries.reduce((activityTotal, entry) => {
-        if (entry.activityTypeId === activity.id && entry.dayOfWeek === day) {
-          return activityTotal + entry.hours;
-        }
-        return activityTotal;
-      }, 0);
-      return subtotal + hours;
-    }, 0);
-    return total + dailyTotal;
-  }, 0);
-  document.getElementById('weekly-total').textContent = weeklyTotal.toFixed(2);
-
-  // Display timecard notes alongside the corresponding time stamps
-  timecard.entries.forEach(entry => {
-    const row = document.createElement('tr');
-    // ...
-    const timecardNoteCell = document.createElement('td');
-    timecardNoteCell.textContent = entry.timecardNote;
-    row.appendChild(timecardNoteCell);
-    // ...
-    weeklyHoursTableBody.appendChild(row);
+  document.getElementById('meal-start-btn').addEventListener('click', () => {
+    startMeal();
   });
 
-  updateTotalWeeklyHours();
+  document.getElementById('meal-end-btn').addEventListener('click', () => {
+    endMeal();
+  });
+
+  // Event listener for day status change
+  document.getElementById('day-status').addEventListener('change', (event) => {
+    const status = event.target.value;
+    handleDayStatusChange(status);
+  });
+
+  // Event listener for leave type change
+  document.getElementById('leave-type').addEventListener('change', (event) => {
+    const leaveType = event.target.value;
+    handleLeaveTypeChange(leaveType);
+  });
+
+  // Event listener for submit button
+  document.getElementById('submit-btn').addEventListener('click', () => {
+    submitTimecard();
+  });
+
+  // Event listener for logout button
+  document.getElementById('logout-btn').addEventListener('click', () => {
+    logout();
+  });
 }
 
 // Function to handle day status change
-function handleDayStatusChange() {
-  const dayStatus = document.getElementById('day-status').value;
+function handleDayStatusChange(status) {
+  const clockInBtn = document.getElementById('clock-in-btn');
+  const clockOutBtn = document.getElementById('clock-out-btn');
+  const mealStartBtn = document.getElementById('meal-start-btn');
+  const mealEndBtn = document.getElementById('meal-end-btn');
   const activityJobSection = document.getElementById('activity-job-section');
   const leaveHoursSection = document.getElementById('leave-hours-section');
+
+  switch (status) {
+    case 'working':
+      clockInBtn.disabled = false;
+      clockOutBtn.disabled = true;
+      mealStartBtn.disabled = true;
+      mealEndBtn.disabled = true;
+      activityJobSection.style.display = 'block';
+      leaveHoursSection.style.display = 'none';
+      break;
+    case 'off':
+      clockInBtn.disabled = true;
+      clockOutBtn.disabled = true;
+      mealStartBtn.disabled = true;
+      mealEndBtn.disabled = true;
+      activityJobSection.style.display = 'none';
+      leaveHoursSection.style.display = 'none';
+      break;
+    case 'leave':
+      clockInBtn.disabled = true;
+      clockOutBtn.disabled = true;
+      mealStartBtn.disabled = true;
+      mealEndBtn.disabled = true;
+      activityJobSection.style.display = 'none';
+      leaveHoursSection.style.display = 'block';
+      break;
+    default:
+      break;
+  }
+}
+
+// Function to handle leave type change
+function handleLeaveTypeChange(leaveType) {
   const mealPeriodWaiver = document.getElementById('meal-period-waiver');
 
-  if (dayStatus === 'working') {
-    activityJobSection.style.display = 'block';
-    leaveHoursSection.style.display = 'none';
+  if (leaveType === 'sick-hours' || leaveType === 'flex-hours') {
     mealPeriodWaiver.style.display = 'block';
-  } else if (dayStatus === 'leave') {
-    activityJobSection.style.display = 'none';
-    leaveHoursSection.style.display = 'block';
-    mealPeriodWaiver.style.display = 'none';
   } else {
-    activityJobSection.style.display = 'none';
-    leaveHoursSection.style.display = 'none';
     mealPeriodWaiver.style.display = 'none';
   }
 }
 
-// Function to handle clock in
-function handleClockIn() {
-  const user = getUser();
-  const dayStatus = document.getElementById('day-status').value;
-  const activityTypeId = document.getElementById('activity-type').value || 'working';
-  const jobId = document.getElementById('job').value;
-  const timecardNote = document.getElementById('timecard-note').value;
-
-  if (dayStatus) {
-    const timestamp = new Date().toLocaleString('en-US', { timeZone: getTimeZone(user.state) });
-    
-    // Check if the employee is already clocked in
-    const timecard = getTimecard(user.id);
-    const lastEntry = timecard.entries[timecard.entries.length - 1];
-    if (lastEntry && !lastEntry.endTime) {
-      // Record the ending time stamp for the previous clock-in entry
-      lastEntry.endTime = timestamp;
-      updateTimecard(user.id, timecard);
-    }
-    
-    // Start a new clock-in entry
-    clockIn(user.id, dayStatus, activityTypeId, jobId, timecardNote, timestamp);
-    document.getElementById('clock-in-btn').disabled = true;
-    document.getElementById('clock-out-btn').disabled = false;
-    document.getElementById('meal-start-btn').disabled = false;
-    renderWeeklyHoursTable();
-    displayTimestamp('Clock In', timestamp);
-  } else {
-    alert('Please select a day status.');
-  }
+// Function to start meal
+function startMeal() {
+  const mealStart = new Date().toLocaleTimeString();
+  document.getElementById('meal-start-time').textContent = `Meal Start: ${mealStart}`;
 }
 
-// Function to handle clock out
-function handleClockOut() {
-  const user = getUser();
-  const timestamp = new Date().toLocaleString('en-US', { timeZone: getTimeZone(user.state) });
-  clockOut(user.id, timestamp);
-  document.getElementById('clock-in-btn').disabled = false;
-  document.getElementById('clock-out-btn').disabled = true;
-  document.getElementById('meal-start-btn').disabled = true;
-  document.getElementById('meal-end-btn').disabled = true;
-  renderWeeklyHoursTable();
-  displayTimestamp('Clock Out', timestamp);
+// Function to end meal
+function endMeal() {
+  const mealEnd = new Date().toLocaleTimeString();
+  document.getElementById('meal-end-time').textContent = `Meal End: ${mealEnd}`;
 }
 
-// Function to handle meal start
-function handleMealStart() {
-  const user = getUser();
-  const timestamp = new Date().toLocaleString('en-US', { timeZone: getTimeZone(user.state) });
-  const activityTypeId = 'meal';
-  clockIn(user.id, 'working', activityTypeId, null, null, timestamp);
-  document.getElementById('meal-start-btn').disabled = true;
-  document.getElementById('meal-end-btn').disabled = false;
-  renderWeeklyHoursTable();
-  displayTimestamp('Meal Start', timestamp);
-}
+// Render employee dashboard when the page loads
+document.addEventListener('DOMContentLoaded', renderEmployeeDashboard);
 
-// Function to handle meal end
-function handleMealEnd() {
-  const user = getUser();
-  const timestamp = new Date().toLocaleString('en-US', { timeZone: getTimeZone(user.state) });
-  const activityTypeId = 'working';
-  clockIn(user.id, 'working', activityTypeId, null, null, timestamp);
-  document.getElementById('meal-start-btn').disabled = false;
-  document.getElementById('meal-end-btn').disabled = true;
-  renderWeeklyHoursTable();
-  displayTimestamp('Meal End', timestamp);
-}
-
-// Function to handle timecard submission
-function handleTimecardSubmission() {
-  const timecardSubmissionDialog = document.getElementById('timecard-submission-dialog');
-  timecardSubmissionDialog.style.display = 'block';
-}
-
-// Function to display timestamp
-function displayTimestamp(type, timestamp) {
-  const timestampElement = document.createElement('p');
-  timestampElement.textContent = `${type} Timestamp: ${timestamp}`;
-  document.getElementById('time-clock').appendChild(timestampElement);
-}
-
-// Function to confirm timecard submission
-function confirmTimecardSubmission() {
-  const user = getUser();
-  const leaveType = document.getElementById('leave-type').value;
-  const leaveHours = document.getElementById('leave-hours').value;
-
-  if (leaveType && leaveHours) {
-    submitLeaveHours(user.id, leaveType, leaveHours);
-  }
-
-  submitTimecard(user.id);
-  alert('Timecard submitted successfully.');
-  closeTimecardSubmissionDialog();
-  
-  // Send notification to supervisor
-  const supervisor = getSupervisor(user.id);
-  const notificationMessage = getNotificationMessage('timecardSubmitted');
-  sendTeamsNotification(supervisor, notificationMessage);
-}
-
-// Function to cancel timecard submission
-function cancelTimecardSubmission() {
-  closeTimecardSubmissionDialog();
-}
-
-// Function to close timecard submission dialog
-function closeTimecardSubmissionDialog() {
-  const timecardSubmissionDialog = document.getElementById('timecard-submission-dialog');
-  timecardSubmissionDialog.style.display = 'none';
-}
-
-// Function to update total weekly hours
-function updateTotalWeeklyHours() {
-  const user = getUser();
-  const timecard = getTimecard(user.id);
-  const { regularHours, overtimeHours, doubleTimeHours } = calculateHours(user.state, timecard);
-
-  document.getElementById('total-hours').textContent = regularHours + overtimeHours + doubleTimeHours;
-  document.getElementById('regular-hours').textContent = regularHours;
-  document.getElementById('ot-hours').textContent = overtimeHours;
-  document.getElementById('dt-hours').textContent = doubleTimeHours;
-}
-
-// Function to handle logout
-function handleLogout() {
-  logout();
-  // Show the login section and hide the dashboard sections
-  loginSection.style.display = 'block';
-  employeeDashboard.style.display = 'none';
-  supervisorDashboard.style.display = 'none';
-  adminDashboard.style.display = 'none';
-}
-
-// Function to get the pay period start date
-function getPayPeriodStartDate(date) {
-  const dayOfWeek = date.getDay();
-  const daysToSubtract = (dayOfWeek + 6) % 7; // Adjust to start on Monday
-  const startDate = new Date(date);
-  startDate.setDate(date.getDate() - daysToSubtract);
-  return startDate;
-}
-
-// Function to get the pay period end date
-function getPayPeriodEndDate(startDate) {
-  const endDate = new Date(startDate);
-  endDate.setDate(startDate.getDate() + 13); // 14 days including start date
-  return endDate;
-}
-
-// Function to get the next pay date
-function getNextPayDate(endDate) {
-  const payDate = new Date(endDate);
-  payDate.setDate(endDate.getDate() + 5); // 5 days after the end of the pay period
-  return payDate;
-}
-
-// Function to format dates
-function formatDate(date) {
-  const options = { month: 'long', day: 'numeric', year: 'numeric' };
-  return date.toLocaleDateString('en-US', options);
-}
