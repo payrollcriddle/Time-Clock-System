@@ -6,29 +6,18 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<!-- Login Section -->
-<section id="login-section">
-  <h2>Login</h2>
-  <form id="login-form">
-    <input type="text" id="username" placeholder="Username" autocomplete="username" required>
-    <input type="password" id="password" placeholder="Password" autocomplete="current-password" required>
-    <button type="submit" class="btn">Login</button>
-  </form>
-</section>
+  <!-- Login Section -->
+  <section id="login-section">
+    <h2>Login</h2>
+    <form id="login-form">
+      <input type="text" id="username" placeholder="Username" autocomplete="username" required>
+      <input type="password" id="password" placeholder="Password" autocomplete="current-password" required>
+      <button type="submit" class="btn">Login</button>
+    </form>
+  </section>
 
   <!-- Employee Dashboard -->
   <section id="employee-dashboard" class="dashboard" style="display: none;">
-    <!-- ... -->
-    <div class="dashboard-sidebar">
-      <div class="card">
-        <h3>Calendar</h3>
-        <div id="calendar"></div>
-        <div id="pay-period-info">
-          <p>Pay Period: <span id="pay-period-dates"></span></p>
-          <p>Next Pay Date: <span id="next-pay-date"></span></p>
-        </div>
-      </div>
-    </div>
     <!-- ... -->
   </section>
 
@@ -38,7 +27,6 @@
   <!-- Admin Dashboard -->
   <section id="admin-dashboard" class="dashboard" style="display: none;"></section>
 
-  <script src="/socket.io/socket.io.js"></script>
   <script type="module" src="app.js"></script>
 </body>
 </html>
