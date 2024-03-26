@@ -1,5 +1,5 @@
 // Import necessary functions from other files
-import { getUser } from './auth.js';
+import { getUser, logout } from './auth.js';
 import { addEmployee, updateEmployee, deleteEmployee, getEmployees } from './employeeManagement.js';
 import { addActivityType, deleteActivityType, getActivityTypes } from './activityTypeManagement.js';
 import { addJob, deleteJob, getJobs } from './jobManagement.js';
@@ -9,7 +9,10 @@ export function renderAdminDashboard() {
   try {
     const adminDashboard = document.getElementById('admin-dashboard');
     adminDashboard.innerHTML = `
-      <h2>Admin Dashboard</h2>
+      <div class="admin-header">
+        <h2>Admin Dashboard</h2>
+        <button id="logout-btn" class="btn">Logout</button>
+      </div>
       
       <!-- Employee Management -->
       <div class="card">
@@ -118,6 +121,9 @@ export function renderAdminDashboard() {
 
     // Event listener for notification form submission
     document.getElementById('notification-form').addEventListener('submit', handleNotificationFormSubmit);
+
+    // Event listener for logout button
+    document.getElementById('logout-btn').addEventListener('click', handleLogout);
   } catch (error) {
     console.error('Error rendering admin dashboard:', error);
   }
@@ -284,4 +290,11 @@ function getNotificationMessage(instance) {
   } catch (error) {
     console.error('Error getting notification message:', error);
   }
+}
+
+// Function to handle logout
+function handleLogout() {
+  logout();
+  // Redirect to the login page or perform any necessary actions
+  window.location.href = '/';
 }
