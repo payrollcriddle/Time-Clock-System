@@ -7,6 +7,7 @@ import { renderAdminDashboard } from './adminDashboard.js';
 // Get DOM elements
 const loginForm = document.getElementById('login-form');
 const loginSection = document.getElementById('login-section');
+const dashboardSection = document.getElementById('dashboard-section');
 const employeeDashboard = document.getElementById('employee-dashboard');
 const supervisorDashboard = document.getElementById('supervisor-dashboard');
 const adminDashboard = document.getElementById('admin-dashboard');
@@ -17,6 +18,7 @@ function renderDashboard() {
 
   if (user && isAuthenticated()) {
     loginSection.style.display = 'none';
+    dashboardSection.style.display = 'block';
 
     if (user.role === 'employee') {
       employeeDashboard.style.display = 'block';
@@ -36,9 +38,7 @@ function renderDashboard() {
     }
   } else {
     loginSection.style.display = 'block';
-    employeeDashboard.style.display = 'none';
-    supervisorDashboard.style.display = 'none';
-    adminDashboard.style.display = 'none';
+    dashboardSection.style.display = 'none';
   }
 }
 
@@ -64,5 +64,5 @@ document.addEventListener('click', event => {
   }
 });
 
-// Initial rendering of the dashboard or login section
+// Initial rendering of the login section
 renderDashboard();
