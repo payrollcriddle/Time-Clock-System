@@ -1,5 +1,24 @@
 // supervisorDashboard.js
-import { logout, redirectToLogin } from './auth.js';
+
+// Function to redirect to login functionality
+function redirectToLogin() {
+  // Implement your login functionality here, such as showing a login modal, navigating to a login route, etc.
+  // For example, if you're using a single-page application (SPA) framework like React or Vue.js, you might trigger a route change to the login page.
+  // For simplicity, let's just log a message to the console
+  console.log("Redirecting to login functionality...");
+}
+
+// Function to handle logout
+export function logout() {
+  // Perform logout actions, such as clearing session/local storage, and redirecting to login functionality
+  // Example:
+  // Clear session storage
+  sessionStorage.removeItem('loggedIn');
+  // Redirect to login functionality
+  redirectToLogin();
+}
+
+import { getUser } from './auth.js';
 
 // Function to render the supervisor dashboard
 export function renderSupervisorDashboard() {
@@ -77,3 +96,4 @@ function fetchTimecardsForReview() {
   // Add event listeners for review, approve, and reject buttons
   // ...
 }
+
