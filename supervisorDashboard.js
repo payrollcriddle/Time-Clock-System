@@ -1,3 +1,6 @@
+// supervisorDashboard.js
+import { getUser } from './auth.js';
+
 // Function to render the supervisor dashboard
 export function renderSupervisorDashboard() {
   const user = getUser();
