@@ -60,7 +60,4 @@ if (isAuthenticated()) {
   renderDashboard(user.role);
 } else {
   loginSection.style.display = 'block';
-  employeeDashboard.style.display = 'none';
-  supervisorDashboard.style.display = 'none';
-  adminDashboard.style.display = 'none';
 }
