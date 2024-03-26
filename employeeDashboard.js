@@ -1,4 +1,4 @@
-// Import necessary functions from other files
+/// Import necessary functions from other files
 import { getUser, logout } from './auth.js';
 import { getActivityTypes } from './activityTypeManagement.js';
 import { getJobs } from './jobManagement.js';
@@ -374,6 +374,7 @@ function renderWeeklyHoursTable() {
 
   // Render table rows based on activities and hours
   const activities = getActivityTypes();
+  const daysOfWeek = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun']; // Define daysOfWeek array
   activities.forEach(activity => {
     const row = document.createElement('tr');
 
@@ -381,7 +382,6 @@ function renderWeeklyHoursTable() {
     activityCell.textContent = activity.name;
     row.appendChild(activityCell);
 
-    const daysOfWeek = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
     daysOfWeek.forEach(day => {
       const dayCell = document.createElement('td');
       const hours = timecard.entries.reduce((total, entry) => {
