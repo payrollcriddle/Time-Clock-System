@@ -6,6 +6,29 @@ import { clockIn, clockOut, getTimecard, submitTimecard, submitLeaveHours, updat
 import { calculateHours } from './hoursCalculation.js';
 import { sendTeamsNotification } from './teamsNotification.js';
 
+// Function to get the pay period start date
+function getPayPeriodStartDate(date) {
+  const dayOfWeek = date.getDay();
+  const daysToSubtract = dayOfWeek === 0 ? 6 : dayOfWeek - 1; // Adjust to start on Monday
+  const startDate = new Date(date);
+  startDate.setDate(date.getDate() - daysToSubtract);
+  return startDate;
+}
+
+// Function to get the pay period end date
+function getPayPeriodEndDate(startDate) {
+  const endDate = new Date(startDate);
+  endDate.setDate(startDate.getDate() + 13); // 14 days including start date
+  return endDate;
+}
+
+// Function to get the next pay date
+function getNextPayDate(endDate) {
+  const payDate = new Date(endDate);
+  payDate.setDate(endDate.getDate() + 5); // 5 days after the end of the pay period
+  return payDate;
+}
+
 // Calendar class
 class Calendar {
   constructor(calendarElement, payPeriodStartDate, payPeriodEndDate) {
