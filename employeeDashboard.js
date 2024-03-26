@@ -308,6 +308,7 @@ export function renderEmployeeDashboard() {
 
   setInterval(updateCalendar, 24 * 60 * 60 * 1000); // Update every 24 hours
 
+  // Display current time
   displayCurrentTime();
   setInterval(displayCurrentTime, 1000);
 }
@@ -451,6 +452,7 @@ function renderWeeklyHoursTable() {
 
   updateTotalWeeklyHours();
 }
+
 // Function to handle day status change
 function handleDayStatusChange() {
   const dayStatus = document.getElementById('day-status').value;
@@ -633,4 +635,4 @@ function getNextPayDate(endDate) {
 function formatDate(date) {
   const options = { month: 'long', day: 'numeric', year: 'numeric' };
   return date.toLocaleDateString('en-US', options);
-} 
+}
