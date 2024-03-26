@@ -1,5 +1,3 @@
-// auth.js
-
 // Simulate user data retrieval from a database or API
 const users = [
   { id: 1, username: 'employee1', password: 'password1', role: 'employee' },
