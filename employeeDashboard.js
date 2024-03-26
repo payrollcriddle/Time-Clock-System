@@ -2,7 +2,7 @@
 import { getUser, logout } from './auth.js';
 import { getActivityTypes } from './activityTypeManagement.js';
 import { getJobs } from './jobManagement.js';
-import { clockIn, clockOut, getTimecard, submitTimecard, submitLeaveHours } from './timecard.js';
+import { clockIn, clockOut, getTimecard, submitTimecard, submitLeaveHours, updateTimecard } from './timecard.js';
 import { calculateHours } from './hoursCalculation.js';
 import { sendTeamsNotification } from './teamsNotification.js';
 
@@ -17,6 +17,8 @@ class Calendar {
   }
 
   renderCalendar() {
+    this.calendarElement.innerHTML = '';
+
     const monthYear = document.createElement('div');
     monthYear.classList.add('month-year');
     monthYear.textContent = `${this.getMonthName()} ${this.currentDate.getFullYear()}`;
@@ -92,19 +94,6 @@ export function renderEmployeeDashboard() {
         <h2>Employee Dashboard</h2>
         <p>Welcome, <span id="employee-name"></span>!</p>
         
-        <!-- Time Clock -->
-        <div id="time-clock" class="card">
-          <h3>Time Clock</h3>
-          <p>Current Time: <span id="current-time"></span></p>
-          <p>Time Zone: <span id="time-zone"></span></p>
-          <div class="btn-group">
-            <button id="clock-in-btn" class="btn">Clock In</button>
-            <button id="clock-out-btn" class="btn" disabled>Clock Out</button>
-            <button id="meal-start-btn" class="btn" disabled>Meal Start</button>
-            <button id="meal-end-btn" class="btn" disabled>Meal End</button>
-          </div>
-        </div>
-        
         <!-- Day Status -->
         <div id="day-status-section" class="card">
           <label for="day-status">Day Status:</label>
@@ -114,6 +103,19 @@ export function renderEmployeeDashboard() {
             <option value="off">Off</option>
             <option value="leave">Leave</option>
           </select>
+        </div>
+        
+        <!-- Time Clock -->
+        <div id="time-clock" class="card">
+          <h3>Time Clock</h3>
+          <p>Current Time: <span id="current-time"></span></p>
+          <p>Time Zone: <span id="time-zone"></span></p>
+          <div class="btn-group">
+            <button id="clock-in-btn" class="btn" disabled>Clock In</button>
+            <button id="clock-out-btn" class="btn" disabled>Clock Out</button>
+            <button id="meal-start-btn" class="btn" disabled>Meal Start</button>
+            <button id="meal-end-btn" class="btn" disabled>Meal End</button>
+          </div>
         </div>
         
         <!-- Activity and Job (Optional) -->
@@ -238,7 +240,7 @@ export function renderEmployeeDashboard() {
   const user = getUser();
   document.getElementById('employee-name').textContent = user.name;
   document.getElementById('time-zone').textContent = getTimeZone(user.state);
-  
+
   renderActivityTypeSelect();
   renderJobSelect();
   renderWeeklyHoursTable();
@@ -280,7 +282,7 @@ export function renderEmployeeDashboard() {
   const payPeriodEndDate = getPayPeriodEndDate(payPeriodStartDate);
   const nextPayDate = getNextPayDate(payPeriodEndDate);
 
-   const calendar = new Calendar(calendarElement, payPeriodStartDate, payPeriodEndDate);
+  const calendar = new Calendar(calendarElement, payPeriodStartDate, payPeriodEndDate);
   calendar.renderCalendar();
 
   payPeriodDatesElement.textContent = `${formatDate(payPeriodStartDate)} - ${formatDate(payPeriodEndDate)}`;
@@ -306,7 +308,6 @@ export function renderEmployeeDashboard() {
 
   setInterval(updateCalendar, 24 * 60 * 60 * 1000); // Update every 24 hours
 
-  // Display current time
   displayCurrentTime();
   setInterval(displayCurrentTime, 1000);
 }
@@ -341,7 +342,7 @@ function getTimeZone(state) {
 function renderActivityTypeSelect() {
   const activityTypeSelect = document.getElementById('activity-type');
   const activityTypes = getActivityTypes();
-  
+
   activityTypes.forEach(activityType => {
     const option = document.createElement('option');
     option.value = activityType.id;
@@ -354,7 +355,7 @@ function renderActivityTypeSelect() {
 function renderJobSelect() {
   const jobSelect = document.getElementById('job');
   const jobs = getJobs();
-  
+
   jobs.forEach(job => {
     const option = document.createElement('option');
     option.value = job.id;
@@ -371,8 +372,72 @@ function renderWeeklyHoursTable() {
   weeklyHoursTableBody.innerHTML = '';
 
   // Render table rows based on activities and hours
-  // ...
-  
+  const activities = getActivityTypes();
+  activities.forEach(activity => {
+    const row = document.createElement('tr');
+
+    const activityCell = document.createElement('td');
+    activityCell.textContent = activity.name;
+    row.appendChild(activityCell);
+
+    const daysOfWeek = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
+    daysOfWeek.forEach(day => {
+      const dayCell = document.createElement('td');
+      const hours = timecard.entries.reduce((total, entry) => {
+        if (entry.activityTypeId === activity.id && entry.dayOfWeek === day) {
+          return total + entry.hours;
+        }
+        return total;
+      }, 0);
+      dayCell.textContent = hours.toFixed(2);
+      row.appendChild(dayCell);
+    });
+
+    const weeklyTotalCell = document.createElement('td');
+    const weeklyTotal = daysOfWeek.reduce((total, day) => {
+      const hours = timecard.entries.reduce((subtotal, entry) => {
+        if (entry.activityTypeId === activity.id && entry.dayOfWeek === day) {
+          return subtotal + entry.hours;
+        }
+        return subtotal;
+      }, 0);
+      return total + hours;
+    }, 0);
+    weeklyTotalCell.textContent = weeklyTotal.toFixed(2);
+    row.appendChild(weeklyTotalCell);
+
+    weeklyHoursTableBody.appendChild(row);
+  });
+
+  // Update daily totals
+  daysOfWeek.forEach(day => {
+    const dailyTotal = activities.reduce((total, activity) => {
+      const hours = timecard.entries.reduce((subtotal, entry) => {
+        if (entry.activityTypeId === activity.id && entry.dayOfWeek === day) {
+          return subtotal + entry.hours;
+        }
+        return subtotal;
+      }, 0);
+      return total + hours;
+    }, 0);
+    document.getElementById(`${day}-total`).textContent = dailyTotal.toFixed(2);
+  });
+
+  // Update weekly total
+  const weeklyTotal = daysOfWeek.reduce((total, day) => {
+    const dailyTotal = activities.reduce((subtotal, activity) => {
+      const hours = timecard.entries.reduce((activityTotal, entry) => {
+        if (entry.activityTypeId === activity.id && entry.dayOfWeek === day) {
+          return activityTotal + entry.hours;
+        }
+        return activityTotal;
+      }, 0);
+      return subtotal + hours;
+    }, 0);
+    return total + dailyTotal;
+  }, 0);
+  document.getElementById('weekly-total').textContent = weeklyTotal.toFixed(2);
+
   // Display timecard notes alongside the corresponding time stamps
   timecard.entries.forEach(entry => {
     const row = document.createElement('tr');
@@ -386,7 +451,6 @@ function renderWeeklyHoursTable() {
 
   updateTotalWeeklyHours();
 }
-
 // Function to handle day status change
 function handleDayStatusChange() {
   const dayStatus = document.getElementById('day-status').value;
@@ -569,4 +633,4 @@ function getNextPayDate(endDate) {
 function formatDate(date) {
   const options = { month: 'long', day: 'numeric', year: 'numeric' };
   return date.toLocaleDateString('en-US', options);
-}
+} 
