@@ -75,10 +75,18 @@ function fetchTimecardsForReview() {
 
 // Function to handle logout
 function logout() {
-  // Perform logout actions, such as clearing session/local storage, redirecting to login page, etc.
+  // Perform logout actions, such as clearing session/local storage, and redirecting to login functionality
   // Example:
   // Clear session storage
   sessionStorage.removeItem('loggedIn');
-  // Redirect to login page
-  window.location.href = 'login.html';
+  // Redirect to login functionality
+  redirectToLogin();
+}
+
+// Function to redirect to login functionality
+function redirectToLogin() {
+  // Implement your login functionality here, such as showing a login modal, navigating to a login route, etc.
+  // For example, if you're using a single-page application (SPA) framework like React or Vue.js, you might trigger a route change to the login page.
+  // For simplicity, let's just log a message to the console
+  console.log("Redirecting to login functionality...");
 }
