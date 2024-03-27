@@ -89,33 +89,20 @@ export function renderEmployeeDashboard() {
         <h2>Employee Dashboard</h2>
         <p>Welcome, <span id="employee-name"></span>!</p>
         
-        <!-- Current Time -->
-        <div id="current-time" class="card">
-          <h3>Current Time</h3>
-          <p id="current-time-display"></p>
-        </div>
-        
-        <!-- State Selection -->
-        <div id="state-selection" class="card">
-          <label for="state">Select State:</label>
-          <select id="state">
-            <option value="">Select State</option>
-            <option value="California">California</option>
-            <option value="Oregon">Oregon</option>
-            <option value="Washington">Washington</option>
-            <option value="Nevada">Nevada</option>
-            <option value="Idaho">Idaho</option>
-            <option value="Montana">Montana</option>
-            <option value="Wyoming">Wyoming</option>
-            <option value="Colorado">Colorado</option>
-          </select>
-        </div>
-        
-        <!-- Pay Period and Payday -->
-        <div id="pay-period-info" class="card">
-          <h3>Pay Period and Payday</h3>
-          <p id="pay-period"></p>
-          <p id="payday"></p>
+        <!-- Time Clock -->
+        <div id="time-clock" class="card">
+          <h3>Time Clock</h3>
+          <p>Current Time: <span id="current-time-display"></span></p>
+          <div class="btn-group">
+            <button id="clock-in-btn" class="btn" disabled>Clock In</button>
+            <button id="clock-out-btn" class="btn" disabled>Clock Out</button>
+            <button id="meal-start-btn" class="btn" disabled>Meal Start</button>
+            <button id="meal-end-btn" class="btn" disabled>Meal End</button>
+          </div>
+          <div id="clock-in-time"></div>
+          <div id="clock-out-time"></div>
+          <div id="meal-start-time"></div>
+          <div id="meal-end-time"></div>
         </div>
         
         <!-- Day Status -->
@@ -127,22 +114,6 @@ export function renderEmployeeDashboard() {
             <option value="off">Off</option>
             <option value="leave">Leave</option>
           </select>
-        </div>
-        
-        <!-- Time Clock -->
-        <div id="time-clock" class="card">
-          <h3>Time Clock</h3>
-          <p>Current Time: <span id="current-time"></span></p>
-          <div class="btn-group">
-            <button id="clock-in-btn" class="btn" disabled>Clock In</button>
-            <button id="clock-out-btn" class="btn" disabled>Clock Out</button>
-            <button id="meal-start-btn" class="btn" disabled>Meal Start</button>
-            <button id="meal-end-btn" class="btn" disabled>Meal End</button>
-          </div>
-          <div id="clock-in-time"></div>
-          <div id="clock-out-time"></div>
-          <div id="meal-start-time"></div>
-          <div id="meal-end-time"></div>
         </div>
         
         <!-- Activity and Job (Optional) -->
@@ -191,13 +162,42 @@ export function renderEmployeeDashboard() {
         <!-- Daily Hours -->
         <div id="daily-hours" class="card">
           <h3>Daily Hours</h3>
-          <p id="daily-hours-display"></p>
+          <table id="daily-hours-table">
+            <thead>
+              <tr>
+                <th>Activity</th>
+                <th>Mon 3/18</th>
+                <th>Tue 3/19</th>
+                <th>Wed 3/20</th>
+                <th>Thu 3/21</th>
+                <th>Fri 3/22</th>
+                <th>Sat 3/23</th>
+                <th>Sun 3/24</th>
+                <th>Weekly Totals</th>
+              </tr>
+            </thead>
+            <tbody id="daily-hours-body">
+              <!-- Daily hours will be dynamically populated here -->
+            </tbody>
+          </table>
         </div>
         
         <!-- Weekly Hours -->
         <div id="weekly-hours" class="card">
           <h3>Weekly Hours</h3>
-          <p id="weekly-hours-display"></p>
+          <table id="weekly-hours-table">
+            <thead>
+              <tr>
+                <th>Total Hours:</th>
+                <th>Regular Hours</th>
+                <th>OT Hours</th>
+                <th>DT Hours</th>
+              </tr>
+            </thead>
+            <tbody id="weekly-hours-body">
+              <!-- Weekly hours will be dynamically populated here -->
+            </tbody>
+          </table>
         </div>
         
         <!-- Submit Button -->
@@ -210,6 +210,13 @@ export function renderEmployeeDashboard() {
       <!-- Calendar Sidebar -->
       <div class="dashboard-sidebar">
         <div id="calendar" class="card"></div>
+        
+        <!-- Pay Period and Payday -->
+        <div id="pay-period-info" class="card">
+          <h3>Pay Period and Payday</h3>
+          <p id="pay-period"></p>
+          <p id="payday"></p>
+        </div>
       </div>
     </div>
   `;
