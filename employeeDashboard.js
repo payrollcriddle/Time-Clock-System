@@ -93,27 +93,27 @@ export function renderEmployeeDashboard() {
         <div id="time-clock" class="card">
           <h3>Time Clock</h3>
           <p>Current Time: <span id="current-time-display"></span></p>
-          <div class="btn-group">
-            <button id="clock-in-btn" class="btn" disabled>Clock In</button>
-            <button id="clock-out-btn" class="btn" disabled>Clock Out</button>
-            <button id="meal-start-btn" class="btn" disabled>Meal Start</button>
-            <button id="meal-end-btn" class="btn" disabled>Meal End</button>
+          <div class="time-clock-container">
+            <div class="btn-group">
+              <button id="clock-in-btn" class="btn" disabled>Clock In</button>
+              <button id="clock-out-btn" class="btn" disabled>Clock Out</button>
+              <button id="meal-start-btn" class="btn" disabled>Meal Start</button>
+              <button id="meal-end-btn" class="btn" disabled>Meal End</button>
+            </div>
+            <div id="day-status-section">
+              <label for="day-status">Day Status:</label>
+              <select id="day-status" required>
+                <option value="">Select Day Status</option>
+                <option value="working">Working</option>
+                <option value="off">Off</option>
+                <option value="leave">Leave</option>
+              </select>
+            </div>
           </div>
           <div id="clock-in-time"></div>
           <div id="clock-out-time"></div>
           <div id="meal-start-time"></div>
           <div id="meal-end-time"></div>
-        </div>
-        
-        <!-- Day Status -->
-        <div id="day-status-section" class="card">
-          <label for="day-status">Day Status:</label>
-          <select id="day-status" required>
-            <option value="">Select Day Status</option>
-            <option value="working">Working</option>
-            <option value="off">Off</option>
-            <option value="leave">Leave</option>
-          </select>
         </div>
         
         <!-- Activity and Job (Optional) -->
@@ -220,7 +220,7 @@ export function renderEmployeeDashboard() {
       </div>
     </div>
   `;
-
+  
   const user = getUser();
   if (user) {
     document.getElementById('employee-name').textContent = user.name;
@@ -259,13 +259,12 @@ export function renderEmployeeDashboard() {
   // Initialize the calendar
   const calendar = new Calendar(document.getElementById('calendar'), payPeriodStartDate, payPeriodEndDate);
 
-  // Get current time and display based on selected state
+  // Get current time and display based on employee's state
   function updateCurrentTime() {
-    const stateSelect = document.getElementById('state');
-    const state = stateSelect.value || 'California'; // Default to California if no state is selected
+    const employeeState = user.state || 'California'; // Default to California if no state is assigned
 
     const currentTimeElement = document.getElementById('current-time-display');
-    const currentTime = getCurrentTimeForState(state);
+    const currentTime = getCurrentTimeForState(employeeState);
     currentTimeElement.textContent = currentTime.toLocaleString();
   }
 
