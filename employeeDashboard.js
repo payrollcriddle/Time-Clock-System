@@ -2,9 +2,8 @@
 import { getUser, logout } from './auth.js';
 import { getActivityTypes } from './activityTypeManagement.js';
 import { getJobs } from './jobManagement.js';
-import { clockIn, clockOut, getTimecard, submitTimecard, submitLeaveHours, updateTimecard } from './timecard.js';
-import { calculateHours } from './hoursCalculation.js';
-import { sendTeamsNotification } from './teamsNotification.js';
+import { clockIn, clockOut, startMeal, endMeal, getTimecard, submitTimecard, submitLeaveHours, updateTimecard } from './timecard.js';
+import { calculateDailyHours, calculateWeeklyHours } from './hoursCalculation.js';
 
 // Function to get the pay period start date
 function getPayPeriodStartDate(date) {
@@ -119,7 +118,90 @@ export function renderEmployeeDashboard() {
           <p id="payday"></p>
         </div>
         
-        <!-- Rest of the employee dashboard HTML... -->
+        <!-- Day Status -->
+        <div id="day-status-section" class="card">
+          <label for="day-status">Day Status:</label>
+          <select id="day-status" required>
+            <option value="">Select Day Status</option>
+            <option value="working">Working</option>
+            <option value="off">Off</option>
+            <option value="leave">Leave</option>
+          </select>
+        </div>
+        
+        <!-- Time Clock -->
+        <div id="time-clock" class="card">
+          <h3>Time Clock</h3>
+          <p>Current Time: <span id="current-time"></span></p>
+          <div class="btn-group">
+            <button id="clock-in-btn" class="btn" disabled>Clock In</button>
+            <button id="clock-out-btn" class="btn" disabled>Clock Out</button>
+            <button id="meal-start-btn" class="btn" disabled>Meal Start</button>
+            <button id="meal-end-btn" class="btn" disabled>Meal End</button>
+          </div>
+          <div id="clock-in-time"></div>
+          <div id="clock-out-time"></div>
+          <div id="meal-start-time"></div>
+          <div id="meal-end-time"></div>
+        </div>
+        
+        <!-- Activity and Job (Optional) -->
+        <div id="activity-job-section" class="card" style="display: none;">
+          <label for="activity-type">Activity (Optional):</label>
+          <select id="activity-type">
+            <option value="">Select Activity</option>
+            <!-- Dynamically populate activity types -->
+          </select>
+          
+          <label for="job">Job (Optional):</label>
+          <select id="job">
+            <option value="">Select Job</option>
+            <!-- Dynamically populate jobs -->
+          </select>
+        </div>
+        
+        <!-- Leave Hours -->
+        <div id="leave-hours-section" class="card" style="display: none;">
+          <label for="leave-type">Leave Type:</label>
+          <select id="leave-type" required>
+            <option value="">Select Leave Type</option>
+            <option value="paid-time-off">Paid Time Off</option>
+            <option value="bonus-pto">Bonus PTO</option>
+            <option value="sick-hours">Sick Hours</option>
+            <option value="flex-hours">Flex Hours</option>
+          </select>
+          
+          <label for="leave-hours">Leave Hours:</label>
+          <input type="number" id="leave-hours" placeholder="Enter Leave Hours" min="0" step="0.01" required>
+        </div>
+        
+        <!-- Timecard Note -->
+        <div id="timecard-note-section" class="card">
+          <label for="timecard-note">Timecard Note:</label>
+          <input type="text" id="timecard-note" placeholder="Enter a note">
+        </div>
+        
+        <!-- Meal Period Waiver -->
+        <div id="meal-period-waiver" class="card" style="display: none;">
+          <h3>Meal Period Waiver</h3>
+          <input type="checkbox" id="meal-period-waiver-checkbox">
+          <label for="meal-period-waiver-checkbox">Waive Meal Period</label>
+        </div>
+        
+        <!-- Daily Hours -->
+        <div id="daily-hours" class="card">
+          <h3>Daily Hours</h3>
+          <p id="daily-hours-display"></p>
+        </div>
+        
+        <!-- Weekly Hours -->
+        <div id="weekly-hours" class="card">
+          <h3>Weekly Hours</h3>
+          <p id="weekly-hours-display"></p>
+        </div>
+        
+        <!-- Submit Button -->
+        <button id="submit-btn" class="btn" disabled>Submit</button>
         
         <!-- Logout Button -->
         <button id="logout-btn" class="btn">Logout</button>
@@ -132,7 +214,6 @@ export function renderEmployeeDashboard() {
     </div>
   `;
 
-  // Get user details and populate the welcome message
   const user = getUser();
   if (user) {
     document.getElementById('employee-name').textContent = user.name;
@@ -191,21 +272,25 @@ export function renderEmployeeDashboard() {
   document.getElementById('clock-in-btn').addEventListener('click', () => {
     const timestamp = new Date().toISOString();
     clockIn(user.id, getDayStatus(), getSelectedActivityTypeId(), getSelectedJobId(), getTimecardNote(), timestamp);
+    updateTimeClockDisplay();
   });
 
   document.getElementById('clock-out-btn').addEventListener('click', () => {
     const timestamp = new Date().toISOString();
     clockOut(user.id, timestamp);
+    updateTimeClockDisplay();
   });
 
   document.getElementById('meal-start-btn').addEventListener('click', () => {
     const timestamp = new Date().toISOString();
     startMeal(user.id, timestamp);
+    updateTimeClockDisplay();
   });
 
   document.getElementById('meal-end-btn').addEventListener('click', () => {
     const timestamp = new Date().toISOString();
     endMeal(user.id, timestamp);
+    updateTimeClockDisplay();
   });
 
   // Event listener for day status change
@@ -222,7 +307,10 @@ export function renderEmployeeDashboard() {
 
   // Event listener for submit button
   document.getElementById('submit-btn').addEventListener('click', () => {
-    submitTimecard();
+    submitTimecard(user.id);
+    submitLeaveHours(user.id, getSelectedLeaveType(), getLeaveHours());
+    updateDailyHoursDisplay();
+    updateWeeklyHoursDisplay();
   });
 
   // Event listener for logout button
@@ -230,6 +318,42 @@ export function renderEmployeeDashboard() {
     logout();
     window.location.href = '/'; // Redirect to the login page after logout
   });
+
+  // Update daily hours display
+  function updateDailyHoursDisplay() {
+    const dailyHoursElement = document.getElementById('daily-hours-display');
+    const dailyHours = calculateDailyHours(user.id, today.toISOString().split('T')[0]);
+    dailyHoursElement.textContent = `${dailyHours} hours`;
+  }
+
+  // Update weekly hours display
+  function updateWeeklyHoursDisplay() {
+    const weeklyHoursElement = document.getElementById('weekly-hours-display');
+    const weeklyHours = calculateWeeklyHours(user.id);
+    weeklyHoursElement.textContent = `${weeklyHours} hours`;
+  }
+
+  // Update time clock display
+  function updateTimeClockDisplay() {
+    const timecard = getTimecard(user.id);
+    const lastEntry = timecard.entries[timecard.entries.length - 1];
+
+    const clockInTimeElement = document.getElementById('clock-in-time');
+    const clockOutTimeElement = document.getElementById('clock-out-time');
+    const mealStartTimeElement = document.getElementById('meal-start-time');
+    const mealEndTimeElement = document.getElementById('meal-end-time');
+
+    clockInTimeElement.textContent = lastEntry && lastEntry.startTime ? `Clocked In: ${new Date(lastEntry.startTime).toLocaleString()}` : '';
+    clockOutTimeElement.textContent = lastEntry && lastEntry.endTime ? `Clocked Out: ${new Date(lastEntry.endTime).toLocaleString()}` : '';
+    mealStartTimeElement.textContent = lastEntry && lastEntry.activityTypeId === 'meal' && lastEntry.startTime ? `Meal Started: ${new Date(lastEntry.startTime).toLocaleString()}` : '';
+    mealEndTimeElement.textContent = lastEntry && lastEntry.activityTypeId === 'meal' && lastEntry.endTime ? `Meal Ended: ${new Date(lastEntry.endTime).toLocaleString()}` : '';
+  }
+
+  // Initialize the dashboard
+  updateCurrentTime();
+  updateDailyHoursDisplay();
+  updateWeeklyHoursDisplay();
+  updateTimeClockDisplay();
 }
 
 // Function to get the current time for a given state
@@ -274,28 +398,66 @@ function getTimecardNote() {
   return timecardNoteInput.value;
 }
 
+// Function to get the selected leave type
+function getSelectedLeaveType() {
+  const leaveTypeSelect = document.getElementById('leave-type');
+  return leaveTypeSelect.value;
+}
+
+// Function to get the leave hours
+function getLeaveHours() {
+  const leaveHoursInput = document.getElementById('leave-hours');
+  return parseFloat(leaveHoursInput.value);
+}
+
 // Function to handle day status change
 function handleDayStatusChange(status) {
-  // ...
+  const clockInBtn = document.getElementById('clock-in-btn');
+  const clockOutBtn = document.getElementById('clock-out-btn');
+  const mealStartBtn = document.getElementById('meal-start-btn');
+  const mealEndBtn = document.getElementById('meal-end-btn');
+  const activityJobSection = document.getElementById('activity-job-section');
+  const leaveHoursSection = document.getElementById('leave-hours-section');
+
+  switch (status) {
+    case 'working':
+      clockInBtn.disabled = false;
+      clockOutBtn.disabled = true;
+      mealStartBtn.disabled = true;
+      mealEndBtn.disabled = true;
+      activityJobSection.style.display = 'block';
+      leaveHoursSection.style.display = 'none';
+      break;
+    case 'off':
+      clockInBtn.disabled = true;
+      clockOutBtn.disabled = true;
+      mealStartBtn.disabled = true;
+      mealEndBtn.disabled = true;
+      activityJobSection.style.display = 'none';
+      leaveHoursSection.style.display = 'none';
+      break;
+    case 'leave':
+      clockInBtn.disabled = true;
+      clockOutBtn.disabled = true;
+      mealStartBtn.disabled = true;
+      mealEndBtn.disabled = true;
+      activityJobSection.style.display = 'none';
+      leaveHoursSection.style.display = 'block';
+      break;
+    default:
+      break;
+  }
 }
 
 // Function to handle leave type change
 function handleLeaveTypeChange(leaveType) {
-  // ...
-}
+  const mealPeriodWaiver = document.getElementById('meal-period-waiver');
 
-// Function to start meal
-function startMeal(userId, timestamp) {
-  // Log meal start timestamp
-  console.log('Meal started at:', timestamp);
-  // Perform any necessary actions or updates
-}
-
-// Function to end meal
-function endMeal(userId, timestamp) {
-  // Log meal end timestamp
-  console.log('Meal ended at:', timestamp);
-  // Perform any necessary actions or updates
+  if (leaveType === 'sick-hours' || leaveType === 'flex-hours') {
+    mealPeriodWaiver.style.display = 'block';
+  } else {
+    mealPeriodWaiver.style.display = 'none';
+  }
 }
 
 // Render employee dashboard when the page loads
