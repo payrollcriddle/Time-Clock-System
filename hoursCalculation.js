@@ -8,7 +8,7 @@ import { wyomingRegulations } from './stateRegulations/wyoming.js';
 import { idahoRegulations } from './stateRegulations/idaho.js';
 
 // Function to calculate hours based on state regulations
-export function calculateHours(state, timecard) {
+function calculateHours(state, timecard) {
   let regularHours = 0;
   let overtimeHours = 0;
   let doubleTimeHours = 0;
@@ -55,3 +55,44 @@ export function calculateHours(state, timecard) {
     doubleTimeHours
   };
 }
+
+// Function to calculate daily hours
+function calculateDailyHours(userId, date) {
+  // Calculate daily hours based on timecard data for the specified user and date
+  const timecardEntries = JSON.parse(localStorage.getItem('timecardEntries')) || [];
+  const userTimecardEntries = timecardEntries.filter(entry => entry.userId === userId && entry.startTime.includes(date));
+
+  const dailyHours = userTimecardEntries.reduce((total, entry) => {
+    if (entry.endTime) {
+      const startTime = new Date(entry.startTime);
+      const endTime = new Date(entry.endTime);
+      const duration = (endTime - startTime) / 3600000; // Convert milliseconds to hours
+      return total + duration;
+    }
+    return total;
+  }, 0);
+
+  return dailyHours;
+}
+
+// Function to calculate weekly hours
+function calculateWeeklyHours(userId) {
+  // Calculate weekly hours based on timecard data for the specified user
+  const timecardEntries = JSON.parse(localStorage.getItem('timecardEntries')) || [];
+  const userTimecardEntries = timecardEntries.filter(entry => entry.userId === userId);
+
+  const weeklyHours = userTimecardEntries.reduce((total, entry) => {
+    if (entry.endTime) {
+      const startTime = new Date(entry.startTime);
+      const endTime = new Date(entry.endTime);
+      const duration = (endTime - startTime) / 3600000; // Convert milliseconds to hours
+      return total + duration;
+    }
+    return total;
+  }, 0);
+
+  return weeklyHours;
+}
+
+// Export the necessary functions
+export { calculateHours, calculateDailyHours, calculateWeeklyHours };
