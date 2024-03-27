@@ -1,114 +1,9 @@
-/// Import necessary functions from other files
 import { getUser, logout } from './auth.js';
 import { getActivityTypes } from './activityTypeManagement.js';
 import { getJobs } from './jobManagement.js';
 import { clockIn, clockOut, getTimecard, submitTimecard, submitLeaveHours, updateTimecard } from './timecard.js';
 import { calculateHours } from './hoursCalculation.js';
-import { sendTeamsNotification } from './teamsNotification.js';
 
-// Function to get the pay period start date
-function getPayPeriodStartDate(date) {
-  const dayOfWeek = date.getDay();
-  const daysToSubtract = dayOfWeek === 0 ? 6 : dayOfWeek - 1; // Adjust to start on Monday
-  const startDate = new Date(date);
-  startDate.setDate(date.getDate() - daysToSubtract);
-  return startDate;
-}
-
-// Function to get the pay period end date
-function getPayPeriodEndDate(startDate) {
-  const endDate = new Date(startDate);
-  endDate.setDate(startDate.getDate() + 13); // 14 days including start date
-  return endDate;
-}
-
-// Function to get the next pay date
-function getNextPayDate(endDate) {
-  const payDate = new Date(endDate);
-  payDate.setDate(endDate.getDate() + 5); // 5 days after the end of the pay period
-  return payDate;
-}
-
-// Calendar class
-class Calendar {
-  constructor(calendarElement, payPeriodStartDate, payPeriodEndDate) {
-    this.calendarElement = calendarElement;
-    this.payPeriodStartDate = payPeriodStartDate;
-    this.payPeriodEndDate = payPeriodEndDate;
-    this.currentDate = new Date();
-    this.renderCalendar();
-  }
-
-  renderCalendar() {
-    this.calendarElement.innerHTML = '';
-
-    const monthYear = document.createElement('div');
-    monthYear.classList.add('month-year');
-    monthYear.textContent = `${this.getMonthName()} ${this.currentDate.getFullYear()}`;
-    this.calendarElement.appendChild(monthYear);
-
-    const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-    const daysOfWeekElement = document.createElement('div');
-    daysOfWeekElement.classList.add('days-of-week');
-    daysOfWeek.forEach(day => {
-      const dayElement = document.createElement('div');
-      dayElement.textContent = day;
-      daysOfWeekElement.appendChild(dayElement);
-    });
-    this.calendarElement.appendChild(daysOfWeekElement);
-
-    const daysElement = document.createElement('div');
-    daysElement.classList.add('days');
-
-    const firstDay = new Date(this.currentDate.getFullYear(), this.currentDate.getMonth(), 1);
-    const lastDay = new Date(this.currentDate.getFullYear(), this.currentDate.getMonth() + 1, 0);
-    const prevMonthDays = firstDay.getDay();
-    const nextMonthDays = 6 - lastDay.getDay();
-
-    for (let i = 1; i <= prevMonthDays; i++) {
-      const dayElement = document.createElement('div');
-      dayElement.classList.add('prev-month');
-      daysElement.appendChild(dayElement);
-    }
-
-    for (let i = 1; i <= lastDay.getDate(); i++) {
-      const dayElement = document.createElement('div');
-      dayElement.textContent = i;
-      dayElement.dataset.date = new Date(this.currentDate.getFullYear(), this.currentDate.getMonth(), i).toISOString();
-
-      if (i === this.currentDate.getDate()) {
-        dayElement.classList.add('current-day');
-      }
-
-      if (
-        new Date(dayElement.dataset.date) >= this.payPeriodStartDate &&
-        new Date(dayElement.dataset.date) <= this.payPeriodEndDate
-      ) {
-        dayElement.classList.add('pay-period');
-      }
-
-      daysElement.appendChild(dayElement);
-    }
-
-    for (let i = 1; i <= nextMonthDays; i++) {
-      const dayElement = document.createElement('div');
-      dayElement.classList.add('next-month');
-      daysElement.appendChild(dayElement);
-    }
-
-    this.calendarElement.appendChild(daysElement);
-  }
-
-  getMonthName() {
-    const monthNames = [
-      'January', 'February', 'March', 'April', 'May', 'June',
-      'July', 'August', 'September', 'October', 'November', 'December'
-    ];
-    return monthNames[this.currentDate.getMonth()];
-  }
-}
-
-// Function to render employee dashboard
 export function renderEmployeeDashboard() {
   const employeeDashboard = document.getElementById('employee-dashboard');
   employeeDashboard.innerHTML = `
@@ -217,13 +112,12 @@ export function renderEmployeeDashboard() {
     </div>
   `;
 
-  // Get user details and populate the welcome message
   const user = getUser();
   if (user) {
     document.getElementById('employee-name').textContent = user.name;
   }
 
-  // Get activity types and populate the dropdown
+  // Populate activity types and jobs dropdowns
   const activityTypeSelect = document.getElementById('activity-type');
   getActivityTypes().forEach(activity => {
     const option = document.createElement('option');
@@ -232,7 +126,6 @@ export function renderEmployeeDashboard() {
     activityTypeSelect.appendChild(option);
   });
 
-  // Get jobs and populate the dropdown
   const jobSelect = document.getElementById('job');
   getJobs().forEach(job => {
     const option = document.createElement('option');
@@ -241,12 +134,10 @@ export function renderEmployeeDashboard() {
     jobSelect.appendChild(option);
   });
 
-  // Initialize the calendar
-  const payPeriodStartDate = new Date(); // Replace with actual start date
-  const payPeriodEndDate = new Date(); // Replace with actual end date
-  const calendar = new Calendar(document.getElementById('calendar'), payPeriodStartDate, payPeriodEndDate);
+  // Initialize calendar
+  const calendar = new Calendar(document.getElementById('calendar'));
 
-  // Get current time and display
+  // Display current time
   setInterval(() => {
     const currentTime = new Date();
     document.getElementById('current-time').textContent = currentTime.toLocaleTimeString();
@@ -289,6 +180,7 @@ export function renderEmployeeDashboard() {
   // Event listener for logout button
   document.getElementById('logout-btn').addEventListener('click', () => {
     logout();
+    window.location.href = '/';
   });
 }
 
@@ -353,7 +245,3 @@ function endMeal() {
   const mealEnd = new Date().toLocaleTimeString();
   document.getElementById('meal-end-time').textContent = `Meal End: ${mealEnd}`;
 }
-
-// Render employee dashboard when the page loads
-document.addEventListener('DOMContentLoaded', renderEmployeeDashboard);
-
