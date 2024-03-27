@@ -1,17 +1,13 @@
-// app.js
-
-import { isAuthenticated, getUser, login } from './auth.js';
+import { isAuthenticated, getUser, login, logout } from './auth.js';
 import { renderEmployeeDashboard } from './employeeDashboard.js';
 import { renderSupervisorDashboard } from './supervisorDashboard.js';
 import { renderAdminDashboard } from './adminDashboard.js';
 
-// Get DOM elements
 const loginSection = document.getElementById('login-section');
 const employeeDashboard = document.getElementById('employee-dashboard');
 const supervisorDashboard = document.getElementById('supervisor-dashboard');
 const adminDashboard = document.getElementById('admin-dashboard');
 
-// Function to render the appropriate dashboard based on user role
 function renderDashboard(userRole) {
   loginSection.style.display = 'none';
   employeeDashboard.style.display = 'none';
@@ -30,7 +26,6 @@ function renderDashboard(userRole) {
   }
 }
 
-// Event listener for login form submission
 document.getElementById('login-form').addEventListener('submit', function(event) {
   event.preventDefault();
   const username = document.getElementById('username').value;
@@ -43,10 +38,14 @@ document.getElementById('login-form').addEventListener('submit', function(event)
   }
 });
 
-// Check if the user is already logged in
 if (isAuthenticated()) {
   const user = getUser();
   renderDashboard(user.role);
 } else {
   loginSection.style.display = 'block';
 }
+
+document.getElementById('logout-btn').addEventListener('click', function() {
+  logout();
+  window.location.href = '/';
+});
