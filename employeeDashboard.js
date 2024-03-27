@@ -89,6 +89,17 @@ export function renderEmployeeDashboard() {
         <h2>Employee Dashboard</h2>
         <p>Welcome, <span id="employee-name"></span>!</p>
         
+    <!-- Day Status -->
+    <div id="day-status-section" class="card">
+      <label for="day-status">Day Status:</label>
+      <select id="day-status" required>
+        <option value="">Select Day Status</option>
+        <option value="working">Working</option>
+        <option value="off">Off</option>
+        <option value="leave">Leave</option>
+      </select>
+    </div>
+    
         <!-- Time Clock -->
         <div id="time-clock" class="card">
           <h3>Time Clock</h3>
@@ -99,15 +110,6 @@ export function renderEmployeeDashboard() {
               <button id="clock-out-btn" class="btn" disabled>Clock Out</button>
               <button id="meal-start-btn" class="btn" disabled>Meal Start</button>
               <button id="meal-end-btn" class="btn" disabled>Meal End</button>
-            </div>
-            <div id="day-status-section">
-              <label for="day-status">Day Status:</label>
-              <select id="day-status" required>
-                <option value="">Select Day Status</option>
-                <option value="working">Working</option>
-                <option value="off">Off</option>
-                <option value="leave">Leave</option>
-              </select>
             </div>
           </div>
           <div id="clock-in-time"></div>
