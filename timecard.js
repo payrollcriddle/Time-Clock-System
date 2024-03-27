@@ -41,6 +41,34 @@ export function clockOut(userId, timestamp) {
   }
 }
 
+// Function to handle meal start
+export function startMeal(userId, timestamp) {
+  // Record meal start entry in the database or data store
+  const entry = {
+    userId,
+    activityTypeId: 'meal',
+    startTime: timestamp,
+    endTime: null,
+  };
+
+  saveTimecardEntry(entry);
+
+  console.log(`Meal started at ${timestamp}`);
+}
+
+// Function to handle meal end
+export function endMeal(userId, timestamp) {
+  // Record meal end entry in the database or data store
+  const timecardEntries = JSON.parse(localStorage.getItem('timecardEntries')) || [];
+  const lastEntry = timecardEntries[timecardEntries.length - 1];
+
+  if (lastEntry && lastEntry.userId === userId && lastEntry.activityTypeId === 'meal' && !lastEntry.endTime) {
+    lastEntry.endTime = timestamp;
+    localStorage.setItem('timecardEntries', JSON.stringify(timecardEntries));
+    console.log(`Meal ended at ${timestamp}`);
+  }
+}
+
 // Function to get timecard data
 export function getTimecard(userId) {
   // Retrieve timecard data from the database or data store for the specified user
@@ -129,4 +157,3 @@ export function updateTimecard(userId, timecard) {
   });
   localStorage.setItem('timecardEntries', JSON.stringify(updatedEntries));
 }
-
