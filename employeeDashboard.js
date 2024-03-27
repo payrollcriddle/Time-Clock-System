@@ -3,7 +3,7 @@ import { getUser, logout } from './auth.js';
 import { getActivityTypes } from './activityTypeManagement.js';
 import { getJobs } from './jobManagement.js';
 import { clockIn, clockOut, startMeal, endMeal, getTimecard, submitTimecard, submitLeaveHours, updateTimecard } from './timecard.js';
-import { calculateDailyHours, calculateWeeklyHours } from './hoursCalculation.js';
+import { calculateHours, calculateDailyHours, calculateWeeklyHours } from './hoursCalculation.js';
 
 // Function to get the pay period start date
 function getPayPeriodStartDate(date) {
