@@ -89,28 +89,17 @@ export function renderEmployeeDashboard() {
         <h2>Employee Dashboard</h2>
         <p>Welcome, <span id="employee-name"></span>!</p>
 
-// Get the current user and user state
-const user = getUser();
-const userState = user.state;
+        <!-- Day Status -->
+        <div id="day-status-section" class="card">
+          <label for="day-status">Day Status:</label>
+          <select id="day-status" required>
+            <option value="">Select Day Status</option>
+            <option value="working">Working</option>
+            <option value="off">Off</option>
+            <option value="leave">Leave</option>
+          </select>
+        </div>
 
-  // Use the userState when calculating hours or applying state-specific rules
-  function updateCurrentTime() {
-    const currentTimeElement = document.getElementById('current-time-display');
-    const currentTime = getCurrentTimeForState(userState);
-    currentTimeElement.textContent = currentTime.toLocaleString();
-  }
-        
-    <!-- Day Status -->
-    <div id="day-status-section" class="card">
-      <label for="day-status">Day Status:</label>
-      <select id="day-status" required>
-        <option value="">Select Day Status</option>
-        <option value="working">Working</option>
-        <option value="off">Off</option>
-        <option value="leave">Leave</option>
-      </select>
-    </div>
-    
         <!-- Time Clock -->
         <div id="time-clock" class="card">
           <h3>Time Clock</h3>
@@ -128,7 +117,7 @@ const userState = user.state;
           <div id="meal-start-time"></div>
           <div id="meal-end-time"></div>
         </div>
-        
+
         <!-- Activity and Job (Optional) -->
         <div id="activity-job-section" class="card" style="display: none;">
           <label for="activity-type">Activity (Optional):</label>
@@ -136,14 +125,14 @@ const userState = user.state;
             <option value="">Select Activity</option>
             <!-- Dynamically populate activity types -->
           </select>
-          
+
           <label for="job">Job (Optional):</label>
           <select id="job">
             <option value="">Select Job</option>
             <!-- Dynamically populate jobs -->
           </select>
         </div>
-        
+
         <!-- Leave Hours -->
         <div id="leave-hours-section" class="card" style="display: none;">
           <label for="leave-type">Leave Type:</label>
@@ -154,24 +143,24 @@ const userState = user.state;
             <option value="sick-hours">Sick Hours</option>
             <option value="flex-hours">Flex Hours</option>
           </select>
-          
+
           <label for="leave-hours">Leave Hours:</label>
           <input type="number" id="leave-hours" placeholder="Enter Leave Hours" min="0" step="0.01" required>
         </div>
-        
+
         <!-- Timecard Note -->
         <div id="timecard-note-section" class="card">
           <label for="timecard-note">Timecard Note:</label>
           <input type="text" id="timecard-note" placeholder="Enter a note">
         </div>
-        
+
         <!-- Meal Period Waiver -->
         <div id="meal-period-waiver" class="card" style="display: none;">
           <h3>Meal Period Waiver</h3>
           <input type="checkbox" id="meal-period-waiver-checkbox">
           <label for="meal-period-waiver-checkbox">Waive Meal Period</label>
         </div>
-        
+
         <!-- Daily Hours -->
         <div id="daily-hours" class="card">
           <h3>Daily Hours</h3>
@@ -194,7 +183,7 @@ const userState = user.state;
             </tbody>
           </table>
         </div>
-        
+
         <!-- Weekly Hours -->
         <div id="weekly-hours" class="card">
           <h3>Weekly Hours</h3>
@@ -212,18 +201,18 @@ const userState = user.state;
             </tbody>
           </table>
         </div>
-        
+
         <!-- Submit Button -->
         <button id="submit-btn" class="btn" disabled>Submit</button>
-        
+
         <!-- Logout Button -->
         <button id="logout-btn" class="btn">Logout</button>
       </div>
-      
+
       <!-- Calendar Sidebar -->
       <div class="dashboard-sidebar">
         <div id="calendar" class="card"></div>
-        
+
         <!-- Pay Period and Payday -->
         <div id="pay-period-info" class="card">
           <h3>Pay Period and Payday</h3>
@@ -233,29 +222,32 @@ const userState = user.state;
       </div>
     </div>
   `;
-  
+
   const user = getUser();
   if (user) {
     document.getElementById('employee-name').textContent = user.name;
   }
 
-// Get activity types and populate the dropdown
-const activityTypeSelect = document.getElementById('activity-type');
-getActivityTypes().forEach(activity => {
-  const option = document.createElement('option');
-  option.value = activity.id;
-  option.textContent = activity.name;
-  activityTypeSelect.appendChild(option);
-});
+  // Get the current user and user state
+  const userState = user.state;
 
-// Get jobs and populate the dropdown
-const jobSelect = document.getElementById('job');
-getJobs().forEach(job => {
-  const option = document.createElement('option');
-  option.value = job.id;
-  option.textContent = job.name;
-  jobSelect.appendChild(option);
-});
+  // Get activity types and populate the dropdown
+  const activityTypeSelect = document.getElementById('activity-type');
+  getActivityTypes().forEach(activity => {
+    const option = document.createElement('option');
+    option.value = activity.id;
+    option.textContent = activity.name;
+    activityTypeSelect.appendChild(option);
+  });
+
+  // Get jobs and populate the dropdown
+  const jobSelect = document.getElementById('job');
+  getJobs().forEach(job => {
+    const option = document.createElement('option');
+    option.value = job.id;
+    option.textContent = job.name;
+    jobSelect.appendChild(option);
+  });
 
   // Calculate and display pay period and payday
   const today = new Date();
@@ -272,13 +264,29 @@ getJobs().forEach(job => {
   // Initialize the calendar
   const calendar = new Calendar(document.getElementById('calendar'), payPeriodStartDate, payPeriodEndDate);
 
-  // Get current time and display based on employee's state
-  function updateCurrentTime() {
-    const employeeState = user.state || 'California'; // Default to California if no state is assigned
+  // Function to get the current time for a given state
+  function getCurrentTimeForState(state) {
+    const timezones = {
+      California: 'America/Los_Angeles',
+      Oregon: 'America/Los_Angeles',
+      Washington: 'America/Los_Angeles',
+      Nevada: 'America/Los_Angeles',
+      Idaho: 'America/Boise',
+      Montana: 'America/Denver',
+      Wyoming: 'America/Denver',
+      Colorado: 'America/Denver',
+    };
 
+    const timezone = timezones[state] || 'America/Los_Angeles'; // Default to California timezone if state is not found
+
+    return new Date().toLocaleString('en-US', { timeZone: timezone });
+  }
+
+  // Function to update the current time display
+  function updateCurrentTime() {
     const currentTimeElement = document.getElementById('current-time-display');
-    const currentTime = getCurrentTimeForState(employeeState);
-    currentTimeElement.textContent = currentTime.toLocaleString();
+    const currentTime = getCurrentTimeForState(userState);
+    currentTimeElement.textContent = currentTime;
   }
 
   // Update current time every second
@@ -333,16 +341,16 @@ getJobs().forEach(job => {
   });
 
   // Function to handle leave hours input change
-function handleLeaveHoursChange() {
-  const leaveHoursInput = document.getElementById('leave-hours');
-  const leaveHours = parseFloat(leaveHoursInput.value);
+  function handleLeaveHoursChange() {
+    const leaveHoursInput = document.getElementById('leave-hours');
+    const leaveHours = parseFloat(leaveHoursInput.value);
 
-  if (isNaN(leaveHours) || leaveHours < 0) {
-    leaveHoursInput.setCustomValidity('Please enter a valid number for leave hours.');
-  } else {
-    leaveHoursInput.setCustomValidity('');
+    if (isNaN(leaveHours) || leaveHours < 0) {
+      leaveHoursInput.setCustomValidity('Please enter a valid number for leave hours.');
+    } else {
+      leaveHoursInput.setCustomValidity('');
+    }
   }
-}
 
   // Event listener for logout button
   document.getElementById('logout-btn').addEventListener('click', () => {
@@ -364,31 +372,30 @@ function handleLeaveHoursChange() {
     weeklyHoursElement.textContent = `${weeklyHours} hours`;
   }
 
-// Function to update the time clock display
-function updateTimeClockDisplay() {
-  const timecard = getTimecard(user.id);
-  const lastEntry = timecard.entries[timecard.entries.length - 1];
+  // Function to update the time clock display
+  function updateTimeClockDisplay() {
+    const timecard = getTimecard(user.id);
+    const lastEntry = timecard.entries[timecard.entries.length - 1];
 
-  const clockInTimeElement = document.getElementById('clock-in-time');
-  const clockOutTimeElement = document.getElementById('clock-out-time');
-  const mealStartTimeElement = document.getElementById('meal-start-time');
-  const mealEndTimeElement = document.getElementById('meal-end-time');
-
-  if (lastEntry) {
-    clockInTimeElement.textContent = lastEntry.startTime ? `Clocked In: ${new Date(lastEntry.startTime).toLocaleString()}` : '';
-    clockOutTimeElement.textContent = lastEntry.endTime ? `Clocked Out: ${new Date(lastEntry.endTime).toLocaleString()}` : '';
-    mealStartTimeElement.textContent = lastEntry.activityTypeId === 'meal' && lastEntry.startTime ? `Meal Started: ${new Date(lastEntry.startTime).toLocaleString()}` : '';
-    mealEndTimeElement.textContent = lastEntry.activityTypeId === 'meal' && lastEntry.endTime ? `Meal Ended: ${new Date(lastEntry.endTime).toLocaleString()}` : '';
-  } else {
-    clockInTimeElement.textContent = '';
-    clockOutTimeElement.textContent = '';
-    mealStartTimeElement.textContent = '';
-    mealEndTimeElement.textContent = '';
+    const clockInTimeElement = document.getElementById('clock-in-time');
+    const clockOutTimeElement = document.getElementById('clock-out-time');
+    const mealStartTimeElement = document.getElementById('meal-start-time');
+    const mealEndTimeElement = document.getElementById('meal-end-time');
+    if (lastEntry) {
+      clockInTimeElement.textContent = lastEntry.startTime ? `Clocked In: ${new Date(lastEntry.startTime).toLocaleString()}` : '';
+      clockOutTimeElement.textContent = lastEntry.endTime ? `Clocked Out: ${new Date(lastEntry.endTime).toLocaleString()}` : '';
+      mealStartTimeElement.textContent = lastEntry.activityTypeId === 'meal' && lastEntry.startTime ? `Meal Started: ${new Date(lastEntry.startTime).toLocaleString()}` : '';
+      mealEndTimeElement.textContent = lastEntry.activityTypeId === 'meal' && lastEntry.endTime ? `Meal Ended: ${new Date(lastEntry.endTime).toLocaleString()}` : '';
+    } else {
+      clockInTimeElement.textContent = '';
+      clockOutTimeElement.textContent = '';
+      mealStartTimeElement.textContent = '';
+      mealEndTimeElement.textContent = '';
+    }
   }
-}
 
-// Call updateTimeClockDisplay every second
-setInterval(updateTimeClockDisplay, 1000);
+  // Call updateTimeClockDisplay every second
+  setInterval(updateTimeClockDisplay, 1000);
 
   // Initialize the dashboard
   updateCurrentTime();
@@ -397,29 +404,10 @@ setInterval(updateTimeClockDisplay, 1000);
   updateTimeClockDisplay();
 }
 
-// Function to get the current time for a given state
-function getCurrentTimeForState(state) {
-  const timezones = {
-    California: 'America/Los_Angeles',
-    Oregon: 'America/Los_Angeles',
-    Washington: 'America/Los_Angeles',
-    Nevada: 'America/Los_Angeles',
-    Idaho: 'America/Boise',
-    Montana: 'America/Denver',
-    Wyoming: 'America/Denver',
-    Colorado: 'America/Denver',
-  };
-
-  const timezone = timezones[state] || 'America/Los_Angeles'; // Default to California timezone if state is not found
-
-  return new Date().toLocaleString('en-US', { timeZone: timezone });
-}
-
-// Function to update the current time display
-function updateCurrentTime() {
-  const currentTimeElement = document.getElementById('current-time-display');
-  const currentTime = getCurrentTimeForState(userState);
-  currentTimeElement.textContent = currentTime;
+// Function to get the selected day status
+function getDayStatus() {
+  const dayStatusSelect = document.getElementById('day-status');
+  return dayStatusSelect.value;
 }
 
 // Function to get the selected activity type ID
@@ -452,6 +440,7 @@ function getLeaveHours() {
   return parseFloat(leaveHoursInput.value);
 }
 
+// Function to handle day status change
 function handleDayStatusChange(status) {
   const clockInBtn = document.getElementById('clock-in-btn');
   const clockOutBtn = document.getElementById('clock-out-btn');
@@ -496,9 +485,6 @@ function handleLeaveTypeChange(leaveType) {
 
 // Event listener for leave hours input change
 document.getElementById('leave-hours').addEventListener('input', handleLeaveHoursChange);
-
-// Render employee dashboard when the page loads
-document.addEventListener('DOMContentLoaded', renderEmployeeDashboard);
 
 // Render employee dashboard when the page loads
 document.addEventListener('DOMContentLoaded', renderEmployeeDashboard);
