@@ -3,36 +3,51 @@
 <head>
   <title>Time Clock System</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="path/to/your/favicon.ico" type="image/x-icon">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <!-- Login Section -->
-  <section id="login-section">
-    <h2>Login</h2>
-    <form id="login-form">
-      <input type="text" id="username" placeholder="Username" autocomplete="username" required>
-      <input type="password" id="password" placeholder="Password" autocomplete="current-password" required>
-      <button type="submit" class="btn">Login</button>
-    </form>
-  </section>
+  <div id="loading" class="loading">Loading...</div>
 
-  <!-- Employee Dashboard -->
-  <section id="employee-dashboard" class="dashboard" style="display: none;">
-    <!-- ... -->
-    <button id="logout-btn" class="btn">Logout</button>
-  </section>
+  <div class="container">
+    <header>
+      <h1>Time Clock System</h1>
+      <!-- Add any additional header content or navigation menu -->
+    </header>
 
-  <!-- Supervisor Dashboard -->
-  <section id="supervisor-dashboard" class="dashboard" style="display: none;">
-    <!-- ... -->
-    <button id="logout-btn" class="btn">Logout</button>
-  </section>
+    <!-- Login Section -->
+    <main id="login-section">
+      <h2>Login</h2>
+      <form id="login-form">
+        <input type="text" id="username" placeholder="Username" autocomplete="username" required>
+        <input type="password" id="password" placeholder="Password" autocomplete="current-password" required>
+        <button type="submit" class="btn">Login</button>
+      </form>
+    </main>
 
-  <!-- Admin Dashboard -->
-  <section id="admin-dashboard" class="dashboard" style="display: none;">
-    <!-- ... -->
-    <button id="logout-btn" class="btn">Logout</button>
-  </section>
+    <!-- Employee Dashboard -->
+    <main id="employee-dashboard" class="dashboard" style="display: none;">
+      <!-- ... -->
+      <button id="logout-btn" class="btn">Logout</button>
+    </main>
+
+    <!-- Supervisor Dashboard -->
+    <main id="supervisor-dashboard" class="dashboard" style="display: none;">
+      <!-- ... -->
+      <button id="logout-btn" class="btn">Logout</button>
+    </main>
+
+    <!-- Admin Dashboard -->
+    <main id="admin-dashboard" class="dashboard" style="display: none;">
+      <!-- ... -->
+      <button id="logout-btn" class="btn">Logout</button>
+    </main>
+
+    <footer>
+      <p>&copy; 2023 Time Clock System. All rights reserved.</p>
+      <!-- Add any additional footer content or links -->
+    </footer>
+  </div>
 
   <script type="module" src="app.js"></script>
 </body>
