@@ -101,44 +101,6 @@ export function submitLeaveHours(userId, leaveType, leaveHours) {
   // ...
 }
 
-// Function to calculate daily hours
-export function calculateDailyHours(userId, date) {
-  // Calculate daily hours based on timecard data for the specified user and date
-  const timecardEntries = JSON.parse(localStorage.getItem('timecardEntries')) || [];
-  const userTimecardEntries = timecardEntries.filter(entry => entry.userId === userId && entry.startTime.includes(date));
-
-  const dailyHours = userTimecardEntries.reduce((total, entry) => {
-    if (entry.endTime) {
-      const startTime = new Date(entry.startTime);
-      const endTime = new Date(entry.endTime);
-      const duration = (endTime - startTime) / 3600000; // Convert milliseconds to hours
-      return total + duration;
-    }
-    return total;
-  }, 0);
-
-  return dailyHours;
-}
-
-// Function to calculate weekly hours
-export function calculateWeeklyHours(userId) {
-  // Calculate weekly hours based on timecard data for the specified user
-  const timecardEntries = JSON.parse(localStorage.getItem('timecardEntries')) || [];
-  const userTimecardEntries = timecardEntries.filter(entry => entry.userId === userId);
-
-  const weeklyHours = userTimecardEntries.reduce((total, entry) => {
-    if (entry.endTime) {
-      const startTime = new Date(entry.startTime);
-      const endTime = new Date(entry.endTime);
-      const duration = (endTime - startTime) / 3600000; // Convert milliseconds to hours
-      return total + duration;
-    }
-    return total;
-  }, 0);
-
-  return weeklyHours;
-}
-
 // Function to update timecard data
 export function updateTimecard(userId, timecard) {
   // Update the timecard data in the database or data store for the specified user
@@ -146,6 +108,32 @@ export function updateTimecard(userId, timecard) {
   const updatedEntries = timecardEntries.map(entry => {
     if (entry.userId === userId) {
       return { ...entry, ...timecard };
+    }
+    return entry;
+  });
+  localStorage.setItem('timecardEntries', JSON.stringify(updatedEntries));
+}
+
+// Function to approve timecard entry
+export function approveTimecardEntry(entryId) {
+  // Update the timecard entry status to "approved" in the database or data store
+  const timecardEntries = JSON.parse(localStorage.getItem('timecardEntries')) || [];
+  const updatedEntries = timecardEntries.map(entry => {
+    if (entry.id === entryId) {
+      return { ...entry, status: 'approved' };
+    }
+    return entry;
+  });
+  localStorage.setItem('timecardEntries', JSON.stringify(updatedEntries));
+}
+
+// Function to reject timecard entry
+export function rejectTimecardEntry(entryId) {
+  // Update the timecard entry status to "rejected" in the database or data store
+  const timecardEntries = JSON.parse(localStorage.getItem('timecardEntries')) || [];
+  const updatedEntries = timecardEntries.map(entry => {
+    if (entry.id === entryId) {
+      return { ...entry, status: 'rejected' };
     }
     return entry;
   });
