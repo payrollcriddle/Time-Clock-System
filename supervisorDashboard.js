@@ -85,7 +85,7 @@ function fetchEmployeeTimecards() {
           <button class="btn btn-reject">Reject</button>
         </td>
       `;
-      employeeTimecardTable.appendChild(row);
+      employeeTimecardTable.querySelector('tbody').appendChild(row);
     });
   });
 }
@@ -105,4 +105,10 @@ function calculateEntryDuration(entry) {
 function generatePerformanceReport() {
   const employeeSelect = document.getElementById('employee-select');
   const employeeId = employeeSelect.value;
-  const performanceReport = document.getElementById('performance
+  const performanceReport = document.getElementById('performance-report');
+  
+  // Implement the logic to generate the performance report based on the selected employee
+  // You can use the employeeId to fetch the relevant data and display it in the performanceReport element
+  // For demonstration purposes, let's display a simple message
+  performanceReport.textContent = `Performance report for employee with ID: ${employeeId}`;
+}
