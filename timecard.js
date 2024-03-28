@@ -12,17 +12,12 @@ export function clockIn(userId, dayStatus, activityTypeId, jobId, timecardNote, 
   };
 
   saveTimecardEntry(entry);
-
-  console.log(`Clocked in at ${timestamp}`);
-  if (activityTypeId === 'meal') {
-    console.log(`Meal started at ${timestamp}`);
-  }
+  console.log(`Clocked in at ${new Date(timestamp).toLocaleString()}`);
 }
 
 // Function to save timecard entry
 export function saveTimecardEntry(entry) {
   // Save the timecard entry to the database or data store
-  // For demonstration purposes, let's assume we have a static array to store timecard entries
   const timecardEntries = JSON.parse(localStorage.getItem('timecardEntries')) || [];
   timecardEntries.push(entry);
   localStorage.setItem('timecardEntries', JSON.stringify(timecardEntries));
@@ -37,7 +32,7 @@ export function clockOut(userId, timestamp) {
   if (lastEntry && lastEntry.userId === userId && !lastEntry.endTime) {
     lastEntry.endTime = timestamp;
     localStorage.setItem('timecardEntries', JSON.stringify(timecardEntries));
-    console.log(`Clocked out at ${timestamp}`);
+    console.log(`Clocked out at ${new Date(timestamp).toLocaleString()}`);
   }
 }
 
@@ -52,8 +47,7 @@ export function startMeal(userId, timestamp) {
   };
 
   saveTimecardEntry(entry);
-
-  console.log(`Meal started at ${timestamp}`);
+  console.log(`Meal started at ${new Date(timestamp).toLocaleString()}`);
 }
 
 // Function to handle meal end
@@ -65,7 +59,7 @@ export function endMeal(userId, timestamp) {
   if (lastEntry && lastEntry.userId === userId && lastEntry.activityTypeId === 'meal' && !lastEntry.endTime) {
     lastEntry.endTime = timestamp;
     localStorage.setItem('timecardEntries', JSON.stringify(timecardEntries));
-    console.log(`Meal ended at ${timestamp}`);
+    console.log(`Meal ended at ${new Date(timestamp).toLocaleString()}`);
   }
 }
 
