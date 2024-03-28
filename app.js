@@ -1,7 +1,7 @@
 import { isAuthenticated, getUser, login, logout } from './auth.js';
-import { renderEmployeeDashboard } from './employeeDashboard.js';
-import { renderSupervisorDashboard } from './supervisorDashboard.js';
-import { renderAdminDashboard } from './adminDashboard.js';
+import { renderEmployeeDashboard } from './dashboards/employeeDashboard.js';
+import { renderSupervisorDashboard } from './dashboards/supervisorDashboard.js';
+import { renderAdminDashboard } from './dashboards/adminDashboard.js';
 
 const loginSection = document.getElementById('login-section');
 const employeeDashboard = document.getElementById('employee-dashboard');
