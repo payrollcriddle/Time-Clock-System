@@ -8,7 +8,7 @@ import { wyomingRegulations } from './stateRegulations/wyoming.js';
 import { idahoRegulations } from './stateRegulations/idaho.js';
 
 // Function to calculate hours based on state regulations
-function calculateHours(state, timecard) {
+export function calculateHours(state, timecard) {
   let regularHours = 0;
   let overtimeHours = 0;
   let doubleTimeHours = 0;
@@ -57,7 +57,7 @@ function calculateHours(state, timecard) {
 }
 
 // Function to calculate daily hours
-function calculateDailyHours(userId, date) {
+export function calculateDailyHours(userId, date) {
   // Calculate daily hours based on timecard data for the specified user and date
   const timecardEntries = JSON.parse(localStorage.getItem('timecardEntries')) || [];
   const userTimecardEntries = timecardEntries.filter(entry => entry.userId === userId && entry.startTime.includes(date));
@@ -76,7 +76,7 @@ function calculateDailyHours(userId, date) {
 }
 
 // Function to calculate weekly hours
-function calculateWeeklyHours(userId) {
+export function calculateWeeklyHours(userId) {
   // Calculate weekly hours based on timecard data for the specified user
   const timecardEntries = JSON.parse(localStorage.getItem('timecardEntries')) || [];
   const userTimecardEntries = timecardEntries.filter(entry => entry.userId === userId);
@@ -93,6 +93,3 @@ function calculateWeeklyHours(userId) {
 
   return weeklyHours;
 }
-
-// Export the necessary functions
-export { calculateHours, calculateDailyHours, calculateWeeklyHours };
