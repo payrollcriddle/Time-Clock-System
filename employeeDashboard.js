@@ -341,21 +341,23 @@ export function renderEmployeeDashboard() {
     weeklyHoursElement.textContent = `${weeklyHours} hours`;
   }
 
-  // Update time clock display
-  function updateTimeClockDisplay() {
-    const timecard = getTimecard(user.id);
-    const lastEntry = timecard.entries[timecard.entries.length - 1];
+ function updateTimeClockDisplay() {
+  const timecard = getTimecard(user.id);
+  const lastEntry = timecard.entries[timecard.entries.length - 1];
 
-    const clockInTimeElement = document.getElementById('clock-in-time');
-    const clockOutTimeElement = document.getElementById('clock-out-time');
-    const mealStartTimeElement = document.getElementById('meal-start-time');
-    const mealEndTimeElement = document.getElementById('meal-end-time');
+  const clockInTimeElement = document.getElementById('clock-in-time');
+  const clockOutTimeElement = document.getElementById('clock-out-time');
+  const mealStartTimeElement = document.getElementById('meal-start-time');
+  const mealEndTimeElement = document.getElementById('meal-end-time');
 
-    clockInTimeElement.textContent = lastEntry && lastEntry.startTime ? `Clocked In: ${new Date(lastEntry.startTime).toLocaleString()}` : '';
-    clockOutTimeElement.textContent = lastEntry && lastEntry.endTime ? `Clocked Out: ${new Date(lastEntry.endTime).toLocaleString()}` : '';
-    mealStartTimeElement.textContent = lastEntry && lastEntry.activityTypeId === 'meal' && lastEntry.startTime ? `Meal Started: ${new Date(lastEntry.startTime).toLocaleString()}` : '';
-    mealEndTimeElement.textContent = lastEntry && lastEntry.activityTypeId === 'meal' && lastEntry.endTime ? `Meal Ended: ${new Date(lastEntry.endTime).toLocaleString()}` : '';
-  }
+  clockInTimeElement.textContent = lastEntry && lastEntry.startTime ? `Clocked In: ${new Date(lastEntry.startTime).toLocaleString()}` : '';
+  clockOutTimeElement.textContent = lastEntry && lastEntry.endTime ? `Clocked Out: ${new Date(lastEntry.endTime).toLocaleString()}` : '';
+  mealStartTimeElement.textContent = lastEntry && lastEntry.activityTypeId === 'meal' && lastEntry.startTime ? `Meal Started: ${new Date(lastEntry.startTime).toLocaleString()}` : '';
+  mealEndTimeElement.textContent = lastEntry && lastEntry.activityTypeId === 'meal' && lastEntry.endTime ? `Meal Ended: ${new Date(lastEntry.endTime).toLocaleString()}` : '';
+}
+
+// Call updateTimeClockDisplay every second
+setInterval(updateTimeClockDisplay, 1000);
 
   // Initialize the dashboard
   updateCurrentTime();
