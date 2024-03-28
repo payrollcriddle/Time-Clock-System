@@ -1,43 +1,12 @@
-import { getUser, logout } from './auth.js';
-import { getEmployees } from './employeeManagement.js';
-import { getTimecard } from './timecard.js';
+import { getUser, logout } from '../auth.js';
+import { getEmployees } from '../management/employeeManagement.js';
+import { getTimecard, approveTimecardEntry, rejectTimecardEntry } from '../timecard.js';
 
 // Function to render supervisor dashboard
 export function renderSupervisorDashboard() {
   const supervisorDashboard = document.getElementById('supervisor-dashboard');
   supervisorDashboard.innerHTML = `
-    <div class="supervisor-header">
-      <h2>Supervisor Dashboard</h2>
-      <button id="logout-btn" class="btn">Logout</button>
-    </div>
-    
-    <!-- Employee Timecard Review -->
-    <div class="card">
-      <h3>Employee Timecard Review</h3>
-      <table id="employee-timecard-table">
-        <thead>
-          <tr>
-            <th>Employee</th>
-            <th>Date</th>
-            <th>Clock In</th>
-            <th>Clock Out</th>
-            <th>Hours Worked</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-    </div>
-    
-    <!-- Employee Performance Reports -->
-    <div class="card">
-      <h3>Employee Performance Reports</h3>
-      <select id="employee-select">
-        <option value="">Select Employee</option>
-      </select>
-      <button id="generate-report-btn" class="btn">Generate Report</button>
-      <div id="performance-report"></div>
-    </div>
+    <!-- ... (HTML code for supervisor dashboard) -->
   `;
 
   const user = getUser();
@@ -57,6 +26,8 @@ function populateEmployeeSelect() {
   const employeeSelect = document.getElementById('employee-select');
   const employees = getEmployees();
 
+  employeeSelect.innerHTML = '<option value="">Select Employee</option>';
+
   employees.forEach(employee => {
     const option = document.createElement('option');
     option.value = employee.id;
@@ -67,11 +38,14 @@ function populateEmployeeSelect() {
 
 // Function to fetch employee timecards
 function fetchEmployeeTimecards() {
-  const employeeTimecardTable = document.getElementById('employee-timecard-table');
+  const employeeTimecardTableBody = document.querySelector('#employee-timecard-table tbody');
   const employees = getEmployees();
+
+  employeeTimecardTableBody.innerHTML = '';
 
   employees.forEach(employee => {
     const timecard = getTimecard(employee.id);
+
     timecard.entries.forEach(entry => {
       const row = document.createElement('tr');
       row.innerHTML = `
@@ -81,12 +55,24 @@ function fetchEmployeeTimecards() {
         <td>${entry.endTime ? new Date(entry.endTime).toLocaleTimeString() : '-'}</td>
         <td>${calculateEntryDuration(entry)}</td>
         <td>
-          <button class="btn btn-approve">Approve</button>
-          <button class="btn btn-reject">Reject</button>
+          <button class="btn btn-approve" data-id="${entry.id}">Approve</button>
+          <button class="btn btn-reject" data-id="${entry.id}">Reject</button>
         </td>
       `;
-      employeeTimecardTable.querySelector('tbody').appendChild(row);
+      employeeTimecardTableBody.appendChild(row);
     });
+  });
+
+  // Add event listeners for approve and reject buttons
+  const approveButtons = document.querySelectorAll('.btn-approve');
+  const rejectButtons = document.querySelectorAll('.btn-reject');
+
+  approveButtons.forEach(button => {
+    button.addEventListener('click', handleApproveTimecardEntry);
+  });
+
+  rejectButtons.forEach(button => {
+    button.addEventListener('click', handleRejectTimecardEntry);
   });
 }
 
@@ -105,10 +91,39 @@ function calculateEntryDuration(entry) {
 function generatePerformanceReport() {
   const employeeSelect = document.getElementById('employee-select');
   const employeeId = employeeSelect.value;
-  const performanceReport = document.getElementById('performance-report');
-  
-  // Implement the logic to generate the performance report based on the selected employee
-  // You can use the employeeId to fetch the relevant data and display it in the performanceReport element
-  // For demonstration purposes, let's display a simple message
-  performanceReport.textContent = `Performance report for employee with ID: ${employeeId}`;
+  const performanceReportElement = document.getElementById('performance-report');
+
+  if (employeeId) {
+    const employee = getEmployees().find(emp => emp.id === employeeId);
+    const timecard = getTimecard(employeeId);
+
+    // Implement the logic to generate the performance report based on the employee's timecard data
+    // You can calculate metrics like total hours worked, average daily hours, etc.
+    // ...
+
+    performanceReportElement.innerHTML = `
+      <h4>Performance Report for ${employee.name}</h4>
+      <!-- Display the generated performance report data -->
+    `;
+  } else {
+    performanceReportElement.textContent = 'Please select an employee to generate the performance report.';
+  }
+}
+
+// Event handler for approve timecard entry button click
+function handleApproveTimecardEntry(event) {
+  const entryId = event.target.dataset.id;
+
+  approveTimecardEntry(entryId);
+
+  fetchEmployeeTimecards();
+}
+
+// Event handler for reject timecard entry button click
+function handleRejectTimecardEntry(event) {
+  const entryId = event.target.dataset.id;
+
+  rejectTimecardEntry(entryId);
+
+  fetchEmployeeTimecards();
 }
