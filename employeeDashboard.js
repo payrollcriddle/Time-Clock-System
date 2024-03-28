@@ -418,7 +418,6 @@ function getLeaveHours() {
   return parseFloat(leaveHoursInput.value);
 }
 
-// Function to handle day status change
 function handleDayStatusChange(status) {
   const clockInBtn = document.getElementById('clock-in-btn');
   const clockOutBtn = document.getElementById('clock-out-btn');
@@ -437,20 +436,13 @@ function handleDayStatusChange(status) {
       leaveHoursSection.style.display = 'none';
       break;
     case 'off':
-      clockInBtn.disabled = true;
-      clockOutBtn.disabled = true;
-      mealStartBtn.disabled = true;
-      mealEndBtn.disabled = true;
-      activityJobSection.style.display = 'none';
-      leaveHoursSection.style.display = 'none';
-      break;
     case 'leave':
       clockInBtn.disabled = true;
       clockOutBtn.disabled = true;
       mealStartBtn.disabled = true;
       mealEndBtn.disabled = true;
       activityJobSection.style.display = 'none';
-      leaveHoursSection.style.display = 'block';
+      leaveHoursSection.style.display = status === 'leave' ? 'block' : 'none';
       break;
     default:
       break;
