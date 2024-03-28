@@ -1,9 +1,9 @@
 // Import necessary functions from other files
-import { getUser, logout } from './auth.js';
-import { getActivityTypes } from './activityTypeManagement.js';
-import { getJobs } from './jobManagement.js';
-import { clockIn, clockOut, startMeal, endMeal, getTimecard, submitTimecard, submitLeaveHours, updateTimecard } from './timecard.js';
-import { calculateHours, calculateDailyHours, calculateWeeklyHours } from './hoursCalculation.js';
+import { getUser, logout } from '../auth.js';
+import { getActivityTypes } from '../management/activityTypeManagement.js';
+import { getJobs } from '../management/jobManagement.js';
+import { clockIn, clockOut, startMeal, endMeal, getTimecard, submitTimecard, submitLeaveHours, updateTimecard } from '../timecard.js';
+import { calculateHours, calculateDailyHours, calculateWeeklyHours } from '../hoursCalculation.js';
 
 // Function to get the pay period start date
 function getPayPeriodStartDate(date) {
@@ -89,8 +89,9 @@ export function renderEmployeeDashboard() {
         <h2>Employee Dashboard</h2>
         <p>Welcome, <span id="employee-name"></span>!</p>
 
-  const user = getUser();
-  const userState = user.state;
+// Get the current user and user state
+const user = getUser();
+const userState = user.state;
 
   // Use the userState when calculating hours or applying state-specific rules
   function updateCurrentTime() {
@@ -331,6 +332,18 @@ getJobs().forEach(job => {
     updateWeeklyHoursDisplay();
   });
 
+  // Function to handle leave hours input change
+function handleLeaveHoursChange() {
+  const leaveHoursInput = document.getElementById('leave-hours');
+  const leaveHours = parseFloat(leaveHoursInput.value);
+
+  if (isNaN(leaveHours) || leaveHours < 0) {
+    leaveHoursInput.setCustomValidity('Please enter a valid number for leave hours.');
+  } else {
+    leaveHoursInput.setCustomValidity('');
+  }
+}
+
   // Event listener for logout button
   document.getElementById('logout-btn').addEventListener('click', () => {
     logout();
@@ -351,7 +364,8 @@ getJobs().forEach(job => {
     weeklyHoursElement.textContent = `${weeklyHours} hours`;
   }
 
- function updateTimeClockDisplay() {
+// Function to update the time clock display
+function updateTimeClockDisplay() {
   const timecard = getTimecard(user.id);
   const lastEntry = timecard.entries[timecard.entries.length - 1];
 
@@ -360,10 +374,17 @@ getJobs().forEach(job => {
   const mealStartTimeElement = document.getElementById('meal-start-time');
   const mealEndTimeElement = document.getElementById('meal-end-time');
 
-  clockInTimeElement.textContent = lastEntry && lastEntry.startTime ? `Clocked In: ${new Date(lastEntry.startTime).toLocaleString()}` : '';
-  clockOutTimeElement.textContent = lastEntry && lastEntry.endTime ? `Clocked Out: ${new Date(lastEntry.endTime).toLocaleString()}` : '';
-  mealStartTimeElement.textContent = lastEntry && lastEntry.activityTypeId === 'meal' && lastEntry.startTime ? `Meal Started: ${new Date(lastEntry.startTime).toLocaleString()}` : '';
-  mealEndTimeElement.textContent = lastEntry && lastEntry.activityTypeId === 'meal' && lastEntry.endTime ? `Meal Ended: ${new Date(lastEntry.endTime).toLocaleString()}` : '';
+  if (lastEntry) {
+    clockInTimeElement.textContent = lastEntry.startTime ? `Clocked In: ${new Date(lastEntry.startTime).toLocaleString()}` : '';
+    clockOutTimeElement.textContent = lastEntry.endTime ? `Clocked Out: ${new Date(lastEntry.endTime).toLocaleString()}` : '';
+    mealStartTimeElement.textContent = lastEntry.activityTypeId === 'meal' && lastEntry.startTime ? `Meal Started: ${new Date(lastEntry.startTime).toLocaleString()}` : '';
+    mealEndTimeElement.textContent = lastEntry.activityTypeId === 'meal' && lastEntry.endTime ? `Meal Ended: ${new Date(lastEntry.endTime).toLocaleString()}` : '';
+  } else {
+    clockInTimeElement.textContent = '';
+    clockOutTimeElement.textContent = '';
+    mealStartTimeElement.textContent = '';
+    mealEndTimeElement.textContent = '';
+  }
 }
 
 // Call updateTimeClockDisplay every second
@@ -394,10 +415,11 @@ function getCurrentTimeForState(state) {
   return new Date().toLocaleString('en-US', { timeZone: timezone });
 }
 
-// Function to get the selected day status
-function getDayStatus() {
-  const dayStatusSelect = document.getElementById('day-status');
-  return dayStatusSelect.value;
+// Function to update the current time display
+function updateCurrentTime() {
+  const currentTimeElement = document.getElementById('current-time-display');
+  const currentTime = getCurrentTimeForState(userState);
+  currentTimeElement.textContent = currentTime;
 }
 
 // Function to get the selected activity type ID
@@ -471,6 +493,12 @@ function handleLeaveTypeChange(leaveType) {
     mealPeriodWaiver.style.display = 'none';
   }
 }
+
+// Event listener for leave hours input change
+document.getElementById('leave-hours').addEventListener('input', handleLeaveHoursChange);
+
+// Render employee dashboard when the page loads
+document.addEventListener('DOMContentLoaded', renderEmployeeDashboard);
 
 // Render employee dashboard when the page loads
 document.addEventListener('DOMContentLoaded', renderEmployeeDashboard);
