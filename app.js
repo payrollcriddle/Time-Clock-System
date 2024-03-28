@@ -31,6 +31,7 @@ document.getElementById('login-form').addEventListener('submit', function(event)
   const username = document.getElementById('username').value;
   const password = document.getElementById('password').value;
   const userRole = login(username, password);
+
   if (userRole) {
     renderDashboard(userRole);
   } else {
@@ -53,3 +54,31 @@ logoutButtons.forEach(button => {
     window.location.href = '/';
   });
 });
+
+// Function to handle unauthorized access
+function handleUnauthorizedAccess() {
+  alert('Unauthorized access. Please login with the appropriate role.');
+  logout();
+  window.location.href = '/';
+}
+
+// Check user role and handle unauthorized access
+function checkUserRole(allowedRoles) {
+  const user = getUser();
+  if (!user || !allowedRoles.includes(user.role)) {
+    handleUnauthorizedAccess();
+  }
+}
+
+// Check user role for each dashboard
+if (employeeDashboard) {
+  checkUserRole(['employee']);
+}
+
+if (supervisorDashboard) {
+  checkUserRole(['supervisor']);
+}
+
+if (adminDashboard) {
+  checkUserRole(['admin']);
+}
