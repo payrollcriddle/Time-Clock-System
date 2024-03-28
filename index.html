@@ -11,7 +11,7 @@
 
   <div class="container">
     <header>
-      <h1>Time Clock System</h1>
+      <h1>payrollcriddle's Time Clock System</h1>
       <!-- Add any additional header content or navigation menu -->
     </header>
 
@@ -27,7 +27,23 @@
 
     <!-- Employee Dashboard -->
     <main id="employee-dashboard" class="dashboard" style="display: none;">
-      <!-- ... -->
+      <!-- Add the necessary input elements and sections for the employee dashboard -->
+      <div id="leave-hours-section" class="card" style="display: none;">
+        <label for="leave-type">Leave Type:</label>
+        <select id="leave-type" required>
+          <option value="">Select Leave Type</option>
+          <option value="paid-time-off">Paid Time Off</option>
+          <option value="bonus-pto">Bonus PTO</option>
+          <option value="sick-hours">Sick Hours</option>
+          <option value="flex-hours">Flex Hours</option>
+        </select>
+
+        <label for="leave-hours">Leave Hours:</label>
+        <input type="number" id="leave-hours" placeholder="Enter Leave Hours" min="0" step="0.01" required>
+      </div>
+
+      <!-- Add other relevant sections and elements for the employee dashboard -->
+
       <button id="logout-btn" class="btn">Logout</button>
     </main>
 
@@ -44,7 +60,7 @@
     </main>
 
     <footer>
-      <p>&copy; 2023 Time Clock System. All rights reserved.</p>
+      <p>&copy; 2024 Time Clock System. All rights reserved.</p>
       <!-- Add any additional footer content or links -->
     </footer>
   </div>
