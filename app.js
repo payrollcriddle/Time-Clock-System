@@ -45,7 +45,11 @@ if (isAuthenticated()) {
   loginSection.style.display = 'block';
 }
 
-document.getElementById('logout-btn').addEventListener('click', function() {
-  logout();
-  window.location.href = '/';
+// Logout functionality
+const logoutButtons = document.querySelectorAll('#logout-btn');
+logoutButtons.forEach(button => {
+  button.addEventListener('click', function() {
+    logout();
+    window.location.href = '/';
+  });
 });
