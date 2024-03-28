@@ -88,6 +88,16 @@ export function renderEmployeeDashboard() {
       <div class="dashboard-main">
         <h2>Employee Dashboard</h2>
         <p>Welcome, <span id="employee-name"></span>!</p>
+
+  const user = getUser();
+  const userState = user.state;
+
+  // Use the userState when calculating hours or applying state-specific rules
+  function updateCurrentTime() {
+    const currentTimeElement = document.getElementById('current-time-display');
+    const currentTime = getCurrentTimeForState(userState);
+    currentTimeElement.textContent = currentTime.toLocaleString();
+  }
         
     <!-- Day Status -->
     <div id="day-status-section" class="card">
