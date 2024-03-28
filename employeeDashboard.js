@@ -228,23 +228,23 @@ export function renderEmployeeDashboard() {
     document.getElementById('employee-name').textContent = user.name;
   }
 
-  // Get activity types and populate the dropdown
-  const activityTypeSelect = document.getElementById('activity-type');
-  getActivityTypes().forEach(activity => {
-    const option = document.createElement('option');
-    option.value = activity.id;
-    option.textContent = activity.name;
-    activityTypeSelect.appendChild(option);
-  });
+// Get activity types and populate the dropdown
+const activityTypeSelect = document.getElementById('activity-type');
+getActivityTypes().forEach(activity => {
+  const option = document.createElement('option');
+  option.value = activity.id;
+  option.textContent = activity.name;
+  activityTypeSelect.appendChild(option);
+});
 
-  // Get jobs and populate the dropdown
-  const jobSelect = document.getElementById('job');
-  getJobs().forEach(job => {
-    const option = document.createElement('option');
-    option.value = job.id;
-    option.textContent = job.name;
-    jobSelect.appendChild(option);
-  });
+// Get jobs and populate the dropdown
+const jobSelect = document.getElementById('job');
+getJobs().forEach(job => {
+  const option = document.createElement('option');
+  option.value = job.id;
+  option.textContent = job.name;
+  jobSelect.appendChild(option);
+});
 
   // Calculate and display pay period and payday
   const today = new Date();
