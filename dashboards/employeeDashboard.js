@@ -483,11 +483,5 @@ function handleLeaveTypeChange(leaveType) {
   }
 }
 
-// Event listener for leave hours input change
-const leaveHoursInput = document.getElementById('leave-hours');
-if (leaveHoursInput) {
-  leaveHoursInput.addEventListener('input', handleLeaveHoursChange);
-}
-
 // Render employee dashboard when the page loads
 document.addEventListener('DOMContentLoaded', renderEmployeeDashboard);
