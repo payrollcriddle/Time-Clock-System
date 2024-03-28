@@ -3,6 +3,7 @@ import { addEmployee, updateEmployee, deleteEmployee, getEmployees } from './emp
 import { addActivityType, deleteActivityType, getActivityTypes } from './activityTypeManagement.js';
 import { addJob, deleteJob, getJobs } from './jobManagement.js';
 
+// Function to render admin dashboard
 export function renderAdminDashboard() {
   const adminDashboard = document.getElementById('admin-dashboard');
   adminDashboard.innerHTML = `
@@ -99,6 +100,24 @@ export function renderAdminDashboard() {
         <button type="submit" class="btn">Save Notification</button>
       </form>
     </div>
+    
+    <!-- Employee Timecard Management -->
+    <div class="card">
+      <h3>Employee Timecard Management</h3>
+      <table id="timecard-table">
+        <thead>
+          <tr>
+            <th>Employee</th>
+            <th>Date</th>
+            <th>Clock In</th>
+            <th>Clock Out</th>
+            <th>Hours Worked</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
   `;
 
   const user = getUser();
@@ -106,6 +125,7 @@ export function renderAdminDashboard() {
   renderActivityTypeList();
   renderJobList();
   renderNotificationForm();
+  fetchEmployeeTimecards();
 
   document.getElementById('employee-form').addEventListener('submit', handleEmployeeFormSubmit);
   document.getElementById('activity-type-form').addEventListener('submit', handleActivityTypeFormSubmit);
@@ -116,6 +136,25 @@ export function renderAdminDashboard() {
     logout();
     window.location.href = '/';
   });
+}
+
+// Function to fetch employee timecards
+function fetchEmployeeTimecards() {
+  // Fetch employee timecard data from the server or database
+  // Update the timecard table with the fetched data
+  // ...
+}
+
+// Function to approve timecard entry
+function approveTimecardEntry(entryId) {
+  // Update the timecard entry status to "approved"
+  // ...
+}
+
+// Function to reject timecard entry
+function rejectTimecardEntry(entryId) {
+  // Update the timecard entry status to "rejected"
+  // ...
 }
 
 // Other functions...
