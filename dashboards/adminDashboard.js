@@ -23,7 +23,8 @@ export function renderAdminDashboard() {
   document.getElementById('job-form').addEventListener('submit', handleJobFormSubmit);
   document.getElementById('notification-form').addEventListener('submit', handleNotificationFormSubmit);
 
-  document.getElementById('logout-btn').addEventListener('click', () => {
+  // Updated event listener to target the correct ID for the logout button
+  document.getElementById('admin-logout-btn').addEventListener('click', () => {
     logout();
     window.location.href = '/';
   });
