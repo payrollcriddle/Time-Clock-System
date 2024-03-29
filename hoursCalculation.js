@@ -1,11 +1,11 @@
-import { californiaRegulations } from '../stateRegulations/california.js';
-import { coloradoRegulations } from '../stateRegulations/colorado.js';
-import { nevadaRegulations } from '../stateRegulations/nevada.js';
-import { oregonRegulations } from '../stateRegulations/oregon.js';
-import { washingtonRegulations } from '../stateRegulations/washington.js';
-import { montanaRegulations } from '../stateRegulations/montana.js';
-import { wyomingRegulations } from '../stateRegulations/wyoming.js';
-import { idahoRegulations } from '../stateRegulations/idaho.js';
+import { californiaRegulations } from './stateRegulations/california.js';
+import { coloradoRegulations } from './stateRegulations/colorado.js';
+import { nevadaRegulations } from './stateRegulations/nevada.js';
+import { oregonRegulations } from './stateRegulations/oregon.js';
+import { washingtonRegulations } from './stateRegulations/washington.js';
+import { montanaRegulations } from './stateRegulations/montana.js';
+import { wyomingRegulations } from './stateRegulations/wyoming.js';
+import { idahoRegulations } from './stateRegulations/idaho.js';
 
 // Function to calculate hours based on state regulations
 export function calculateHours(state, timecard) {
