@@ -1,7 +1,7 @@
 import { getUser, logout } from '../../auth.js';
-import { addEmployee, updateEmployee, deleteEmployee, getEmployees } from '../management/employeeManagement.js';
-import { addActivityType, deleteActivityType, getActivityTypes } from '../management/activityTypeManagement.js';
-import { addJob, deleteJob, getJobs } from '../management/jobManagement.js';
+import { addEmployee, updateEmployee, deleteEmployee, getEmployees } from '../../management/employeeManagement.js';
+import { addActivityType, deleteActivityType, getActivityTypes } from '../../management/activityTypeManagement.js';
+import { addJob, deleteJob, getJobs } from '../../management/jobManagement.js';
 import { getTimecard, approveTimecardEntry, rejectTimecardEntry } from '../../timecard.js';
 
 // Function to render admin dashboard
