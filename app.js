@@ -15,22 +15,23 @@ function renderDashboard(userRole) {
   supervisorDashboard.style.display = 'none';
   adminDashboard.style.display = 'none';
 
-  switch (userRole) {
-    case 'employee':
-      employeeDashboard.style.display = 'block';
-      renderEmployeeDashboard();
-      break;
-    case 'supervisor':
-      supervisorDashboard.style.display = 'block';
-      renderSupervisorDashboard();
-      break;
-    case 'admin':
-      adminDashboard.style.display = 'block';
-      renderAdminDashboard();
-      break;
-    default:
-      loginSection.style.display = 'block';
-      break;
+  if (userRole) {
+    switch (userRole) {
+      case 'employee':
+        employeeDashboard.style.display = 'block';
+        renderEmployeeDashboard();
+        break;
+      case 'supervisor':
+        supervisorDashboard.style.display = 'block';
+        renderSupervisorDashboard();
+        break;
+      case 'admin':
+        adminDashboard.style.display = 'block';
+        renderAdminDashboard();
+        break;
+    }
+  } else {
+    loginSection.style.display = 'block';
   }
 }
 
