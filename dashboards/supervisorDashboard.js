@@ -15,7 +15,8 @@ export function renderSupervisorDashboard() {
 
   document.getElementById('generate-report-btn').addEventListener('click', generatePerformanceReport);
 
-  document.getElementById('logout-btn').addEventListener('click', () => {
+  // Updated event listener to target the correct ID for the logout button
+  document.getElementById('supervisor-logout-btn').addEventListener('click', () => {
     logout();
     window.location.href = '/';
   });
