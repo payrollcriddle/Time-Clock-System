@@ -1,7 +1,7 @@
 // employeeDashboardModules/displayFunctions.js
 
-import { calculateDailyHours, calculateWeeklyHours } from '../hoursCalculation.js';
-import { getTimecard } from '../timecard.js';
+import { calculateDailyHours, calculateWeeklyHours } from '../../hoursCalculation.js';
+import { getTimecard } from '../../timecard.js';
 
 export function updateCurrentTime(userState) {
   const currentTimeElement = document.getElementById('current-time-display');
