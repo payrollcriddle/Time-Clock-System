@@ -28,9 +28,18 @@ const logoutButton = document.getElementById('logout-button');
 const calendarContainer = document.getElementById('calendar-container');
 
 export function renderEmployeeDashboard() {
-  // Display the welcome message
-  const employee = getUser();
-  welcomeMessage.textContent = `Welcome, ${employee.name}!`;
+    const employee = getUser();
+    if (employee) {
+        welcomeMessage.textContent = `Welcome, ${employee.name}!`;
+
+        // Other code for rendering the dashboard
+
+    } else {
+        // Handle the case where the user object is null
+        console.error("User object is null.");
+        // You can redirect the user to the login page or display an error message
+    }
+}
 
   // Show the current date and time
   const currentTime = updateCurrentTime(employee.state);
