@@ -1,5 +1,5 @@
 import { getUser, logout } from '../../auth.js';
-import { getEmployees } from '../management/employeeManagement.js';
+import { getEmployees } from '../../management/employeeManagement.js';
 import { getTimecard, approveTimecardEntry, rejectTimecardEntry } from '../../timecard.js';
 
 // Function to render supervisor dashboard
