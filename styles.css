@@ -240,3 +240,58 @@ textarea {
     width: 100%;
   }
 }
+
+/* Employee Dashboard Styles */
+#welcome-message {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+#current-date-time {
+  font-size: 18px;
+  margin-bottom: 20px;
+}
+
+#day-status-dropdown,
+#activity-dropdown,
+#job-dropdown,
+#leave-type-dropdown {
+  margin-bottom: 10px;
+}
+
+#leave-hours-section {
+  margin-bottom: 20px;
+}
+
+#leave-hours-input {
+  margin-bottom: 10px;
+}
+
+#meal-period-waiver-checkbox {
+  margin-bottom: 20px;
+}
+
+#timecard-note-input {
+  margin-bottom: 20px;
+}
+
+#daily-hours-table {
+  margin-bottom: 20px;
+}
+
+#weekly-hours-summary {
+  margin-bottom: 20px;
+}
+
+#submit-button {
+  margin-bottom: 10px;
+}
+
+#logout-button {
+  margin-top: 10px;
+}
+
+#calendar-container {
+  margin-top: 20px;
+}
