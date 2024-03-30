@@ -40,11 +40,30 @@ export function getStates() {
 }
 
 export function getRegulationFile(state) {
-    return stateConfig[state]?.regulationFile;
+    if (stateConfig[state] && stateConfig[state].regulationFile) {
+        return stateConfig[state].regulationFile;
+    } else {
+        console.error(`Regulation file not found for state: ${state}`);
+        return null;
+    }
 }
 
 export function getPolicyFile(state) {
-    return stateConfig[state]?.policyFile;
+    if (stateConfig[state] && stateConfig[state].policyFile) {
+        return stateConfig[state].policyFile;
+    } else {
+        console.error(`Policy file not found for state: ${state}`);
+        return null;
+    }
+}
+
+export function getStateConfig(state) {
+    if (stateConfig[state]) {
+        return stateConfig[state];
+    } else {
+        console.error(`State configuration not found for state: ${state}`);
+        return null;
+    }
 }
 
 export default stateConfig;
