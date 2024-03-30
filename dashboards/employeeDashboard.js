@@ -33,6 +33,19 @@ const employeeDashboardElements = {
 export function renderEmployeeDashboard() {
     const employee = getUser();
     if (employee) {
+        // Check if all required DOM elements are found
+        if (!employeeDashboardElements.welcomeMessage || !employeeDashboardElements.currentDateTime ||
+            !employeeDashboardElements.dayStatusDropdown || !employeeDashboardElements.timeClock ||
+            !employeeDashboardElements.activityDropdown || !employeeDashboardElements.jobDropdown ||
+            !employeeDashboardElements.leaveHoursSection || !employeeDashboardElements.leaveTypeDropdown ||
+            !employeeDashboardElements.leaveHoursInput || !employeeDashboardElements.timecardNoteInput ||
+            !employeeDashboardElements.mealPeriodWaiverCheckbox || !employeeDashboardElements.dailyHoursTable ||
+            !employeeDashboardElements.weeklyHoursSummary || !employeeDashboardElements.submitButton ||
+            !employeeDashboardElements.logoutButton || !employeeDashboardElements.calendarContainer) {
+            console.error("Required DOM elements not found.");
+            return;
+        }
+
         // Render welcome message
         employeeDashboardElements.welcomeMessage.textContent = `Welcome, ${employee.name}!`;
 
@@ -51,8 +64,7 @@ export function renderEmployeeDashboard() {
         // Populate the activity and job dropdowns
         const activityTypes = getActivityTypes();
         employeeDashboardElements.activityDropdown.innerHTML = activityTypes.map(activity => `<option value="${activity.id}">${activity.name}</option>`).join('');
-        
-        // Update the code to use the getJobs function from jobManagement.js
+
         const jobs = getJobs();
         employeeDashboardElements.jobDropdown.innerHTML = jobs.map(job => `<option value="${job.id}">${job.name}</option>`).join('');
 
@@ -67,12 +79,11 @@ export function renderEmployeeDashboard() {
         employeeDashboardElements.leaveTypeDropdown.addEventListener('change', handleLeaveTypeChange);
 
         // Populate the daily hours table
-        const timecard = getTimecard(employee.id, employee.role); // Pass the user's role as an argument
+        const timecard = getTimecard(employee.id);
         const payPeriodStart = getPayPeriodStartDate(new Date());
         const payPeriodEnd = getPayPeriodEndDate(payPeriodStart);
         const dailyHours = calculateDailyHours(timecard, payPeriodStart, payPeriodEnd);
         employeeDashboardElements.dailyHoursTable.innerHTML = renderDailyHoursTable(dailyHours);
-
 
         // Calculate and display the weekly hours summary
         const weeklyHours = calculateWeeklyHours(dailyHours);
@@ -128,7 +139,7 @@ function renderDailyHoursTable(dailyHours) {
         <tbody>
             ${dailyHours.map(day => `
                 <tr>
-                    <td>${day.date}</td>
+                    <td>${new Date(day.date).toLocaleDateString()}</td>
                     <td>${day.hoursWorked}</td>
                     <td>${day.leaveHours}</td>
                     <td>${day.mealPeriodWaived ? 'Yes' : 'No'}</td>
