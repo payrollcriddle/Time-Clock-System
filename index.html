@@ -5,86 +5,74 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="A web-based time clock system for tracking employee work hours and generating timecards.">
     <link rel="icon" href="path/to/your/favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-  <div id="loading" class="loading">Loading...</div>
-  <div class="container">
-    <header>
-      <h1>Time Clock System</h1>
-      <!-- Add any additional header content or navigation menu -->
-    </header>
+    <div id="loading" class="loading">Loading...</div>
+    <div class="container">
+        <header>
+            <h1>Time Clock System</h1>
+            <!-- Add any additional header content or navigation menu -->
+        </header>
 
-    <!-- Login Section -->
-    <main id="login-section">
-      <h2>Login</h2>
-      <form id="login-form">
-        <input type="text" id="username" placeholder="Username" autocomplete="username" required>
-        <input type="password" id="password" placeholder="Password" autocomplete="current-password" required>
-        <button type="submit" class="btn">Login</button>
-      </form>
-    </main>
+        <!-- Login Section -->
+        <main id="login-section">
+            <h2>Login</h2>
+            <form id="login-form">
+                <input type="text" id="username" placeholder="Username" autocomplete="username" required>
+                <input type="password" id="password" placeholder="Password" autocomplete="current-password" required>
+                <button type="submit" class="btn">Login</button>
+            </form>
+        </main>
 
-    <!-- Employee Dashboard -->
-    <main id="employee-dashboard" class="dashboard" style="display: none;">
-      <div id="welcome-message"></div>
-      <div id="current-date-time"></div>
-      
-      <label for="day-status-dropdown">Day Status:</label>
-      <select id="day-status-dropdown"></select>
-      
-      <div id="time-clock"></div>
-      
-      <label for="activity-dropdown">Activity:</label>
-      <select id="activity-dropdown"></select>
-      
-      <label for="job-dropdown">Job:</label>
-      <select id="job-dropdown"></select>
-      
-      <div id="leave-hours-section" class="card" style="display: none;">
-        <label for="leave-type-dropdown">Leave Type:</label>
-        <select id="leave-type-dropdown"></select>
-        
-        <label for="leave-hours-input">Leave Hours:</label>
-        <input type="number" id="leave-hours-input" placeholder="Enter Leave Hours" min="0" step="0.01" required>
-        
-        <label for="meal-period-waiver-checkbox">Waive Meal Period:</label>
-        <input type="checkbox" id="meal-period-waiver-checkbox">
-      </div>
-      
-      <label for="timecard-note-input">Timecard Note:</label>
-      <textarea id="timecard-note-input"></textarea>
-      
-      <table id="daily-hours-table">
-        <!-- Daily hours table content will be dynamically populated -->
-      </table>
-      
-      <div id="weekly-hours-summary"></div>
-      
-      <button id="submit-button" class="btn">Submit Timecard</button>
-      <button id="logout-button" class="btn">Logout</button>
-      
-      <div id="calendar-container"></div>
-    </main>
+        <!-- Employee Dashboard -->
+        <main id="employee-dashboard" class="dashboard" style="display: none;">
+            <div id="welcome-message"></div>
+            <div id="current-date-time"></div>
+            <label for="day-status-dropdown">Day Status:</label>
+            <select id="day-status-dropdown"></select>
+            <div id="time-clock"></div>
+            <label for="activity-dropdown">Activity:</label>
+            <select id="activity-dropdown"></select>
+            <label for="job-dropdown">Job:</label>
+            <select id="job-dropdown"></select>
+            <div id="leave-hours-section" class="card" style="display: none;">
+                <label for="leave-type-dropdown">Leave Type:</label>
+                <select id="leave-type-dropdown"></select>
+                <label for="leave-hours-input">Leave Hours:</label>
+                <input type="number" id="leave-hours-input" placeholder="Enter Leave Hours" min="0" step="0.01" required>
+                <label for="meal-period-waiver-checkbox">Waive Meal Period:</label>
+                <input type="checkbox" id="meal-period-waiver-checkbox">
+            </div>
+            <label for="timecard-note-input">Timecard Note:</label>
+            <textarea id="timecard-note-input"></textarea>
+            <table id="daily-hours-table">
+                <!-- Daily hours table content will be dynamically populated -->
+            </table>
+            <div id="weekly-hours-summary"></div>
+            <button id="submit-button" class="btn">Submit Timecard</button>
+            <button id="logout-button" class="btn">Logout</button>
+            <div id="calendar-container"></div>
+        </main>
 
-    <!-- Supervisor Dashboard -->
-    <main id="supervisor-dashboard" class="dashboard" style="display: none;">
-      <!-- ... -->
-      <button id="supervisor-logout-btn" class="btn">Logout</button>
-    </main>
+        <!-- Supervisor Dashboard -->
+        <main id="supervisor-dashboard" class="dashboard" style="display: none;">
+            <!-- ... -->
+            <button id="supervisor-logout-btn" class="btn">Logout</button>
+        </main>
 
-    <!-- Admin Dashboard -->
-    <main id="admin-dashboard" class="dashboard" style="display: none;">
-      <!-- ... -->
-      <button id="admin-logout-btn" class="btn">Logout</button>
-    </main>
+        <!-- Admin Dashboard -->
+        <main id="admin-dashboard" class="dashboard" style="display: none;">
+            <!-- ... -->
+            <button id="admin-logout-btn" class="btn">Logout</button>
+        </main>
 
-    <footer>
-      <p>&copy; 2024 payrollcriddle's Time Clock System. All rights reserved.</p>
-      <!-- Add any additional footer content or links -->
-    </footer>
-  </div>
+        <footer>
+            <p>&copy; 2024 payrollcriddle's Time Clock System. All rights reserved.</p>
+            <!-- Add any additional footer content or links -->
+        </footer>
+    </div>
 
-  <script type="module" src="app.js"></script>
+    <script type="module" src="app.js"></script>
 </body>
 </html>
