@@ -1,5 +1,8 @@
+// displayFunctions.js
+
 import { calculateDailyHours, calculateWeeklyHours } from '../../hoursCalculation.js';
 import { getTimecard } from '../../timecard.js';
+import { stateTimeZones } from '../../config/stateTimeZones.js';
 
 // Define time zone offsets for the states
 const stateTimeZones = {
