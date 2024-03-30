@@ -7,6 +7,11 @@ import { getTimecard, approveTimecardEntry, rejectTimecardEntry } from '../timec
 // Function to render admin dashboard
 export function renderAdminDashboard() {
   const adminDashboard = document.getElementById('admin-dashboard');
+  if (!adminDashboard) {
+    console.error('Admin dashboard element not found');
+    return;
+  }
+
   adminDashboard.innerHTML = `
     <!-- ... (HTML code for admin dashboard) -->
   `;
@@ -18,21 +23,43 @@ export function renderAdminDashboard() {
   renderNotificationForm();
   fetchEmployeeTimecards();
 
-  document.getElementById('employee-form').addEventListener('submit', handleEmployeeFormSubmit);
-  document.getElementById('activity-type-form').addEventListener('submit', handleActivityTypeFormSubmit);
-  document.getElementById('job-form').addEventListener('submit', handleJobFormSubmit);
-  document.getElementById('notification-form').addEventListener('submit', handleNotificationFormSubmit);
+  const employeeForm = document.getElementById('employee-form');
+  const activityTypeForm = document.getElementById('activity-type-form');
+  const jobForm = document.getElementById('job-form');
+  const notificationForm = document.getElementById('notification-form');
+  const logoutButton = document.getElementById('admin-logout-btn');
 
-  // Updated event listener to target the correct ID for the logout button
-  document.getElementById('admin-logout-btn').addEventListener('click', () => {
-    logout();
-    window.location.href = '/';
-  });
+  if (employeeForm) {
+    employeeForm.addEventListener('submit', handleEmployeeFormSubmit);
+  }
+  if (activityTypeForm) {
+    activityTypeForm.addEventListener('submit', handleActivityTypeFormSubmit);
+  }
+  if (jobForm) {
+    jobForm.addEventListener('submit', handleJobFormSubmit);
+  }
+  if (notificationForm) {
+    notificationForm.addEventListener('submit', handleNotificationFormSubmit);
+  }
+  if (logoutButton) {
+    logoutButton.addEventListener('click', handleLogout);
+  }
+}
+
+// Function to handle logout
+function handleLogout() {
+  logout();
+  window.location.href = '/';
 }
 
 // Function to render employee table
 function renderEmployeeTable() {
   const employeeTableBody = document.querySelector('#employee-table tbody');
+  if (!employeeTableBody) {
+    console.error('Employee table body not found');
+    return;
+  }
+
   const employees = getEmployees();
 
   employeeTableBody.innerHTML = '';
@@ -54,8 +81,8 @@ function renderEmployeeTable() {
   });
 
   // Add event listeners for edit and delete buttons
-  const editButtons = document.querySelectorAll('.btn-edit');
-  const deleteButtons = document.querySelectorAll('.btn-delete');
+  const editButtons = employeeTableBody.querySelectorAll('.btn-edit');
+  const deleteButtons = employeeTableBody.querySelectorAll('.btn-delete');
 
   editButtons.forEach(button => {
     button.addEventListener('click', handleEditEmployee);
@@ -69,6 +96,11 @@ function renderEmployeeTable() {
 // Function to render activity type list
 function renderActivityTypeList() {
   const activityTypeList = document.getElementById('activity-type-list');
+  if (!activityTypeList) {
+    console.error('Activity type list element not found');
+    return;
+  }
+
   const activityTypes = getActivityTypes();
 
   activityTypeList.innerHTML = '';
@@ -90,6 +122,11 @@ function renderActivityTypeList() {
 // Function to render job list
 function renderJobList() {
   const jobList = document.getElementById('job-list');
+  if (!jobList) {
+    console.error('Job list element not found');
+    return;
+  }
+
   const jobs = getJobs();
 
   jobList.innerHTML = '';
@@ -116,35 +153,42 @@ function renderNotificationForm() {
 }
 
 // Function to fetch employee timecards
-function fetchEmployeeTimecards() {
+async function fetchEmployeeTimecards() {
   const timecardTableBody = document.querySelector('#timecard-table tbody');
+  if (!timecardTableBody) {
+    console.error('Timecard table body not found');
+    return;
+  }
+
   const employees = getEmployees();
 
   timecardTableBody.innerHTML = '';
 
-  employees.forEach(employee => {
-    const timecard = getTimecard(employee.id, 'admin'); // Pass 'admin' as the user role
+  for (const employee of employees) {
+    const timecard = await getTimecard(employee.id, 'admin'); // Pass 'admin' as the user role
 
-    timecard.entries.forEach(entry => {
-      const row = document.createElement('tr');
-      row.innerHTML = `
-        <td>${employee.name}</td>
-        <td>${new Date(entry.startTime).toLocaleDateString()}</td>
-        <td>${new Date(entry.startTime).toLocaleTimeString()}</td>
-        <td>${entry.endTime ? new Date(entry.endTime).toLocaleTimeString() : '-'}</td>
-        <td>${calculateEntryDuration(entry)}</td>
-        <td>
-          <button class="btn btn-approve" data-id="${entry.id}">Approve</button>
-          <button class="btn btn-reject" data-id="${entry.id}">Reject</button>
-        </td>
-      `;
-      timecardTableBody.appendChild(row);
-    });
-  });
+    if (timecard && timecard.entries) {
+      timecard.entries.forEach(entry => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${employee.name}</td>
+          <td>${new Date(entry.startTime).toLocaleDateString()}</td>
+          <td>${new Date(entry.startTime).toLocaleTimeString()}</td>
+          <td>${entry.endTime ? new Date(entry.endTime).toLocaleTimeString() : '-'}</td>
+          <td>${calculateEntryDuration(entry)}</td>
+          <td>
+            <button class="btn btn-approve" data-id="${entry.id}">Approve</button>
+            <button class="btn btn-reject" data-id="${entry.id}">Reject</button>
+          </td>
+        `;
+        timecardTableBody.appendChild(row);
+      });
+    }
+  }
 
   // Add event listeners for approve and reject buttons
-  const approveButtons = document.querySelectorAll('.btn-approve');
-  const rejectButtons = document.querySelectorAll('.btn-reject');
+  const approveButtons = timecardTableBody.querySelectorAll('.btn-approve');
+  const rejectButtons = timecardTableBody.querySelectorAll('.btn-reject');
 
   approveButtons.forEach(button => {
     button.addEventListener('click', handleApproveTimecardEntry);
@@ -167,7 +211,7 @@ function calculateEntryDuration(entry) {
 }
 
 // Event handler for employee form submit
-function handleEmployeeFormSubmit(event) {
+async function handleEmployeeFormSubmit(event) {
   event.preventDefault();
 
   const nameInput = document.getElementById('employee-name');
@@ -177,6 +221,11 @@ function handleEmployeeFormSubmit(event) {
   const roleSelect = document.getElementById('employee-role');
   const stateSelect = document.getElementById('employee-state');
 
+  if (!nameInput || !usernameInput || !passwordInput || !employeeIdInput || !roleSelect || !stateSelect) {
+    console.error('Required form elements not found');
+    return;
+  }
+
   const name = nameInput.value;
   const username = usernameInput.value;
   const password = passwordInput.value;
@@ -184,50 +233,69 @@ function handleEmployeeFormSubmit(event) {
   const role = roleSelect.value;
   const state = stateSelect.value;
 
-  addEmployee(name, username, password, employeeId, role, state);
-
-  nameInput.value = '';
-  usernameInput.value = '';
-  passwordInput.value = '';
-  employeeIdInput.value = '';
-  roleSelect.value = '';
-  stateSelect.value = '';
-
-  renderEmployeeTable();
+  try {
+    await addEmployee(name, username, password, employeeId, role, state);
+    nameInput.value = '';
+    usernameInput.value = '';
+    passwordInput.value = '';
+    employeeIdInput.value = '';
+    roleSelect.value = '';
+    stateSelect.value = '';
+    renderEmployeeTable();
+  } catch (error) {
+    console.error('Failed to add employee:', error);
+    // Display an error message to the user
+  }
 }
 
 // Event handler for activity type form submit
-function handleActivityTypeFormSubmit(event) {
+async function handleActivityTypeFormSubmit(event) {
   event.preventDefault();
 
   const activityTypeNameInput = document.getElementById('activity-type-name');
+  if (!activityTypeNameInput) {
+    console.error('Activity type name input not found');
+    return;
+  }
+
   const activityTypeName = activityTypeNameInput.value;
 
-  addActivityType(activityTypeName);
-
-  activityTypeNameInput.value = '';
-
-  renderActivityTypeList();
+  try {
+    await addActivityType(activityTypeName);
+    activityTypeNameInput.value = '';
+    renderActivityTypeList();
+  } catch (error) {
+    console.error('Failed to add activity type:', error);
+    // Display an error message to the user
+  }
 }
 
 // Event handler for job form submit
-function handleJobFormSubmit(event) {
+async function handleJobFormSubmit(event) {
   event.preventDefault();
 
   const jobNameInput = document.getElementById('job-name');
   const jobDescriptionInput = document.getElementById('job-description');
+
+  if (!jobNameInput || !jobDescriptionInput) {
+    console.error('Required job form elements not found');
+    return;
+  }
 
   const job = {
     name: jobNameInput.value,
     description: jobDescriptionInput.value,
   };
 
-  addJob(job);
-
-  jobNameInput.value = '';
-  jobDescriptionInput.value = '';
-
-  renderJobList();
+  try {
+    await addJob(job);
+    jobNameInput.value = '';
+    jobDescriptionInput.value = '';
+    renderJobList();
+  } catch (error) {
+    console.error('Failed to add job:', error);
+    // Display an error message to the user
+  }
 }
 
 // Event handler for notification form submit
@@ -236,6 +304,11 @@ function handleNotificationFormSubmit(event) {
 
   const notificationInstanceInput = document.getElementById('notification-instance');
   const notificationMessageInput = document.getElementById('notification-message');
+
+  if (!notificationInstanceInput || !notificationMessageInput) {
+    console.error('Required notification form elements not found');
+    return;
+  }
 
   const notificationInstance = notificationInstanceInput.value;
   const notificationMessage = notificationMessageInput.value;
@@ -261,46 +334,67 @@ function handleEditEmployee(event) {
 }
 
 // Event handler for delete employee button click
-function handleDeleteEmployee(event) {
+async function handleDeleteEmployee(event) {
   const employeeId = event.target.dataset.id;
 
-  deleteEmployee(employeeId);
-
-  renderEmployeeTable();
+  try {
+    await deleteEmployee(employeeId);
+    renderEmployeeTable();
+  } catch (error) {
+    console.error('Failed to delete employee:', error);
+    // Display an error message to the user
+  }
 }
 
 // Event handler for delete activity type button click
-function handleDeleteActivityType(activityTypeId) {
-  deleteActivityType(activityTypeId);
-
-  renderActivityTypeList();
+async function handleDeleteActivityType(activityTypeId) {
+  try {
+    await deleteActivityType(activityTypeId);
+    renderActivityTypeList();
+  } catch (error) {
+    console.error('Failed to delete activity type:', error);
+    // Display an error message to the user
+  }
 }
 
 // Event handler for delete job button click
-function handleDeleteJob(jobId) {
-  const deletedJob = deleteJob(jobId);
-
-  if (deletedJob) {
-    renderJobList();
-  } else {
-    alert('Failed to delete job. Job not found.');
+async function handleDeleteJob(jobId) {
+  try {
+    const deletedJob = await deleteJob(jobId);
+    if (deletedJob) {
+      renderJobList();
+    } else {
+      console.error('Failed to delete job. Job not found.');
+      // Display an error message to the user
+    }
+  } catch (error) {
+    console.error('Failed to delete job:', error);
+    // Display an error message to the user
   }
 }
 
 // Event handler for approve timecard entry button click
-function handleApproveTimecardEntry(event) {
+async function handleApproveTimecardEntry(event) {
   const entryId = event.target.dataset.id;
 
-  approveTimecardEntry(entryId);
-
-  fetchEmployeeTimecards();
+  try {
+    await approveTimecardEntry(entryId);
+    fetchEmployeeTimecards();
+  } catch (error) {
+    console.error('Failed to approve timecard entry:', error);
+    // Display an error message to the user
+  }
 }
 
 // Event handler for reject timecard entry button click
-function handleRejectTimecardEntry(event) {
+async function handleRejectTimecardEntry(event) {
   const entryId = event.target.dataset.id;
 
-  rejectTimecardEntry(entryId);
-
-  fetchEmployeeTimecards();
+  try {
+    await rejectTimecardEntry(entryId);
+    fetchEmployeeTimecards();
+  } catch (error) {
+    console.error('Failed to reject timecard entry:', error);
+    // Display an error message to the user
+  }
 }
