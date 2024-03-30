@@ -51,6 +51,8 @@ export function renderEmployeeDashboard() {
         // Populate the activity and job dropdowns
         const activityTypes = getActivityTypes();
         employeeDashboardElements.activityDropdown.innerHTML = activityTypes.map(activity => `<option value="${activity.id}">${activity.name}</option>`).join('');
+        
+        // Update the code to use the getJobs function from jobManagement.js
         const jobs = getJobs();
         employeeDashboardElements.jobDropdown.innerHTML = jobs.map(job => `<option value="${job.id}">${job.name}</option>`).join('');
 
@@ -104,7 +106,7 @@ export function renderEmployeeDashboard() {
         employeeDashboardElements.logoutButton.addEventListener('click', handleLogout);
 
         // Render the calendar
-        renderCalendar(employeeDashboardElements.calendarContainer, payPeriodStart, payPeriodEnd);
+        new Calendar(employeeDashboardElements.calendarContainer, payPeriodStart, payPeriodEnd);
 
     } else {
         // Handle the case where the user object is null
