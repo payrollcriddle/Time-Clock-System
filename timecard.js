@@ -2,6 +2,7 @@
 export function clockIn(userId, dayStatus, activityTypeId, jobId, timecardNote, timestamp) {
   // Record clock in entry in the database or data store
   const entry = {
+    id: generateEntryId(), // Generate a unique ID for the entry
     userId,
     dayStatus,
     activityTypeId,
@@ -9,10 +10,18 @@ export function clockIn(userId, dayStatus, activityTypeId, jobId, timecardNote, 
     timecardNote,
     startTime: timestamp,
     endTime: null,
+    status: 'pending', // Set initial status as "pending"
   };
 
   saveTimecardEntry(entry);
   console.log(`Clocked in at ${new Date(timestamp).toLocaleString()}`);
+}
+
+// Function to generate a unique entry ID
+function generateEntryId() {
+  // Implement your logic to generate a unique ID for timecard entries
+  // For example, you can use a combination of timestamp and random number
+  return `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
 }
 
 // Function to save timecard entry
@@ -27,9 +36,9 @@ export function saveTimecardEntry(entry) {
 export function clockOut(userId, timestamp) {
   // Record clock out entry in the database or data store
   const timecardEntries = JSON.parse(localStorage.getItem('timecardEntries')) || [];
-  const lastEntry = timecardEntries[timecardEntries.length - 1];
+  const lastEntry = timecardEntries.find(entry => entry.userId === userId && !entry.endTime);
 
-  if (lastEntry && lastEntry.userId === userId && !lastEntry.endTime) {
+  if (lastEntry) {
     lastEntry.endTime = timestamp;
     localStorage.setItem('timecardEntries', JSON.stringify(timecardEntries));
     console.log(`Clocked out at ${new Date(timestamp).toLocaleString()}`);
@@ -40,10 +49,12 @@ export function clockOut(userId, timestamp) {
 export function startMeal(userId, timestamp) {
   // Record meal start entry in the database or data store
   const entry = {
+    id: generateEntryId(), // Generate a unique ID for the entry
     userId,
     activityTypeId: 'meal',
     startTime: timestamp,
     endTime: null,
+    status: 'pending', // Set initial status as "pending"
   };
 
   saveTimecardEntry(entry);
@@ -54,9 +65,9 @@ export function startMeal(userId, timestamp) {
 export function endMeal(userId, timestamp) {
   // Record meal end entry in the database or data store
   const timecardEntries = JSON.parse(localStorage.getItem('timecardEntries')) || [];
-  const lastEntry = timecardEntries[timecardEntries.length - 1];
+  const lastEntry = timecardEntries.find(entry => entry.userId === userId && entry.activityTypeId === 'meal' && !entry.endTime);
 
-  if (lastEntry && lastEntry.userId === userId && lastEntry.activityTypeId === 'meal' && !lastEntry.endTime) {
+  if (lastEntry) {
     lastEntry.endTime = timestamp;
     localStorage.setItem('timecardEntries', JSON.stringify(timecardEntries));
     console.log(`Meal ended at ${new Date(timestamp).toLocaleString()}`);
@@ -64,10 +75,20 @@ export function endMeal(userId, timestamp) {
 }
 
 // Function to get timecard data
-export function getTimecard(userId) {
+export function getTimecard(userId, userRole) {
   // Retrieve timecard data from the database or data store for the specified user
   const timecardEntries = JSON.parse(localStorage.getItem('timecardEntries')) || [];
-  const userTimecardEntries = timecardEntries.filter(entry => entry.userId === userId);
+  let userTimecardEntries = timecardEntries.filter(entry => entry.userId === userId);
+
+  // Filter timecard data based on user role and permissions
+  if (userRole === 'employee') {
+    userTimecardEntries = userTimecardEntries.filter(entry => {
+      return entry.userId === userId;
+    });
+  } else if (userRole === 'supervisor') {
+    // Filter timecard data for supervisor's direct reports
+    // Implement your logic here based on supervisor's permissions
+  }
 
   const timecardData = {
     userId: userId,
@@ -91,9 +112,11 @@ export function submitTimecard(userId) {
 export function submitLeaveHours(userId, leaveType, leaveHours) {
   // Submit leave hours data to the server or perform necessary actions
   const leaveEntry = {
+    id: generateEntryId(), // Generate a unique ID for the leave entry
     userId,
     leaveType,
     leaveHours,
+    status: 'pending', // Set initial status as "pending"
   };
   // Perform submission logic here
   console.log('Leave hours submitted:', leaveEntry);
