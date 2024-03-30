@@ -123,7 +123,7 @@ function fetchEmployeeTimecards() {
   timecardTableBody.innerHTML = '';
 
   employees.forEach(employee => {
-    const timecard = getTimecard(employee.id);
+    const timecard = getTimecard(employee.id, 'admin'); // Pass 'admin' as the user role
 
     timecard.entries.forEach(entry => {
       const row = document.createElement('tr');
