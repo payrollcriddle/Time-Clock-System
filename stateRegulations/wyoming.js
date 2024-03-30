@@ -6,5 +6,15 @@ export function wyomingRegulations(weeklyHours) {
     overtimeHours = weeklyHours - 40;
   }
 
-  return { regularHours, overtimeHours };
+  return regularHours;
+}
+
+export function wyomingOvertimeRegulations(weeklyHours) {
+  let overtimeHours = 0;
+
+  if (weeklyHours > 40) {
+    overtimeHours = weeklyHours - 40;
+  }
+
+  return overtimeHours;
 }
