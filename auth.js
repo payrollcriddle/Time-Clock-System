@@ -1,35 +1,38 @@
-// Define an array of available states
-const states = ['California', 'Oregon', 'Nevada', 'Washington', 'Idaho', 'Montana', 'Wyoming', 'Colorado'];
+// auth.js
 
-const users = [
-  { id: 1, username: 'employee1', password: 'password1', role: 'employee', name: 'John Doe', state: 'California' },
-  { id: 2, username: 'admin1', password: 'password2', role: 'admin', name: 'Jane Smith', state: 'Oregon' },
-  { id: 3, username: 'supervisor1', password: 'password3', role: 'supervisor', name: 'Mike Johnson', state: 'Nevada' },
-];
+import { getStates } from './stateConfig.js';
+import { users } from './userData.js';
 
 export function login(username, password) {
-  const user = users.find(user => user.username === username && user.password === password);
-  if (user) {
-    localStorage.setItem('user', JSON.stringify(user));
-    return user.role;
-  } else {
-    return null;
-  }
+    const user = users.find(user => user.username === username);
+    if (user && verifyPassword(user.password, password)) {
+        localStorage.setItem('user', JSON.stringify(user));
+        return user.role;
+    } else {
+        return null;
+    }
 }
 
 export function logout() {
-  localStorage.removeItem('user');
+    localStorage.removeItem('user');
 }
 
 export function isAuthenticated() {
-  return localStorage.getItem('user') !== null;
+    return localStorage.getItem('user') !== null;
 }
 
 export function getUser() {
-  const userString = localStorage.getItem('user');
-  return userString ? JSON.parse(userString) : null;
+    const userString = localStorage.getItem('user');
+    return userString ? JSON.parse(userString) : null;
 }
 
 export function getStates() {
-  return states;
+    return getStates();
+}
+
+// Function to verify password (placeholder for demonstration purposes)
+function verifyPassword(storedPassword, enteredPassword) {
+    // Replace this with your own password verification logic
+    // For example, you can compare the hashed and salted passwords
+    return storedPassword === enteredPassword;
 }
