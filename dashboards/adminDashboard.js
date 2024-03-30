@@ -215,11 +215,17 @@ function handleJobFormSubmit(event) {
   event.preventDefault();
 
   const jobNameInput = document.getElementById('job-name');
-  const jobName = jobNameInput.value;
+  const jobDescriptionInput = document.getElementById('job-description');
 
-  addJob(jobName);
+  const job = {
+    name: jobNameInput.value,
+    description: jobDescriptionInput.value,
+  };
+
+  addJob(job);
 
   jobNameInput.value = '';
+  jobDescriptionInput.value = '';
 
   renderJobList();
 }
@@ -272,9 +278,13 @@ function handleDeleteActivityType(activityTypeId) {
 
 // Event handler for delete job button click
 function handleDeleteJob(jobId) {
-  deleteJob(jobId);
+  const deletedJob = deleteJob(jobId);
 
-  renderJobList();
+  if (deletedJob) {
+    renderJobList();
+  } else {
+    alert('Failed to delete job. Job not found.');
+  }
 }
 
 // Event handler for approve timecard entry button click
