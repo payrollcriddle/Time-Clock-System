@@ -1,5 +1,16 @@
+// stateRegulations/california.js
+
 export function californiaRegulations(dailyHours, weeklyHours) {
   let regularHours = Math.min(40, weeklyHours);
+
+  if (dailyHours > 8) {
+    regularHours = Math.min(regularHours, dailyHours - 8);
+  }
+
+  return regularHours;
+}
+
+export function californiaOvertimeRegulations(dailyHours, weeklyHours) {
   let overtimeHours = 0;
   let doubleTimeHours = 0;
 
@@ -14,5 +25,5 @@ export function californiaRegulations(dailyHours, weeklyHours) {
     doubleTimeHours = dailyHours - 12;
   }
 
-  return { regularHours, overtimeHours, doubleTimeHours };
+  return { overtimeHours, doubleTimeHours };
 }
