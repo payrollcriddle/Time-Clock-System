@@ -4,62 +4,81 @@ import { calculateDailyHours, calculateWeeklyHours } from '../../hoursCalculatio
 import { getTimecard } from '../../timecard.js';
 import { stateTimeZones } from '../../config/stateTimeZones.js';
 
-// Define time zone offsets for the states
-const stateTimeZones = {
-    'California': -7, // Pacific Time (PDT)
-    'Idaho': -6,      // Mountain Time (MDT)
-    'Washington': -7, // Pacific Time (PDT)
-    'Oregon': -7,     // Pacific Time (PDT)
-    'Nevada': -7,     // Pacific Time (PDT)
-    'Montana': -6,    // Mountain Time (MDT)
-    'Wyoming': -6,    // Mountain Time (MDT)
-    'Colorado': -6    // Mountain Time (MDT)
-};
-
-// Function to get current time adjusted for state time zone
-function getCurrentTimeForState(state) {
-    const currentTime = new Date();
-    const offset = stateTimeZones[state] || -7; // Default to Pacific Time (California)
-    const adjustedTime = new Date(currentTime.getTime() + offset * 60 * 60 * 1000); // Adjust for time zone offset
-    return adjustedTime.toLocaleTimeString();
-}
-
 export function updateCurrentTime(userState) {
-    const currentTimeElement = document.getElementById('current-time-display');
-    const currentTime = getCurrentTimeForState(userState);
-    currentTimeElement.textContent = currentTime;
+  const currentTimeElement = document.getElementById('current-time-display');
+  const currentTime = getCurrentTimeForState(userState);
+  currentTimeElement.textContent = currentTime;
 }
 
 export function updateDailyHoursDisplay(userId, date) {
-    const dailyHoursElement = document.getElementById('daily-hours-display');
-    const dailyHours = calculateDailyHours(userId, date.toISOString().split('T')[0]);
-    dailyHoursElement.textContent = `${dailyHours} hours`;
+  const dailyHoursElement = document.getElementById('daily-hours-display');
+  const dailyHours = calculateDailyHours(userId, date.toISOString().split('T')[0]);
+  dailyHoursElement.textContent = `${dailyHours} hours`;
 }
 
 export function updateWeeklyHoursDisplay(userId) {
-    const weeklyHoursElement = document.getElementById('weekly-hours-display');
-    const weeklyHours = calculateWeeklyHours(userId);
-    weeklyHoursElement.textContent = `${weeklyHours} hours`;
+  const weeklyHoursElement = document.getElementById('weekly-hours-display');
+  const weeklyHours = calculateWeeklyHours(userId);
+  weeklyHoursElement.textContent = `${weeklyHours} hours`;
 }
 
 export function updateTimeClockDisplay(userId) {
-    const timecard = getTimecard(userId);
-    const lastEntry = timecard.entries[timecard.entries.length - 1];
+  const timecard = getTimecard(userId);
+  const lastEntry = timecard.entries[timecard.entries.length - 1];
+  const timeclockElement = document.getElementById('timeclock');
 
-    const clockInTimeElement = document.getElementById('clock-in-time');
-    const clockOutTimeElement = document.getElementById('clock-out-time');
-    const mealStartTimeElement = document.getElementById('meal-start-time');
-    const mealEndTimeElement = document.getElementById('meal-end-time');
+  if (lastEntry) {
+    const clockInTime = lastEntry.startTime ? formatDateTime(lastEntry.startTime) : '-';
+    const clockOutTime = lastEntry.endTime ? formatDateTime(lastEntry.endTime) : '-';
+    const mealStartTime = lastEntry.activityTypeId === 'meal' && lastEntry.startTime ? formatDateTime(lastEntry.startTime) : '-';
+    const mealEndTime = lastEntry.activityTypeId === 'meal' && lastEntry.endTime ? formatDateTime(lastEntry.endTime) : '-';
 
-    if (lastEntry) {
-        clockInTimeElement.textContent = lastEntry.startTime ? `Clocked In: ${new Date(lastEntry.startTime).toLocaleString()}` : '';
-        clockOutTimeElement.textContent = lastEntry.endTime ? `Clocked Out: ${new Date(lastEntry.endTime).toLocaleString()}` : '';
-        mealStartTimeElement.textContent = lastEntry.activityTypeId === 'meal' && lastEntry.startTime ? `Meal Started: ${new Date(lastEntry.startTime).toLocaleString()}` : '';
-        mealEndTimeElement.textContent = lastEntry.activityTypeId === 'meal' && lastEntry.endTime ? `Meal Ended: ${new Date(lastEntry.endTime).toLocaleString()}` : '';
-    } else {
-        clockInTimeElement.textContent = '';
-        clockOutTimeElement.textContent = '';
-        mealStartTimeElement.textContent = '';
-        mealEndTimeElement.textContent = '';
-    }
+    timeclockElement.innerHTML = `
+      <p>Clock In: ${clockInTime}</p>
+      <p>Clock Out: ${clockOutTime}</p>
+      <p>Meal Start: ${mealStartTime}</p>
+      <p>Meal End: ${mealEndTime}</p>
+    `;
+  } else {
+    timeclockElement.innerHTML = `
+      <p>Clock In: -</p>
+      <p>Clock Out: -</p>
+      <p>Meal Start: -</p>
+      <p>Meal End: -</p>
+    `;
+  }
+}
+
+export function formatDateTime(dateTimeString) {
+  const dateTime = new Date(dateTimeString);
+  return dateTime.toLocaleString();
+}
+
+export function displayNotification(message) {
+  const notificationElement = document.getElementById('notification');
+  notificationElement.textContent = message;
+  notificationElement.classList.add('show');
+
+  setTimeout(() => {
+    notificationElement.classList.remove('show');
+  }, 3000);
+}
+
+export function updateEmployeeList(employees) {
+  const employeeListElement = document.getElementById('employee-list');
+  employeeListElement.innerHTML = '';
+
+  employees.forEach(employee => {
+    const listItem = document.createElement('li');
+    listItem.textContent = employee.name;
+    employeeListElement.appendChild(listItem);
+  });
+}
+
+// Function to get current time adjusted for state time zone
+function getCurrentTimeForState(state) {
+  const currentTime = new Date();
+  const offset = stateTimeZones[state] || 0;
+  const adjustedTime = new Date(currentTime.getTime() + offset * 60 * 60 * 1000);
+  return adjustedTime.toLocaleTimeString();
 }
