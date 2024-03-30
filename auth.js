@@ -1,6 +1,6 @@
 // auth.js
 
-import { fetchStates } from './stateConfig.js'; // Rename getStates to fetchStates
+import { getStates as fetchStates } from './stateConfig.js';
 import { users } from './userData.js';
 
 export function login(username, password) {
