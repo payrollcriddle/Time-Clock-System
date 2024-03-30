@@ -1,21 +1,33 @@
-import { californiaPolicy } from './mealPeriodPolicies/california.js';
-import { montanaPolicy } from './mealPeriodPolicies/montana.js';
-import { nevadaPolicy } from './mealPeriodPolicies/nevada.js';
-import { oregonPolicy } from './mealPeriodPolicies/oregon.js';
-import { washingtonPolicy } from './mealPeriodPolicies/washington.js';
-import { coloradoPolicy } from './mealPeriodPolicies/colorado.js';
-import { idahoPolicy } from './mealPeriodPolicies/idaho.js';
-import { wyomingPolicy } from './mealPeriodPolicies/wyoming.js';
+// mealPeriodPolicies.js
 
-const mealPeriodPolicies = {
-  California: californiaPolicy,
-  Montana: montanaPolicy,
-  Nevada: nevadaPolicy,
-  Oregon: oregonPolicy,
-  Washington: washingtonPolicy,
-  Colorado: coloradoPolicy,
-  Idaho: idahoPolicy,
-  Wyoming: wyomingPolicy,
-};
+import { getStateConfig } from './stateConfig.js';
 
-export default mealPeriodPolicies;
+const mealPeriodPolicies = {};
+
+function loadMealPeriodPolicy(state) {
+    const stateConfig = getStateConfig(state);
+    if (stateConfig && stateConfig.policyFile) {
+        try {
+            const policyModule = await import(`./mealPeriodPolicies/${stateConfig.policyFile}`);
+            mealPeriodPolicies[state] = policyModule.default;
+        } catch (error) {
+            console.error(`Error loading meal period policy for state: ${state}`, error);
+        }
+    }
+}
+
+export async function getMealPeriodPolicy(state) {
+    if (!mealPeriodPolicies[state]) {
+        await loadMealPeriodPolicy(state);
+    }
+    return mealPeriodPolicies[state] || null;
+}
+
+export async function getAllMealPeriodPolicies() {
+    const states = Object.keys(getStateConfig());
+    await Promise.all(states.map(loadMealPeriodPolicy));
+    return states.reduce((policies, state) => {
+        policies[state] = mealPeriodPolicies[state];
+        return policies;
+    }, {});
+}
