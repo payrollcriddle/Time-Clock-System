@@ -1,6 +1,6 @@
 import { getTimecard, updateTimecard } from './timecard.js';
-import { sendNotification } from './notification.js';
-import { getUserById } from './user.js';
+import { sendNotification } from './teamsNotification.js';
+import { getUserById } from './userData.js';
 import { logTimecardReviewAction } from './logging.js';
 
 // Function to review a timecard
