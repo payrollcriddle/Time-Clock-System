@@ -1,6 +1,6 @@
 // auth.js
 
-import { getStates } from './stateConfig.js';
+import { fetchStates } from './stateConfig.js'; // Rename getStates to fetchStates
 import { users } from './userData.js';
 
 export function login(username, password) {
@@ -27,7 +27,7 @@ export function getUser() {
 }
 
 export function getStates() {
-    return getStates();
+    return fetchStates(); // Use the renamed function fetchStates
 }
 
 // Function to verify password (placeholder for demonstration purposes)
