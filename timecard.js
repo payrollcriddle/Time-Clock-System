@@ -25,7 +25,7 @@ function generateEntryId() {
 }
 
 // Function to save timecard entry
-export function saveTimecardEntry(entry) {
+export async function saveTimecardEntry(entry) {
   // Save the timecard entry to the database or data store
   const timecardEntries = JSON.parse(localStorage.getItem('timecardEntries')) || [];
   timecardEntries.push(entry);
@@ -75,41 +75,27 @@ export function endMeal(userId, timestamp) {
 }
 
 // Function to get timecard data
-export function getTimecard(userId, userRole) {
-  // Retrieve timecard data from the database or data store for the specified user
+export async function getTimecard(timecardId) {
+  // Retrieve timecard data from the database or data store for the specified timecardId
   const timecardEntries = JSON.parse(localStorage.getItem('timecardEntries')) || [];
-  let userTimecardEntries = timecardEntries.filter(entry => entry.userId === userId);
+  const timecard = timecardEntries.find(entry => entry.id === timecardId);
 
-  // Filter timecard data based on user role and permissions
-  if (userRole === 'employee') {
-    userTimecardEntries = userTimecardEntries.filter(entry => {
-      return entry.userId === userId;
-    });
-  } else if (userRole === 'supervisor') {
-    // Filter timecard data for supervisor's direct reports
-    // Implement your logic here based on supervisor's permissions
-  }
-
-  const timecardData = {
-    userId: userId,
-    entries: userTimecardEntries,
-  };
-
-  return timecardData;
+  return timecard;
 }
 
 // Function to submit timecard
-export function submitTimecard(userId) {
+export async function submitTimecard(timecardId) {
   // Submit timecard data to the server or perform necessary actions
-  const timecardData = getTimecard(userId);
+  const timecard = await getTimecard(timecardId);
   // Perform submission logic here
-  console.log('Timecard submitted:', timecardData);
+  console.log('Timecard submitted:', timecard);
   // Update the timecard status to "submitted"
-  // ...
+  timecard.status = 'submitted';
+  await updateTimecard(timecard);
 }
 
 // Function to submit leave hours
-export function submitLeaveHours(userId, leaveType, leaveHours) {
+export async function submitLeaveHours(userId, leaveType, leaveHours) {
   // Submit leave hours data to the server or perform necessary actions
   const leaveEntry = {
     id: generateEntryId(), // Generate a unique ID for the leave entry
@@ -125,12 +111,12 @@ export function submitLeaveHours(userId, leaveType, leaveHours) {
 }
 
 // Function to update timecard data
-export function updateTimecard(userId, timecard) {
-  // Update the timecard data in the database or data store for the specified user
+export async function updateTimecard(timecard) {
+  // Update the timecard data in the database or data store
   const timecardEntries = JSON.parse(localStorage.getItem('timecardEntries')) || [];
   const updatedEntries = timecardEntries.map(entry => {
-    if (entry.userId === userId) {
-      return { ...entry, ...timecard };
+    if (entry.id === timecard.id) {
+      return timecard;
     }
     return entry;
   });
@@ -138,7 +124,7 @@ export function updateTimecard(userId, timecard) {
 }
 
 // Function to approve timecard entry
-export function approveTimecardEntry(entryId) {
+export async function approveTimecardEntry(entryId) {
   // Update the timecard entry status to "approved" in the database or data store
   const timecardEntries = JSON.parse(localStorage.getItem('timecardEntries')) || [];
   const updatedEntries = timecardEntries.map(entry => {
@@ -151,7 +137,7 @@ export function approveTimecardEntry(entryId) {
 }
 
 // Function to reject timecard entry
-export function rejectTimecardEntry(entryId) {
+export async function rejectTimecardEntry(entryId) {
   // Update the timecard entry status to "rejected" in the database or data store
   const timecardEntries = JSON.parse(localStorage.getItem('timecardEntries')) || [];
   const updatedEntries = timecardEntries.map(entry => {
