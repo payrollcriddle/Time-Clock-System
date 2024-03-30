@@ -6,7 +6,7 @@ import { getJobs } from '../management/jobManagement.js';
 import { getTimecard, submitTimecard, updateTimecard } from '../timecard.js';
 import { calculateDailyHours, calculateWeeklyHours } from '../hoursCalculation.js';
 import { getPayPeriodStartDate, getPayPeriodEndDate } from './employeeDashboardModules/timesheetFunctions.js';
-import { renderCalendar } from './employeeDashboardModules/calendarFunctions.js';
+import { Calendar } from './employeeDashboardModules/calendarFunctions.js';
 import { updateCurrentTime, updateTimeClockDisplay } from './employeeDashboardModules/displayFunctions.js';
 import { handleDayStatusChange, handleLeaveTypeChange } from './employeeDashboardModules/eventHandlers.js';
 import { validateForm } from './employeeDashboardModules/formValidation.js';
