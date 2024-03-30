@@ -1,21 +1,18 @@
-// employeeDashboardModules/timesheetFunctions.js
+// timesheetFunctions.js
 
-export function getPayPeriodStartDate(date) {
-  const dayOfWeek = date.getDay();
-  const daysToSubtract = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
-  const startDate = new Date(date);
-  startDate.setDate(date.getDate() - daysToSubtract);
-  return startDate;
+export function getPayPeriodStartDate(currentDate) {
+    const currentDay = currentDate.getDay(); // Get the day of the week (0-6)
+    const daysToSubtract = (currentDay + 6) % 7; // Calculate the number of days to subtract to get to the previous Monday
+
+    const payPeriodStartDate = new Date(currentDate);
+    payPeriodStartDate.setDate(currentDate.getDate() - daysToSubtract);
+
+    return payPeriodStartDate;
 }
 
 export function getPayPeriodEndDate(startDate) {
-  const endDate = new Date(startDate);
-  endDate.setDate(startDate.getDate() + 13);
-  return endDate;
-}
+    const payPeriodEndDate = new Date(startDate);
+    payPeriodEndDate.setDate(startDate.getDate() + 13); // Add 13 days to the start date to get the end date (14 days total)
 
-export function getNextPayDate(endDate) {
-  const payDate = new Date(endDate);
-  payDate.setDate(endDate.getDate() + 5);
-  return payDate;
+    return payPeriodEndDate;
 }
