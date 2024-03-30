@@ -65,11 +65,12 @@ export function renderEmployeeDashboard() {
         employeeDashboardElements.leaveTypeDropdown.addEventListener('change', handleLeaveTypeChange);
 
         // Populate the daily hours table
-        const timecard = getTimecard(employee.id);
+        const timecard = getTimecard(employee.id, employee.role); // Pass the user's role as an argument
         const payPeriodStart = getPayPeriodStartDate(new Date());
         const payPeriodEnd = getPayPeriodEndDate(payPeriodStart);
         const dailyHours = calculateDailyHours(timecard, payPeriodStart, payPeriodEnd);
         employeeDashboardElements.dailyHoursTable.innerHTML = renderDailyHoursTable(dailyHours);
+
 
         // Calculate and display the weekly hours summary
         const weeklyHours = calculateWeeklyHours(dailyHours);
