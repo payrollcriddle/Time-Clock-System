@@ -1,297 +1,56 @@
-/* General Styles */
-body {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 20px;
-  background-color: #f5f5f5;
-}
+/* styles.css */
 
-h2 {
-  color: #333;
-}
+@import "base.css";
+@import "buttons.css";
+@import "forms.css";
+@import "dashboard.css";
+@import "calendar.css";
+@import "timeclock.css";
+@import "utilities.css";
 
-h3 {
-  color: #555;
-}
-
-/* Button Styles */
-.btn {
-  padding: 10px 20px;
-  background-color: #007bff;
+/* Navigation */
+nav {
+  background-color: #333;
   color: #fff;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.btn:hover {
-  background-color: #0056b3;
-}
-
-.btn-group {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin-top: 10px;
-}
-
-/* Card Styles */
-.card {
-  background-color: #fff;
-  border-radius: 4px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  padding: 20px;
-  margin-bottom: 20px;
-}
-
-/* Dashboard Styles */
-.dashboard-container {
-  display: flex;
-  gap: 20px;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-.dashboard-main {
-  flex: 1;
-}
-
-.dashboard-sidebar {
-  width: 300px;
-}
-
-/* Time Clock Styles */
-#time-clock {
-  text-align: center;
-}
-
-#current-time {
-  font-size: 24px;
-  font-weight: bold;
-  margin-bottom: 10px;
-}
-
-/* Calendar Styles */
-#calendar {
-  width: 100%;
-  max-width: 600px;
-  margin: 0 auto;
-  background-color: #fff;
-  border: 1px solid #ddd;
-  border-radius: 4px;
   padding: 10px;
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  grid-gap: 5px;
 }
 
-.calendar-header {
-  grid-column: 1 / -1;
-  text-align: center;
-  font-weight: bold;
-  margin-bottom: 10px;
+nav ul {
+  list-style-type: none;
 }
 
-.calendar-grid {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  grid-gap: 5px;
+nav ul li {
+  display: inline-block;
+  margin-right: 10px;
 }
 
-.calendar-day {
-  background-color: #f5f5f5;
-  padding: 5px;
-  text-align: center;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.pay-period-day {
-  background-color: #e0e0e0;
-}
-
-.today {
-  background-color: #007bff;
+nav ul li a {
   color: #fff;
-  font-weight: bold;
+  text-decoration: none;
 }
 
-/* Table Styles */
+/* Tables */
 table {
   width: 100%;
   border-collapse: collapse;
-}
-
-th, td {
-  padding: 8px;
-  text-align: left;
-  border-bottom: 1px solid #ddd;
-}
-
-th {
-  background-color: #f2f2f2;
-}
-
-/* Form Styles */
-form {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-input,
-select,
-textarea {
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-}
-
-/* Modal Styles */
-.modal {
-  position: fixed;
-  z-index: 1;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-  background-color: rgba(0, 0, 0, 0.4);
-}
-
-.modal-content {
-  background-color: #fefefe;
-  margin: 15% auto;
-  padding: 20px;
-  border: 1px solid #888;
-  border-radius: 4px;
-  max-width: 400px;
-}
-
-/* Admin Dashboard Styles */
-.admin-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   margin-bottom: 20px;
 }
 
-.admin-header h2 {
-  margin: 0;
-}
-
-.admin-header .btn {
-  margin-left: auto;
-}
-
-/* Employee Table Styles */
-#employee-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 20px;
-}
-
-#employee-table th,
-#employee-table td {
+table th,
+table td {
   padding: 10px;
   text-align: left;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid #ccc;
 }
 
-#employee-table th {
-  background-color: #f2f2f2;
-}
-
-#employee-table td:last-child {
-  text-align: center;
-}
-
-/* Activity Type List Styles */
-#activity-type-list,
-#job-list {
-  list-style-type: none;
-  padding: 0;
-}
-
-#activity-type-list li,
-#job-list li {
-  margin-bottom: 10px;
-}
-
-/* Notification Form Styles */
-#notification-form label {
-  display: block;
-  margin-bottom: 5px;
-}
-
-#notification-form textarea {
-  height: 100px;
-}
-
-/* Responsive Styles */
-@media (max-width: 768px) {
-  .dashboard-container {
-    flex-direction: column;
-    gap: 0;
-  }
-
-  .dashboard-sidebar {
-    width: 100%;
-  }
-}
-
-/* Employee Dashboard Styles */
-#welcome-message {
-  font-size: 24px;
+table th {
+  background-color: #f5f5f5;
   font-weight: bold;
-  margin-bottom: 20px;
 }
 
-#current-date-time {
-  font-size: 18px;
-  margin-bottom: 20px;
-}
-
-#day-status-dropdown,
-#activity-dropdown,
-#job-dropdown,
-#leave-type-dropdown {
-  margin-bottom: 10px;
-}
-
-#leave-hours-section {
-  margin-bottom: 20px;
-}
-
-#leave-hours-input {
-  margin-bottom: 10px;
-}
-
-#meal-period-waiver-checkbox {
-  margin-bottom: 20px;
-}
-
-#timecard-note-input {
-  margin-bottom: 20px;
-}
-
-#daily-hours-table {
-  margin-bottom: 20px;
-}
-
-#weekly-hours-summary {
-  margin-bottom: 20px;
-}
-
-#submit-button {
-  margin-bottom: 10px;
-}
-
-#logout-button {
-  margin-top: 10px;
-}
-
-#calendar-container {
-  margin-top: 20px;
+/* Responsive */
+@media (max-width: 768px) {
+  .container {
+    padding: 10px;
+  }
 }
