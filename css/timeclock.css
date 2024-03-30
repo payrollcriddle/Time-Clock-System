@@ -1,0 +1,10 @@
+/* timeclock.css */
+
+.time-clock {
+  margin-bottom: 20px;
+}
+
+.time-clock-display {
+  font-size: 24px;
+  font-weight: bold;
+}
