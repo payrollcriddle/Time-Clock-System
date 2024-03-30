@@ -45,7 +45,7 @@ function fetchEmployeeTimecards() {
   employeeTimecardTableBody.innerHTML = '';
 
   employees.forEach(employee => {
-    const timecard = getTimecard(employee.id);
+    const timecard = getTimecard(employee.id, 'supervisor'); // Pass 'supervisor' as the user role
 
     timecard.entries.forEach(entry => {
       const row = document.createElement('tr');
@@ -96,7 +96,7 @@ function generatePerformanceReport() {
 
   if (employeeId) {
     const employee = getEmployees().find(emp => emp.id === employeeId);
-    const timecard = getTimecard(employeeId);
+    const timecard = getTimecard(employeeId, 'supervisor'); // Pass 'supervisor' as the user role
 
     // Implement the logic to generate the performance report based on the employee's timecard data
     // You can calculate metrics like total hours worked, average daily hours, etc.
