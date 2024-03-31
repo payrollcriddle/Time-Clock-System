@@ -56,7 +56,8 @@ function handleLoginFormSubmit(event) {
     renderDashboard(userRole);
   } else {
     alert('Invalid username or password');
-    renderDashboard(null);
+    // Clear the password field
+    document.getElementById('password').value = '';
   }
 }
 
