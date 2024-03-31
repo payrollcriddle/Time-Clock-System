@@ -78,12 +78,17 @@ export function renderEmployeeDashboard() {
         // Show/hide the meal period waiver based on leave type
         employeeDashboardElements.leaveTypeDropdown.addEventListener('change', handleLeaveTypeChange);
 
-        // Populate the daily hours table
-        const timecard = getTimecard(employee.id);
-        const payPeriodStart = getPayPeriodStartDate(new Date());
-        const payPeriodEnd = getPayPeriodEndDate(payPeriodStart);
-        const dailyHours = calculateDailyHours(timecard, payPeriodStart, payPeriodEnd);
-        employeeDashboardElements.dailyHoursTable.innerHTML = renderDailyHoursTable(dailyHours);
+    // Populate the daily hours table
+    const timecard = getTimecard(employee.id);
+    const payPeriodStart = getPayPeriodStartDate(new Date());
+    const payPeriodEnd = getPayPeriodEndDate(payPeriodStart);
+    const dailyHours = calculateDailyHours(timecard, payPeriodStart, payPeriodEnd);
+    if (Array.isArray(dailyHours)) {
+      employeeDashboardElements.dailyHoursTable.innerHTML = renderDailyHoursTable(dailyHours);
+    } else {
+      console.error("dailyHours is not an array:", dailyHours);
+      employeeDashboardElements.dailyHoursTable.innerHTML = "<tr><td colspan='4'>No daily hours data available</td></tr>";
+    }
 
         // Calculate and display the weekly hours summary
         const weeklyHours = calculateWeeklyHours(dailyHours);
