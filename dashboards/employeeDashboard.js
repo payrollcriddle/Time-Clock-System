@@ -123,12 +123,14 @@ export function renderEmployeeDashboard() {
         };
         employeeDashboardElements.submitButton.addEventListener('click', handleSubmit);
 
-        // Handle logout
-        const handleLogout = () => {
-            logout();
-            window.location.href = '/';
-        };
-        employeeDashboardElements.logoutButton.addEventListener('click', handleLogout);
+// Handle logout
+const handleLogout = () => {
+  console.log("Logout button clicked"); // Add this line
+  logout();
+  window.location.href = '/';
+};
+
+employeeDashboardElements.logoutButton.addEventListener('click', handleLogout);
 
         // Render the calendar
         new Calendar(employeeDashboardElements.calendarContainer, payPeriodStart, payPeriodEnd);
