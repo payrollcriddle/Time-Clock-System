@@ -207,7 +207,7 @@ function handleCreateJob(event) {
   if (nameInput) {
     const name = nameInput.value;
 
-    const newJob = createJob(name);
+    const newJob = addJob(name);
     if (newJob) {
       fetchJobs();
       nameInput.value = '';
