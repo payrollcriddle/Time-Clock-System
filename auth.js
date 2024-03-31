@@ -5,10 +5,13 @@ import { users } from './userData.js';
 
 export function login(username, password) {
   const user = users.find(user => user.username === username);
+  console.log('User:', user); // Add this line
   if (user && verifyPassword(user.password, password)) {
     localStorage.setItem('user', JSON.stringify(user));
+    console.log('User role:', user.role); // Add this line
     return user.role;
   } else {
+    console.log('Login failed'); // Add this line
     return null;
   }
 }
