@@ -172,7 +172,7 @@ function handleCreateEmployee(event) {
     const name = nameInput.value;
     const email = emailInput.value;
 
-    const newEmployee = createEmployee(name, email);
+    const newEmployee = addEmployee(name, email);
     if (newEmployee) {
       fetchEmployees();
       nameInput.value = '';
