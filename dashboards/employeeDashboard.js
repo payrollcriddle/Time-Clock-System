@@ -119,11 +119,12 @@ export function renderEmployeeDashboard() {
         // Render the calendar
         new Calendar(employeeDashboardElements.calendarContainer, payPeriodStart, payPeriodEnd);
 
-    } else {
-        // Handle the case where the user object is null
-        console.error("User object is null.");
-        // You can redirect the user to the login page or display an error message
-    }
+  } else {
+    console.error("User object is null.");
+    // Handle the case where the user object is null, such as redirecting to the login page or displaying an error message
+    alert("User not found. Please login again.");
+    window.location.href = '/'; // Redirect to the login page
+  }
 }
 
 function renderDailyHoursTable(dailyHours) {
