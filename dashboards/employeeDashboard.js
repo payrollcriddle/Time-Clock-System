@@ -125,14 +125,14 @@ export function renderEmployeeDashboard() {
 
     // Render the calendar
     new Calendar(employeeDashboardElements.calendarContainer, payPeriodStart, payPeriodEnd);
-} else {
-console.error("User object is null.");
-// Display the login section if it exists
-const loginSection = document.getElementById('login-section');
-if (loginSection) {
-loginSection.style.display = 'block';
-}
-}
+      } else {
+        console.error("User object is null.");
+        // Display the login section if it exists
+        const loginSection = document.getElementById('login-section');
+        if (loginSection) {
+          loginSection.style.display = 'block';
+        }
+      }
   
 function renderDailyHoursTable(dailyHours) {
   return `
