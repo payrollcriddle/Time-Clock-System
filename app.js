@@ -81,8 +81,11 @@ function initializeApp() {
     button.addEventListener('click', handleLogout);
   });
 
+  console.log('Is authenticated:', isAuthenticated());
   if (isAuthenticated()) {
     const user = getUser();
+    console.log('User object:', user);
+    console.log('User role:', user && user.role);
     if (user && user.role) {
       renderDashboard(user.role);
     } else {
@@ -90,6 +93,7 @@ function initializeApp() {
       renderDashboard(null);
     }
   } else {
+    console.log('User not authenticated');
     renderDashboard(null);
   }
 }
