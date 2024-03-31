@@ -53,20 +53,29 @@ export function renderEmployeeDashboard() {
         const currentTime = updateCurrentTime(employee.state);
         employeeDashboardElements.currentDateTime.textContent = currentTime;
 
-        // Populate the day status dropdown
-        const dayStatusOptions = ['Working', 'Off', 'Leave'];
-        employeeDashboardElements.dayStatusDropdown.innerHTML = dayStatusOptions.map(option => `<option value="${option}">${option}</option>`).join('');
+    // Populate the day status dropdown
+    const dayStatusOptions = ['Working', 'Off', 'Leave'];
+    employeeDashboardElements.dayStatusDropdown.innerHTML = dayStatusOptions.map(option => `<option value="${option}">${option}</option>`).join('');
+    
+    // Set default selected option for day status dropdown
+    employeeDashboardElements.dayStatusDropdown.selectedIndex = 0;
 
         // Initialize the time clock
         updateTimeClockDisplay(employee.id);
         setInterval(() => updateTimeClockDisplay(employee.id), 1000);
 
-        // Populate the activity and job dropdowns
-        const activityTypes = getActivityTypes();
-        employeeDashboardElements.activityDropdown.innerHTML = activityTypes.map(activity => `<option value="${activity.id}">${activity.name}</option>`).join('');
+    // Populate the activity and job dropdowns
+    const activityTypes = getActivityTypes();
+    employeeDashboardElements.activityDropdown.innerHTML = activityTypes.map(activity => `<option value="${activity.id}">${activity.name}</option>`).join('');
+    
+    // Set default selected option for activity dropdown
+    employeeDashboardElements.activityDropdown.selectedIndex = 0;
 
-        const jobs = getJobs();
-        employeeDashboardElements.jobDropdown.innerHTML = jobs.map(job => `<option value="${job.id}">${job.name}</option>`).join('');
+    const jobs = getJobs();
+    employeeDashboardElements.jobDropdown.innerHTML = jobs.map(job => `<option value="${job.id}">${job.name}</option>`).join('');
+    
+    // Set default selected option for job dropdown
+    employeeDashboardElements.jobDropdown.selectedIndex = 0;
 
         // Show/hide the leave hours section based on day status
         employeeDashboardElements.dayStatusDropdown.addEventListener('change', handleDayStatusChange);
