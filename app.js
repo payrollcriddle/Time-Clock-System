@@ -37,6 +37,8 @@ function renderDashboard(userRole) {
       break;
     default:
       loginSection.style.display = 'block';
+      // Clear the password field
+      document.getElementById('password').value = '';
       break;
   }
 }
