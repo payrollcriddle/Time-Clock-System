@@ -128,6 +128,7 @@ export function renderEmployeeDashboard() {
   } else {
     console.error("User object is null.");
     // Handle the case where the user object is null, such as redirecting to
+
     function renderDailyHoursTable(dailyHours) {
   return `
     <thead>
