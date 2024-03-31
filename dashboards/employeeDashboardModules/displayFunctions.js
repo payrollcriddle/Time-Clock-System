@@ -36,10 +36,10 @@ export function updateWeeklyHoursDisplay(userId) {
 
 export function updateTimeClockDisplay(userId) {
   const timecard = getTimecard(userId);
-  const lastEntry = timecard.entries[timecard.entries.length - 1];
   const timeclockElement = document.getElementById('time-clock');
   if (timeclockElement) {
-    if (lastEntry) {
+    if (timecard && timecard.entries) {
+      const lastEntry = timecard.entries[timecard.entries.length - 1];
       const clockInTime = lastEntry.startTime ? formatDateTime(lastEntry.startTime) : '-';
       const clockOutTime = lastEntry.endTime ? formatDateTime(lastEntry.endTime) : '-';
       const mealStartTime = lastEntry.activityTypeId === 'meal' && lastEntry.startTime ? formatDateTime(lastEntry.startTime) : '-';
