@@ -31,12 +31,18 @@
         <span id="current-time-display"></span>
       </div>
       <label for="day-status-dropdown">Day Status:</label>
-      <select id="day-status-dropdown"></select>
+      <select id="day-status-dropdown">
+        <option value="">Select</option>
+      </select>
       <div id="time-clock"></div>
       <label for="activity-dropdown">Activity:</label>
-      <select id="activity-dropdown"></select>
+      <select id="activity-dropdown">
+        <option value="">Select</option>
+      </select>
       <label for="job-dropdown">Job:</label>
-      <select id="job-dropdown"></select>
+      <select id="job-dropdown">
+        <option value="">Select</option>
+      </select>
       <div id="leave-hours-section" class="card" style="display: none;">
         <label for="leave-type-dropdown">Leave Type:</label>
         <select id="leave-type-dropdown"></select>
@@ -52,20 +58,20 @@
       </table>
       <div id="weekly-hours-summary"></div>
       <button id="submit-button" class="btn">Submit Timecard</button>
-      <button id="logout-button" class="btn">Logout</button>
+      <button id="logout-button" class="btn logout-btn">Logout</button>
       <div id="calendar-container"></div>
     </main>
 
     <!-- Supervisor Dashboard -->
     <main id="supervisor-dashboard" class="dashboard" style="display: none;">
       <!-- ... -->
-      <button id="supervisor-logout-btn" class="btn">Logout</button>
+      <button id="supervisor-logout-btn" class="btn logout-btn">Logout</button>
     </main>
 
     <!-- Admin Dashboard -->
     <main id="admin-dashboard" class="dashboard" style="display: none;">
       <!-- ... -->
-      <button id="admin-logout-btn" class="btn">Logout</button>
+      <button id="admin-logout-btn" class="btn logout-btn">Logout</button>
     </main>
 
     <footer>
