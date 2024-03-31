@@ -1,7 +1,7 @@
 // adminDashboard.js
 
 import { getUser, logout } from '../auth.js';
-import { getEmployees, createEmployee, updateEmployee, deleteEmployee } from '../management/employeeManagement.js';
+import { getEmployees, addEmployee, updateEmployee, deleteEmployee } from '../management/employeeManagement.js';
 import { getActivityTypes, createActivityType, updateActivityType, deleteActivityType } from '../management/activityTypeManagement.js';
 import { getJobs, createJob, updateJob, deleteJob } from '../management/jobManagement.js';
 
