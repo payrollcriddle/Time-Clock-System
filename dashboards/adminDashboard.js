@@ -3,7 +3,7 @@
 import { getUser, logout } from '../auth.js';
 import { getEmployees, addEmployee, updateEmployee, deleteEmployee } from '../management/employeeManagement.js';
 import { getActivityTypes, createActivityType, updateActivityType, deleteActivityType } from '../management/activityTypeManagement.js';
-import { getJobs, createJob, updateJob, deleteJob } from '../management/jobManagement.js';
+import { getJobs, addJob, updateJob, deleteJob } from '../management/jobManagement.js';
 
 // Function to render admin dashboard
 export function renderAdminDashboard() {
