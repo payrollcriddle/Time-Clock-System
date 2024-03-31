@@ -127,9 +127,13 @@ export function renderEmployeeDashboard() {
     new Calendar(employeeDashboardElements.calendarContainer, payPeriodStart, payPeriodEnd);
   } else {
     console.error("User object is null.");
-    // Handle the case where the user object is null, such as redirecting to
+    // Handle the case where the user object is null, such as redirecting to the login page or displaying an error message
+    alert("User not found. Please login again.");
+    window.location.href = '/';
+  }
+}
 
-    function renderDailyHoursTable(dailyHours) {
+function renderDailyHoursTable(dailyHours) {
   return `
     <thead>
       <tr>
