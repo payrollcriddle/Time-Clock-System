@@ -46,14 +46,15 @@ function handleLoginFormSubmit(event) {
   event.preventDefault();
   const username = document.getElementById('username').value;
   const password = document.getElementById('password').value;
-  console.log('Username:', username); // Add this line
-  console.log('Password:', password); // Add this line
+  console.log('Username:', username);
+  console.log('Password:', password);
   const userRole = login(username, password);
-  console.log('User role after login:', userRole); // Add this line
+  console.log('User role after login:', userRole);
   if (userRole) {
     renderDashboard(userRole);
   } else {
     alert('Invalid username or password');
+    renderDashboard(null);
   }
 }
 
@@ -83,6 +84,7 @@ function initializeApp() {
       renderDashboard(user.role);
     } else {
       console.error('User object is null');
+      logout();
       renderDashboard(null);
     }
   } else {
