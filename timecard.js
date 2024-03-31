@@ -1,3 +1,5 @@
+// timecard.js
+
 // Function to handle clock in
 export function clockIn(userId, dayStatus, activityTypeId, jobId, timecardNote, timestamp) {
   // Record clock in entry in the database or data store
@@ -75,22 +77,24 @@ export function endMeal(userId, timestamp) {
 }
 
 // Function to get timecard data
-export async function getTimecard(timecardId) {
-  // Retrieve timecard data from the database or data store for the specified timecardId
+export async function getTimecard(userId) {
+  // Retrieve timecard data from the database or data store for the specified userId
   const timecardEntries = JSON.parse(localStorage.getItem('timecardEntries')) || [];
-  const timecard = timecardEntries.find(entry => entry.id === timecardId);
+  const timecard = timecardEntries.filter(entry => entry.userId === userId);
 
   return timecard;
 }
 
 // Function to submit timecard
-export async function submitTimecard(timecardId) {
+export async function submitTimecard(userId) {
   // Submit timecard data to the server or perform necessary actions
-  const timecard = await getTimecard(timecardId);
+  const timecard = await getTimecard(userId);
   // Perform submission logic here
   console.log('Timecard submitted:', timecard);
   // Update the timecard status to "submitted"
-  timecard.status = 'submitted';
+  timecard.forEach(entry => {
+    entry.status = 'submitted';
+  });
   await updateTimecard(timecard);
 }
 
@@ -107,7 +111,7 @@ export async function submitLeaveHours(userId, leaveType, leaveHours) {
   // Perform submission logic here
   console.log('Leave hours submitted:', leaveEntry);
   // Save the leave hours entry for the user
-  // ...
+  saveTimecardEntry(leaveEntry);
 }
 
 // Function to update timecard data
@@ -115,10 +119,8 @@ export async function updateTimecard(timecard) {
   // Update the timecard data in the database or data store
   const timecardEntries = JSON.parse(localStorage.getItem('timecardEntries')) || [];
   const updatedEntries = timecardEntries.map(entry => {
-    if (entry.id === timecard.id) {
-      return timecard;
-    }
-    return entry;
+    const updatedEntry = timecard.find(t => t.id === entry.id);
+    return updatedEntry || entry;
   });
   localStorage.setItem('timecardEntries', JSON.stringify(updatedEntries));
 }
