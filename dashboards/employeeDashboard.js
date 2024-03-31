@@ -123,7 +123,6 @@ export function renderEmployeeDashboard() {
         // Handle the case where the user object is null
         console.error("User object is null.");
         // You can redirect the user to the login page or display an error message
-        window.location.href = '/login';
     }
 }
 
