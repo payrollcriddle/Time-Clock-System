@@ -80,10 +80,10 @@ function initializeApp() {
 
   if (isAuthenticated()) {
     const user = getUser();
-    if (user) {
+    if (user && user.role) {
       renderDashboard(user.role);
     } else {
-      console.error('User object is null');
+      console.error('User object is null or missing role');
       logout();
       renderDashboard(null);
     }
@@ -97,27 +97,6 @@ function handleUnauthorizedAccess() {
   alert('Unauthorized access. Please login with the appropriate role.');
   logout();
   renderDashboard(null);
-}
-
-// Function to check user role and handle unauthorized access
-function checkUserRole(allowedRoles) {
-  const user = getUser();
-  if (!user || !allowedRoles.includes(user.role)) {
-    handleUnauthorizedAccess();
-    return false;
-  }
-  return true;
-}
-
-// Check user role for each dashboard
-if (employeeDashboard && !checkUserRole(['employee'])) {
-  employeeDashboard.style.display = 'none';
-}
-if (supervisorDashboard && !checkUserRole(['supervisor'])) {
-  supervisorDashboard.style.display = 'none';
-}
-if (adminDashboard && !checkUserRole(['admin'])) {
-  adminDashboard.style.display = 'none';
 }
 
 // Initialize the app
