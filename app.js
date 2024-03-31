@@ -46,7 +46,10 @@ function handleLoginFormSubmit(event) {
   event.preventDefault();
   const username = document.getElementById('username').value;
   const password = document.getElementById('password').value;
+  console.log('Username:', username); // Add this line
+  console.log('Password:', password); // Add this line
   const userRole = login(username, password);
+  console.log('User role after login:', userRole); // Add this line
   if (userRole) {
     renderDashboard(userRole);
   } else {
