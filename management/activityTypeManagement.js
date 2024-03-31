@@ -24,3 +24,11 @@ export function deleteActivityType(activityTypeId) {
   // Delete activity type from the database or data store
   activityTypes = activityTypes.filter(activityType => activityType.id !== activityTypeId);
 }
+
+// Function to create a new activity type
+export function createActivityType(activityTypeData) {
+  // Create a new activity type and add it to the database or data store
+  const newActivityType = { id: activityTypes.length + 1, ...activityTypeData };
+  activityTypes.push(newActivityType);
+  return newActivityType;
+}
