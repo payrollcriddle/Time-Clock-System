@@ -5,13 +5,11 @@ import { users } from './userData.js';
 
 export function login(username, password) {
   const user = users.find(user => user.username === username);
-  console.log('User:', user);
+
   if (user && verifyPassword(user.password, password)) {
     localStorage.setItem('user', JSON.stringify(user));
-    console.log('User role:', user.role);
     return user.role;
   } else {
-    console.log('Login failed');
     return null;
   }
 }
@@ -27,10 +25,7 @@ export function isAuthenticated() {
 export function getUser() {
   const userString = localStorage.getItem('user');
   if (userString) {
-    const user = JSON.parse(userString);
-    if (user && user.role) {
-      return user;
-    }
+    return JSON.parse(userString);
   }
   return null;
 }
