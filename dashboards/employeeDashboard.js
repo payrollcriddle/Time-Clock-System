@@ -168,3 +168,4 @@ function renderWeeklyHoursSummary(weeklyHours) {
 
 // Render employee dashboard when the page loads
 document.addEventListener('DOMContentLoaded', renderEmployeeDashboard);
+}
