@@ -83,20 +83,12 @@ function initializeApp() {
     if (user && user.role) {
       renderDashboard(user.role);
     } else {
-      console.error('User object is null or missing role');
       logout();
       renderDashboard(null);
     }
   } else {
     renderDashboard(null);
   }
-}
-
-// Function to handle unauthorized access
-function handleUnauthorizedAccess() {
-  alert('Unauthorized access. Please login with the appropriate role.');
-  logout();
-  renderDashboard(null);
 }
 
 // Initialize the app
