@@ -1,6 +1,6 @@
 // employeeManagement.js
 
-import { users } from './userData.js';
+import { users } from '../userData.js';
 
 // Function to add a new employee
 export function addEmployee(employee) {
