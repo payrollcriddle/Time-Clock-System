@@ -1,7 +1,7 @@
 // displayFunctions.js
 
 import { calculateDailyHours, calculateWeeklyHours } from '../../hoursCalculation.js';
-import { getTimecard } from '../../timecard.js';
+import { getTimecard, getTimecardForDateRange } from '../../timecard.js';
 import { stateTimeZones } from '../../config/stateTimeZones.js';
 
 // Ensures functions are called after the DOM is fully loaded
