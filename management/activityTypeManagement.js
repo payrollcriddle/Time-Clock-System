@@ -32,3 +32,15 @@ export function createActivityType(activityTypeData) {
   activityTypes.push(newActivityType);
   return newActivityType;
 }
+
+// Function to update an activity type
+export function updateActivityType(activityTypeId, updatedActivityTypeData) {
+  // Find the activity type by id and update its properties
+  const index = activityTypes.findIndex(activityType => activityType.id === activityTypeId);
+  if (index !== -1) {
+    activityTypes[index] = { ...activityTypes[index], ...updatedActivityTypeData };
+    return activityTypes[index];
+  }
+  return null;
+}
+
