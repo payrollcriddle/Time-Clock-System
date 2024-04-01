@@ -4,14 +4,27 @@ import { calculateDailyHours, calculateWeeklyHours } from '../../hoursCalculatio
 import { getTimecard } from '../../timecard.js';
 import { stateTimeZones } from '../../config/stateTimeZones.js';
 
+// Ensures functions are called after the DOM is fully loaded
+document.addEventListener('DOMContentLoaded', () => {
+    // Place any code here that can execute after DOM is ready
+    // For example, initialize UI components or display the current time
+    // updateCurrentTime('California'); // Uncomment and replace 'California' with dynamic user state if available on load
+});
+
+// This function might be called after dynamic content loading, e.g., upon user login
+export function initializeDynamicContent(userState) {
+    updateCurrentTime(userState);
+    // Add calls to other functions that depend on dynamically loaded content here
+}
+
 export function updateCurrentTime(userState) {
-  const currentTimeElement = document.getElementById('current-time-display');
-  if (currentTimeElement) {
-    const currentTime = getCurrentTimeForState(userState);
-    currentTimeElement.textContent = currentTime;
-  } else {
-    console.error("Element with ID 'current-time-display' not found.");
-  }
+    const currentTimeElement = document.getElementById('current-time-display');
+    if (currentTimeElement) {
+        const currentTime = getCurrentTimeForState(userState);
+        currentTimeElement.textContent = currentTime;
+    } else {
+        console.error("Element with ID 'current-time-display' not found.");
+    }
 }
 
 export function updateDailyHoursDisplay(userId, date) {
