@@ -1,8 +1,10 @@
+// employeeManagement.js
+
 // Function to add a new employee
 export function addEmployee(employee) {
   // Validate employee data
-  if (!employee.name || !employee.email) {
-    throw new Error('Employee name and email are required');
+  if (!employee.name || !employee.email || !employee.state) {
+    throw new Error('Employee name, email, and state are required');
   }
 
   // Add employee to the database or data store
@@ -12,8 +14,8 @@ export function addEmployee(employee) {
 // Function to update an employee
 export function updateEmployee(employee) {
   // Validate employee data
-  if (!employee.id || !employee.name || !employee.email) {
-    throw new Error('Employee ID, name, and email are required');
+  if (!employee.id || !employee.name || !employee.email || !employee.state) {
+    throw new Error('Employee ID, name, email, and state are required');
   }
 
   // Update employee data in the database or data store
