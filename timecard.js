@@ -85,6 +85,17 @@ export async function getTimecard(userId) {
   return timecard;
 }
 
+// Function to get timecard data for a specific date range
+export async function getTimecardForDateRange(userId, startDate, endDate) {
+  const timecardEntries = JSON.parse(localStorage.getItem('timecardEntries')) || [];
+  const timecard = timecardEntries.filter(entry => 
+    entry.userId === userId &&
+    new Date(entry.startTime) >= startDate &&
+    new Date(entry.startTime) <= endDate
+  );
+  return timecard;
+}
+
 // Function to submit timecard
 export async function submitTimecard(userId) {
   // Submit timecard data to the server or perform necessary actions
