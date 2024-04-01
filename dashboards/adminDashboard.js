@@ -7,43 +7,38 @@ import { getJobs, addJob, updateJob, deleteJob } from '../management/jobManageme
 
 // Function to render admin dashboard
 export function renderAdminDashboard() {
-  // Wait for the DOM content to be fully loaded
-  document.addEventListener('DOMContentLoaded', function() {
-    const adminDashboard = document.getElementById('admin-dashboard');
-    if (!adminDashboard) {
-      console.error('Admin dashboard element not found');
-      return;
-    }
+  const adminDashboard = document.getElementById('admin-dashboard');
+  if (!adminDashboard) {
+    console.error('Admin dashboard element not found');
+    return;
+  }
 
-    adminDashboard.innerHTML = `
-      <!-- ... (HTML code for admin dashboard) -->
-    `;
+  adminDashboard.style.display = 'block';
 
-    const user = getUser();
-    fetchEmployees();
-    fetchActivityTypes();
-    fetchJobs();
+  const user = getUser();
+  fetchEmployees();
+  fetchActivityTypes();
+  fetchJobs();
 
-    const createEmployeeForm = document.getElementById('create-employee-form');
-    if (createEmployeeForm) {
-      createEmployeeForm.addEventListener('submit', handleCreateEmployee);
-    }
+  const createEmployeeForm = document.getElementById('create-employee-form');
+  if (createEmployeeForm) {
+    createEmployeeForm.addEventListener('submit', handleCreateEmployee);
+  }
 
-    const createActivityTypeForm = document.getElementById('create-activity-type-form');
-    if (createActivityTypeForm) {
-      createActivityTypeForm.addEventListener('submit', handleCreateActivityType);
-    }
+  const createActivityTypeForm = document.getElementById('create-activity-type-form');
+  if (createActivityTypeForm) {
+    createActivityTypeForm.addEventListener('submit', handleCreateActivityType);
+  }
 
-    const createJobForm = document.getElementById('create-job-form');
-    if (createJobForm) {
-      createJobForm.addEventListener('submit', handleCreateJob);
-    }
+  const createJobForm = document.getElementById('create-job-form');
+  if (createJobForm) {
+    createJobForm.addEventListener('submit', handleCreateJob);
+  }
 
-    const logoutBtn = document.getElementById('admin-logout-btn');
-    if (logoutBtn) {
-      logoutBtn.addEventListener('click', handleLogout);
-    }
-  });
+  const logoutBtn = document.getElementById('admin-logout-btn');
+  if (logoutBtn) {
+    logoutBtn.addEventListener('click', handleLogout);
+  }
 }
 
 // Function to handle logout
@@ -54,7 +49,7 @@ function handleLogout() {
 
 // Function to fetch employees
 function fetchEmployees() {
-  const employeeTableBody = document.querySelector('#employee-table tbody');
+  const employeeTableBody = document.getElementById('employee-table').querySelector('tbody');
   if (!employeeTableBody) {
     console.error('Employee table body not found');
     return;
@@ -78,8 +73,8 @@ function fetchEmployees() {
   });
 
   // Add event listeners for edit and delete buttons
-  const editButtons = document.querySelectorAll('.btn-edit');
-  const deleteButtons = document.querySelectorAll('.btn-delete');
+  const editButtons = employeeTableBody.querySelectorAll('.btn-edit');
+  const deleteButtons = employeeTableBody.querySelectorAll('.btn-delete');
 
   editButtons.forEach(button => {
     button.addEventListener('click', handleEditEmployee);
