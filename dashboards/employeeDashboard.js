@@ -3,15 +3,13 @@
 import { getUser, logout } from '../auth.js';
 import { getActivityTypes } from '../management/activityTypeManagement.js';
 import { getJobs } from '../management/jobManagement.js';
-import { getTimecard, submitTimecard, updateTimecard } from '../timecard.js';
+import { getTimecardForDateRange, submitTimecard, updateTimecard, clockIn, clockOut, startMeal, endMeal } from '../timecard.js';
 import { calculateDailyHours, calculateWeeklyHours } from '../hoursCalculation.js';
 import { getPayPeriodStartDate, getPayPeriodEndDate } from './employeeDashboardModules/timesheetFunctions.js';
 import { Calendar } from './employeeDashboardModules/calendarFunctions.js';
-import { updateCurrentTime, updateTimeClockDisplay } from './employeeDashboardModules/displayFunctions.js';
+import { updateCurrentTime, updateTimeClockDisplay, updateDailyHoursTable, updateWeeklyHoursSummary, displayNotification } from './employeeDashboardModules/displayFunctions.js';
 import { handleDayStatusChange, handleLeaveTypeChange } from './employeeDashboardModules/eventHandlers.js';
 import { validateForm } from './employeeDashboardModules/formValidation.js';
-import { getTimecardForDateRange } from '../timecard.js';
-import { updateDailyHoursTable, updateWeeklyHoursSummary } from './employeeDashboardModules/displayFunctions.js';
 
 const employeeDashboardElements = {
   welcomeMessage: document.getElementById('welcome-message'),
