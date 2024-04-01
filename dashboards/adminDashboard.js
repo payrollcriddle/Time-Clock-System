@@ -165,16 +165,19 @@ function handleCreateEmployee(event) {
 
   const nameInput = document.getElementById('employee-name-input');
   const emailInput = document.getElementById('employee-email-input');
+  const stateInput = document.getElementById('employee-state-input');
 
-  if (nameInput && emailInput) {
+  if (nameInput && emailInput && stateInput) {
     const name = nameInput.value;
     const email = emailInput.value;
+    const state = stateInput.value;
 
-    const newEmployee = addEmployee(name, email);
+    const newEmployee = addEmployee({ name, email, state });
     if (newEmployee) {
       fetchEmployees();
       nameInput.value = '';
       emailInput.value = '';
+      stateInput.value = '';
     }
   }
 }
