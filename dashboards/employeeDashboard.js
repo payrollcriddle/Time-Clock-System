@@ -56,8 +56,8 @@ export function renderEmployeeDashboard() {
     employeeDashboardElements.welcomeMessage.textContent = `Welcome, ${employee.name}!`;
 
     // Show the current date and time
-    const currentTime = updateCurrentTime(employee.state);
-    employeeDashboardElements.currentDateTime.textContent = currentTime;
+    updateCurrentTime(employee.state);
+    setInterval(() => updateCurrentTime(employee.state), 1000);
 
     // Populate the day status dropdown
     const dayStatusOptions = ['Select', 'Working', 'Off', 'Leave'];
@@ -87,20 +87,12 @@ export function renderEmployeeDashboard() {
     employeeDashboardElements.leaveTypeDropdown.addEventListener('change', handleLeaveTypeChange);
 
     // Populate the daily hours table
-    const timecard = getTimecard(employee.id);
     const payPeriodStart = getPayPeriodStartDate(new Date());
     const payPeriodEnd = getPayPeriodEndDate(payPeriodStart);
-    const dailyHours = calculateDailyHours(timecard, payPeriodStart, payPeriodEnd);
-    if (Array.isArray(dailyHours)) {
-      employeeDashboardElements.dailyHoursTable.innerHTML = renderDailyHoursTable(dailyHours);
-    } else {
-      console.warn("dailyHours is not an array:", dailyHours);
-      employeeDashboardElements.dailyHoursTable.innerHTML = "<tr><td colspan='4'>No daily hours data available</td></tr>";
-    }
+    updateDailyHoursTable(employee.id, payPeriodStart, payPeriodEnd);
 
     // Calculate and display the weekly hours summary
-    const weeklyHours = calculateWeeklyHours(dailyHours);
-    employeeDashboardElements.weeklyHoursSummary.innerHTML = renderWeeklyHoursSummary(weeklyHours);
+    updateWeeklyHoursSummary(employee.id, payPeriodStart, payPeriodEnd);
 
     // Handle form submission
     const handleSubmit = (event) => {
@@ -117,7 +109,7 @@ export function renderEmployeeDashboard() {
         };
         updateTimecard(employee.id, updatedTimecard);
         submitTimecard(employee.id);
-        alert('Timecard submitted successfully!');
+        displayNotification('Timecard submitted successfully!');
       }
     };
     employeeDashboardElements.submitButton.addEventListener('click', handleSubmit);
@@ -131,29 +123,37 @@ export function renderEmployeeDashboard() {
 
     // Handle clock in button click
     const handleClockIn = () => {
-      // Implement the clock in functionality
-      console.log("Clocked in");
+      const dayStatus = employeeDashboardElements.dayStatusDropdown.value;
+      const activityTypeId = employeeDashboardElements.activityDropdown.value;
+      const jobId = employeeDashboardElements.jobDropdown.value;
+      const timecardNote = employeeDashboardElements.timecardNoteInput.value;
+      clockIn(employee.id, dayStatus, activityTypeId, jobId, timecardNote, new Date());
+      updateTimeClockDisplay(employee.id);
+      displayNotification('Clocked in successfully!');
     };
     employeeDashboardElements.clockInButton.addEventListener('click', handleClockIn);
 
     // Handle clock out button click
     const handleClockOut = () => {
-      // Implement the clock out functionality
-      console.log("Clocked out");
+      clockOut(employee.id, new Date());
+      updateTimeClockDisplay(employee.id);
+      displayNotification('Clocked out successfully!');
     };
     employeeDashboardElements.clockOutButton.addEventListener('click', handleClockOut);
 
     // Handle meal start button click
     const handleMealStart = () => {
-      // Implement the meal start functionality
-      console.log("Meal started");
+      startMeal(employee.id, new Date());
+      updateTimeClockDisplay(employee.id);
+      displayNotification('Meal started successfully!');
     };
     employeeDashboardElements.mealStartButton.addEventListener('click', handleMealStart);
 
     // Handle meal end button click
     const handleMealEnd = () => {
-      // Implement the meal end functionality
-      console.log("Meal ended");
+      endMeal(employee.id, new Date());
+      updateTimeClockDisplay(employee.id);
+      displayNotification('Meal ended successfully!');
     };
     employeeDashboardElements.mealEndButton.addEventListener('click', handleMealEnd);
 
@@ -167,38 +167,6 @@ export function renderEmployeeDashboard() {
       loginSection.style.display = 'block';
     }
   }
-}
-
-function renderDailyHoursTable(dailyHours) {
-  return `
-    <thead>
-      <tr>
-        <th>Date</th>
-        <th>Hours Worked</th>
-        <th>Leave Hours</th>
-        <th>Meal Period Waived</th>
-      </tr>
-    </thead>
-    <tbody>
-      ${dailyHours.map(day => `
-        <tr>
-          <td>${new Date(day.date).toLocaleDateString()}</td>
-          <td>${day.hoursWorked}</td>
-          <td>${day.leaveHours}</td>
-          <td>${day.mealPeriodWaived ? 'Yes' : 'No'}</td>
-        </tr>
-      `).join('')}
-    </tbody>
-  `;
-}
-
-function renderWeeklyHoursSummary(weeklyHours) {
-  return `
-    <p>Regular Hours: ${weeklyHours.regularHours}</p>
-    <p>Overtime Hours: ${weeklyHours.overtimeHours}</p>
-    <p>Double-time Hours: ${weeklyHours.doubleTimeHours}</p>
-    <p>Total Hours: ${weeklyHours.totalHours}</p>
-  `;
 }
 
 // Render employee dashboard when the page loads
