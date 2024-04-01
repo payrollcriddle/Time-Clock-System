@@ -27,8 +27,13 @@ export function deleteActivityType(activityTypeId) {
 
 // Function to create a new activity type
 export function createActivityType(activityTypeData) {
+  // Validate activity type data
+  if (!activityTypeData.name) {
+    throw new Error('Activity type name is required');
+  }
+
   // Create a new activity type and add it to the database or data store
-  const newActivityType = { id: activityTypes.length + 1, ...activityTypeData };
+  const newActivityType = { id: generateActivityTypeId(), ...activityTypeData };
   activityTypes.push(newActivityType);
   return newActivityType;
 }
@@ -42,5 +47,10 @@ export function updateActivityType(activityTypeId, updatedActivityTypeData) {
     return activityTypes[index];
   }
   return null;
+}
+
+// Function to generate a unique activity type ID
+function generateActivityTypeId() {
+  return '_' + Math.random().toString(36).substr(2, 9);
 }
 
