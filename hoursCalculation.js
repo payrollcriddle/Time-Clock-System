@@ -21,24 +21,28 @@ export function calculateHours(state, timecard) {
   const hourlyRate = timecard.hourlyRate || 0;
 
   switch (state) {
-    case 'California':
-      // Apply California regulations
-      ({ regularHours, overtimeHours, doubleTimeHours } = californiaRegulations(dailyHours, weeklyHours));
-      break;
+case 'California':
+  // Apply California regulations
+  regularHours = californiaRegulations(dailyHours, weeklyHours);
+  ({ overtimeHours, doubleTimeHours } = californiaOvertimeRegulations(dailyHours, weeklyHours));
+  break;
     case 'Colorado':
       // Apply Colorado regulations
-      ({ regularHours, overtimeHours } = coloradoRegulations(dailyHours, weeklyHours));
-      break;
+  regularHours = coloradoRegulations(dailyHours, weeklyHours);
+  ({ overtimeHours, doubleTimeHours } = coloradoOvertimeRegulations(dailyHours, weeklyHours));
+  break;
     case 'Nevada':
       // Apply Nevada regulations
-      ({ regularHours, overtimeHours } = nevadaRegulations(dailyHours, weeklyHours, hourlyRate));
-      break;
+  regularHours = nevadaRegulations(dailyHours, weeklyHours);
+  ({ overtimeHours, doubleTimeHours } = nevadaOvertimeRegulations(dailyHours, weeklyHours));
+  break;
     case 'Oregon':
     case 'Washington':
     case 'Montana':
       // Apply Oregon, Washington, and Montana regulations
-      ({ regularHours, overtimeHours } = oregonRegulations(weeklyHours));
-      break;
+  regularHours = nevadaRegulations(dailyHours, weeklyHours);
+  ({ overtimeHours, doubleTimeHours } = nevadaOvertimeRegulations(dailyHours, weeklyHours));
+  break;
     case 'Wyoming':
     case 'Idaho':
       // Apply Wyoming and Idaho regulations (follow FLSA)
