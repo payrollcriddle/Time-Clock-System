@@ -1,5 +1,3 @@
-// jobManagement.js
-
 // Function to get all jobs from local storage
 export function getJobs() {
   const jobsData = localStorage.getItem('jobs');
@@ -13,6 +11,11 @@ function saveJobs(jobs) {
 
 // Function to add a new job
 export function addJob(job) {
+  // Validate job data
+  if (!job.name || !job.description) {
+    throw new Error('Job name and description are required');
+  }
+
   const jobs = getJobs();
   const newJob = {
     id: generateJobId(),
@@ -27,6 +30,11 @@ export function addJob(job) {
 
 // Function to update an existing job
 export function updateJob(jobId, updatedJob) {
+  // Validate job data
+  if (!jobId || !updatedJob.name || !updatedJob.description) {
+    throw new Error('Job ID, name, and description are required');
+  }
+
   const jobs = getJobs();
   const index = jobs.findIndex(job => job.id === jobId);
   if (index !== -1) {
@@ -39,6 +47,11 @@ export function updateJob(jobId, updatedJob) {
 
 // Function to delete a job
 export function deleteJob(jobId) {
+  // Validate job ID
+  if (!jobId) {
+    throw new Error('Job ID is required');
+  }
+
   const jobs = getJobs();
   const index = jobs.findIndex(job => job.id === jobId);
   if (index !== -1) {
