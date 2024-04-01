@@ -30,7 +30,7 @@ const employeeDashboardElements = {
   calendarContainer: document.getElementById('calendar-container')
 };
 
-export function renderEmployeeDashboard() {
+function renderEmployeeDashboard() {
   const employee = getUser();
   if (employee) {
     // Check if all required DOM elements are found
@@ -125,15 +125,16 @@ export function renderEmployeeDashboard() {
 
     // Render the calendar
     new Calendar(employeeDashboardElements.calendarContainer, payPeriodStart, payPeriodEnd);
-      } else {
-        console.error("User object is null.");
-        // Display the login section if it exists
-        const loginSection = document.getElementById('login-section');
-        if (loginSection) {
-          loginSection.style.display = 'block';
-        }
-      }
-  
+  } else {
+    console.error("User object is null.");
+    // Display the login section if it exists
+    const loginSection = document.getElementById('login-section');
+    if (loginSection) {
+      loginSection.style.display = 'block';
+    }
+  }
+}
+
 function renderDailyHoursTable(dailyHours) {
   return `
     <thead>
@@ -168,4 +169,3 @@ function renderWeeklyHoursSummary(weeklyHours) {
 
 // Render employee dashboard when the page loads
 document.addEventListener('DOMContentLoaded', renderEmployeeDashboard);
-}
