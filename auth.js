@@ -1,5 +1,3 @@
-// auth.js
-
 import { getStates as fetchStates } from './stateConfig.js';
 import { users } from './userData.js';
 
