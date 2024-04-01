@@ -1,5 +1,7 @@
 // employeeManagement.js
 
+import { users } from './userData.js';
+
 // Function to add a new employee
 export function addEmployee(employee) {
   // Validate employee data
@@ -7,8 +9,24 @@ export function addEmployee(employee) {
     throw new Error('Employee name, email, and state are required');
   }
 
-  // Add employee to the database or data store
-  // ...
+  // Generate a new employee ID
+  const newEmployeeId = Math.max(...users.map(user => user.id)) + 1;
+
+  // Create a new employee object
+  const newEmployee = {
+    id: newEmployeeId,
+    username: `employee${newEmployeeId}`,
+    password: `password${newEmployeeId}`,
+    role: 'employee',
+    name: employee.name,
+    email: employee.email,
+    state: employee.state
+  };
+
+  // Add the new employee to the users array
+  users.push(newEmployee);
+
+  return newEmployee;
 }
 
 // Function to update an employee
@@ -18,8 +36,22 @@ export function updateEmployee(employee) {
     throw new Error('Employee ID, name, email, and state are required');
   }
 
-  // Update employee data in the database or data store
-  // ...
+  // Find the index of the employee in the users array
+  const employeeIndex = users.findIndex(user => user.id === employee.id);
+
+  if (employeeIndex !== -1) {
+    // Update the employee data
+    users[employeeIndex] = {
+      ...users[employeeIndex],
+      name: employee.name,
+      email: employee.email,
+      state: employee.state
+    };
+
+    return users[employeeIndex];
+  } else {
+    throw new Error(`Employee with ID ${employee.id} not found`);
+  }
 }
 
 // Function to delete an employee
@@ -29,12 +61,20 @@ export function deleteEmployee(employeeId) {
     throw new Error('Employee ID is required');
   }
 
-  // Delete employee from the database or data store
-  // ...
+  // Find the index of the employee in the users array
+  const employeeIndex = users.findIndex(user => user.id === employeeId);
+
+  if (employeeIndex !== -1) {
+    // Remove the employee from the users array
+    users.splice(employeeIndex, 1);
+    return true;
+  } else {
+    throw new Error(`Employee with ID ${employeeId} not found`);
+  }
 }
 
 // Function to get all employees
 export function getEmployees() {
-  // Retrieve employees from the database or data store
-  // ...
+  // Filter and return only the employee users
+  return users.filter(user => user.role === 'employee');
 }
