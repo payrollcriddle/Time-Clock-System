@@ -10,6 +10,8 @@ import { Calendar } from './employeeDashboardModules/calendarFunctions.js';
 import { updateCurrentTime, updateTimeClockDisplay } from './employeeDashboardModules/displayFunctions.js';
 import { handleDayStatusChange, handleLeaveTypeChange } from './employeeDashboardModules/eventHandlers.js';
 import { validateForm } from './employeeDashboardModules/formValidation.js';
+import { getTimecardForDateRange } from '../timecard.js';
+import { updateDailyHoursTable, updateWeeklyHoursSummary } from './employeeDashboardModules/displayFunctions.js';
 
 const employeeDashboardElements = {
   welcomeMessage: document.getElementById('welcome-message'),
