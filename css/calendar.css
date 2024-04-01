@@ -23,6 +23,7 @@
   text-align: center;
   border-radius: 4px;
   cursor: pointer;
+  border: 1px solid #ccc; /* Add border */
 }
 
 .calendar-day:hover {
@@ -37,4 +38,15 @@
 .pay-period-day {
   background-color: #28a745;
   color: #fff;
+}
+
+/* Additional styling for calendar header */
+.calendar-header {
+  background-color: #f0f0f0;
+  padding: 10px;
+}
+
+.day-of-week {
+  font-weight: bold;
+  text-align: center;
 }
