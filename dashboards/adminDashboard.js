@@ -172,12 +172,17 @@ function handleCreateEmployee(event) {
     const email = emailInput.value;
     const state = stateInput.value;
 
-    const newEmployee = addEmployee({ name, email, state });
-    if (newEmployee) {
-      fetchEmployees();
-      nameInput.value = '';
-      emailInput.value = '';
-      stateInput.value = '';
+    try {
+      const newEmployee = addEmployee({ name, email, state });
+      if (newEmployee) {
+        fetchEmployees();
+        nameInput.value = '';
+        emailInput.value = '';
+        stateInput.value = '';
+      }
+    } catch (error) {
+      console.error('Error adding employee:', error);
+      // Display an error message to the user
     }
   }
 }
@@ -218,13 +223,24 @@ function handleCreateJob(event) {
 
 // Event handler for edit employee button click
 function handleEditEmployee(event) {
-  const employeeId = event.target.dataset.id;
+  const employeeId = Number(event.target.dataset.id);
 
-  // Implement the logic to edit the employee using the employeeId
-  // You can prompt the user for updated employee details and call the updateEmployee function
-  // ...
+  // Prompt the user for updated employee details
+  const name = prompt('Enter the updated employee name:');
+  const email = prompt('Enter the updated employee email:');
+  const state = prompt('Enter the updated employee state:');
 
-  fetchEmployees();
+  if (name && email && state) {
+    try {
+      const updatedEmployee = updateEmployee({ id: employeeId, name, email, state });
+      if (updatedEmployee) {
+        fetchEmployees();
+      }
+    } catch (error) {
+      console.error('Error updating employee:', error);
+      // Display an error message to the user
+    }
+  }
 }
 
 // Event handler for delete employee button click
