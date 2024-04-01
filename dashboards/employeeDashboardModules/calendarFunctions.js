@@ -50,7 +50,7 @@ export class Calendar {
     return calendarHeader;
   }
 
-renderCalendarGrid() {
+  renderCalendarGrid() {
     const calendarGrid = document.createElement('div');
     calendarGrid.classList.add('calendar-grid');
 
