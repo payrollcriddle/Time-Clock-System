@@ -75,19 +75,38 @@ export function calculateHours(state, timecard) {
 
 // Function to calculate daily hours
 export function calculateDailyHours(userId, timecard, startDate, endDate) {
-  // Calculate daily hours based on timecard data for the specified user and date
-  const timecardEntries = JSON.parse(localStorage.getItem('timecardEntries')) || [];
-  const userTimecardEntries = timecardEntries.filter(entry => entry.userId === userId && entry.startTime.includes(date));
+  const dailyHours = [];
 
-  const dailyHours = userTimecardEntries.reduce((total, entry) => {
-    if (entry.endTime) {
-      const startTime = new Date(entry.startTime);
-      const endTime = new Date(entry.endTime);
-      const duration = (endTime - startTime) / 3600000; // Convert milliseconds to hours
-      return total + duration;
-    }
-    return total;
-  }, 0);
+  // Iterate over each date between startDate and endDate
+  const currentDate = new Date(startDate);
+  while (currentDate <= endDate) {
+    const formattedDate = currentDate.toISOString().split('T')[0];
+
+    // Filter timecard entries for the current date and user ID
+    const filteredEntries = timecard.filter(entry => entry.userId === userId && entry.startTime.includes(formattedDate));
+
+    // Calculate total hours for the current date
+    const totalHours = filteredEntries.reduce((total, entry) => {
+      if (entry.endTime) {
+        const startTime = new Date(entry.startTime);
+        const endTime = new Date(entry.endTime);
+        const duration = (endTime - startTime) / 3600000; // Convert milliseconds to hours
+        return total + duration;
+      }
+      return total;
+    }, 0);
+
+    // Add daily hours data to the array
+    dailyHours.push({
+      date: formattedDate,
+      hoursWorked: totalHours,
+      leaveHours: 0, // Add logic to calculate leave hours if applicable
+      mealPeriodWaived: false // Add logic to determine if meal period was waived
+    });
+
+    // Move to the next date
+    currentDate.setDate(currentDate.getDate() + 1);
+  }
 
   return dailyHours;
 }
