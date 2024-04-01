@@ -27,7 +27,11 @@ const employeeDashboardElements = {
   weeklyHoursSummary: document.getElementById('weekly-hours-summary'),
   submitButton: document.getElementById('submit-button'),
   logoutButton: document.getElementById('logout-button'),
-  calendarContainer: document.getElementById('calendar-container')
+  calendarContainer: document.getElementById('calendar-container'),
+  clockInButton: document.getElementById('clock-in-button'),
+  clockOutButton: document.getElementById('clock-out-button'),
+  mealStartButton: document.getElementById('meal-start-button'),
+  mealEndButton: document.getElementById('meal-end-button')
 };
 
 export function renderEmployeeDashboard() {
@@ -41,7 +45,9 @@ export function renderEmployeeDashboard() {
       !employeeDashboardElements.leaveHoursInput || !employeeDashboardElements.timecardNoteInput ||
       !employeeDashboardElements.mealPeriodWaiverCheckbox || !employeeDashboardElements.dailyHoursTable ||
       !employeeDashboardElements.weeklyHoursSummary || !employeeDashboardElements.submitButton ||
-      !employeeDashboardElements.logoutButton || !employeeDashboardElements.calendarContainer) {
+      !employeeDashboardElements.logoutButton || !employeeDashboardElements.calendarContainer ||
+      !employeeDashboardElements.clockInButton || !employeeDashboardElements.clockOutButton ||
+      !employeeDashboardElements.mealStartButton || !employeeDashboardElements.mealEndButton) {
       console.error("Required DOM elements not found.");
       return;
     }
@@ -88,7 +94,7 @@ export function renderEmployeeDashboard() {
     if (Array.isArray(dailyHours)) {
       employeeDashboardElements.dailyHoursTable.innerHTML = renderDailyHoursTable(dailyHours);
     } else {
-      console.error("dailyHours is not an array:", dailyHours);
+      console.warn("dailyHours is not an array:", dailyHours);
       employeeDashboardElements.dailyHoursTable.innerHTML = "<tr><td colspan='4'>No daily hours data available</td></tr>";
     }
 
@@ -122,6 +128,34 @@ export function renderEmployeeDashboard() {
       window.location.href = '/';
     };
     employeeDashboardElements.logoutButton.addEventListener('click', handleLogout);
+
+    // Handle clock in button click
+    const handleClockIn = () => {
+      // Implement the clock in functionality
+      console.log("Clocked in");
+    };
+    employeeDashboardElements.clockInButton.addEventListener('click', handleClockIn);
+
+    // Handle clock out button click
+    const handleClockOut = () => {
+      // Implement the clock out functionality
+      console.log("Clocked out");
+    };
+    employeeDashboardElements.clockOutButton.addEventListener('click', handleClockOut);
+
+    // Handle meal start button click
+    const handleMealStart = () => {
+      // Implement the meal start functionality
+      console.log("Meal started");
+    };
+    employeeDashboardElements.mealStartButton.addEventListener('click', handleMealStart);
+
+    // Handle meal end button click
+    const handleMealEnd = () => {
+      // Implement the meal end functionality
+      console.log("Meal ended");
+    };
+    employeeDashboardElements.mealEndButton.addEventListener('click', handleMealEnd);
 
     // Render the calendar
     new Calendar(employeeDashboardElements.calendarContainer, payPeriodStart, payPeriodEnd);
