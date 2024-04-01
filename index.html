@@ -24,26 +24,39 @@
       </form>
     </main>
 
-    <!-- Employee Dashboard -->
-    <main id="employee-dashboard" class="dashboard" style="display: none;">
-      <h2 id="welcome-message"></h2>
-      <p id="current-date-time"></p>
-      <select id="day-status-dropdown"></select>
-      <div id="time-clock"></div>
-      <select id="activity-dropdown"></select>
-      <select id="job-dropdown"></select>
-      <div id="leave-hours-section">
-        <select id="leave-type-dropdown"></select>
-        <input type="number" id="leave-hours-input" min="0" step="0.5">
-      </div>
-      <textarea id="timecard-note-input"></textarea>
-      <input type="checkbox" id="meal-period-waiver-checkbox">
-      <table id="daily-hours-table"></table>
-      <div id="weekly-hours-summary"></div>
-      <button id="submit-button">Submit</button>
-      <button id="logout-button">Logout</button>
-      <div id="calendar-container"></div>
-    </main>
+<!-- Employee Dashboard -->
+<main id="employee-dashboard" class="dashboard" style="display: none;">
+  <h2 id="welcome-message"></h2>
+  <p id="current-date-time"></p>
+  <div id="time-clock">
+    <p id="current-time-display"></p>
+    <button id="clock-in-button">Clock In</button>
+    <button id="clock-out-button">Clock Out</button>
+    <button id="meal-start-button">Meal Start</button>
+    <button id="meal-end-button">Meal End</button>
+  </div>
+  <label for="day-status-dropdown">Day Status:</label>
+  <select id="day-status-dropdown"></select>
+  <label for="activity-dropdown">Activity:</label>
+  <select id="activity-dropdown"></select>
+  <label for="job-dropdown">Job:</label>
+  <select id="job-dropdown"></select>
+  <div id="leave-hours-section">
+    <label for="leave-type-dropdown">Leave Type:</label>
+    <select id="leave-type-dropdown"></select>
+    <label for="leave-hours-input">Leave Hours:</label>
+    <input type="number" id="leave-hours-input" min="0" step="0.5">
+  </div>
+  <label for="timecard-note-input">Timecard Note:</label>
+  <textarea id="timecard-note-input"></textarea>
+  <label for="meal-period-waiver-checkbox">Meal Period Waiver:</label>
+  <input type="checkbox" id="meal-period-waiver-checkbox">
+  <table id="daily-hours-table"></table>
+  <div id="weekly-hours-summary"></div>
+  <button id="submit-button">Submit</button>
+  <button id="logout-button">Logout</button>
+  <div id="calendar-container"></div>
+</main>
 
     <!-- Supervisor Dashboard -->
     <main id="supervisor-dashboard" class="dashboard" style="display: none;">
