@@ -30,7 +30,7 @@ const employeeDashboardElements = {
   calendarContainer: document.getElementById('calendar-container')
 };
 
-function renderEmployeeDashboard() {
+export function renderEmployeeDashboard() {
   const employee = getUser();
   if (employee) {
     // Check if all required DOM elements are found
