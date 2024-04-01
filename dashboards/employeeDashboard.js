@@ -37,6 +37,7 @@ const employeeDashboardElements = {
 export function renderEmployeeDashboard() {
   const employee = getUser();
   if (employee) {
+    console.log('Employee state:', employee.state);
     // Check if all required DOM elements are found
     if (!employeeDashboardElements.welcomeMessage || !employeeDashboardElements.currentDateTime ||
       !employeeDashboardElements.dayStatusDropdown || !employeeDashboardElements.timeClock ||
