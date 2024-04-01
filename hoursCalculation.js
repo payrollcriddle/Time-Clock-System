@@ -113,19 +113,21 @@ export function calculateDailyHours(userId, timecard, startDate, endDate) {
 
 // Function to calculate weekly hours
 export function calculateWeeklyHours(dailyHours) {
-  // Calculate weekly hours based on timecard data for the specified user
-  const timecardEntries = JSON.parse(localStorage.getItem('timecardEntries')) || [];
-  const userTimecardEntries = timecardEntries.filter(entry => entry.userId === userId);
+  const weeklyHours = {
+    regularHours: 0,
+    overtimeHours: 0,
+    doubleTimeHours: 0,
+    totalHours: 0
+  };
 
-  const weeklyHours = userTimecardEntries.reduce((total, entry) => {
-    if (entry.endTime) {
-      const startTime = new Date(entry.startTime);
-      const endTime = new Date(entry.endTime);
-      const duration = (endTime - startTime) / 3600000; // Convert milliseconds to hours
-      return total + duration;
-    }
-    return total;
-  }, 0);
+  // Sum up the hours from daily hours data
+  dailyHours.forEach(day => {
+    weeklyHours.regularHours += day.hoursWorked;
+    weeklyHours.totalHours += day.hoursWorked;
+  });
+
+  // Apply state-specific regulations to calculate overtime and double-time hours
+  // Add logic based on the state regulations
 
   return weeklyHours;
 }
