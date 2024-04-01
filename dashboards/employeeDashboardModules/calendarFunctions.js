@@ -50,11 +50,13 @@ export class Calendar {
     return calendarHeader;
   }
 
-  renderCalendarGrid() {
+renderCalendarGrid() {
     const calendarGrid = document.createElement('div');
     calendarGrid.classList.add('calendar-grid');
 
     const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+    // Create a row for days of the week
     const daysOfWeekRow = document.createElement('div');
     daysOfWeekRow.classList.add('days-of-week');
     daysOfWeek.forEach(day => {
@@ -75,13 +77,14 @@ export class Calendar {
       weekRow.classList.add('week-row');
 
       for (let j = 0; j < 7; j++) {
+        const dayElement = document.createElement('div');
+        dayElement.classList.add('calendar-day');
+
         if ((i === 0 && j < startDate.getDay()) || dayCount > numDays) {
-          const emptyDayElement = document.createElement('div');
-          emptyDayElement.classList.add('empty-day');
-          weekRow.appendChild(emptyDayElement);
+          // Render empty days for days before the start of the month or after the end of the month
+          dayElement.classList.add('empty-day');
         } else {
-          const dayElement = document.createElement('div');
-          dayElement.classList.add('calendar-day');
+          // Render actual calendar days
           dayElement.textContent = dayCount;
 
           if (this.isCurrentDate(dayCount)) {
@@ -92,9 +95,10 @@ export class Calendar {
             dayElement.classList.add('pay-period-day');
           }
 
-          weekRow.appendChild(dayElement);
           dayCount++;
         }
+
+        weekRow.appendChild(dayElement);
       }
 
       calendarGrid.appendChild(weekRow);
