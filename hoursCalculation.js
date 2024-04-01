@@ -74,7 +74,7 @@ export function calculateHours(state, timecard) {
 }
 
 // Function to calculate daily hours
-export function calculateDailyHours(timecard, startDate, endDate) {
+export function calculateDailyHours(userId, timecard, startDate, endDate) {
   // Calculate daily hours based on timecard data for the specified user and date
   const timecardEntries = JSON.parse(localStorage.getItem('timecardEntries')) || [];
   const userTimecardEntries = timecardEntries.filter(entry => entry.userId === userId && entry.startTime.includes(date));
