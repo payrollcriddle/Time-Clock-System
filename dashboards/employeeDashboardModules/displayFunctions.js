@@ -27,23 +27,51 @@ export function updateCurrentTime(userState) {
     }
 }
 
-export function updateDailyHoursDisplay(userId, date) {
-  const dailyHoursElement = document.getElementById('daily-hours-display');
-  if (dailyHoursElement) {
-    const dailyHours = calculateDailyHours(userId, date.toISOString().split('T')[0]);
-    dailyHoursElement.textContent = `${dailyHours} hours`;
+export function updateDailyHoursTable(userId, startDate, endDate) {
+  const dailyHoursTableBody = document.getElementById('daily-hours-table-body');
+  if (dailyHoursTableBody) {
+    getTimecardForDateRange(userId, startDate, endDate)
+      .then(timecard => {
+        const dailyHours = calculateDailyHours(timecard, startDate, endDate);
+        dailyHoursTableBody.innerHTML = '';
+        dailyHours.forEach(day => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${formatDate(day.date)}</td>
+            <td>${day.hoursWorked}</td>
+            <td>${day.leaveHours || '-'}</td>
+            <td>${day.mealPeriodWaived ? 'Yes' : 'No'}</td>
+          `;
+          dailyHoursTableBody.appendChild(row);
+        });
+      })
+      .catch(error => {
+        console.error('Error updating daily hours table:', error);
+      });
   } else {
-    console.error("Element with ID 'daily-hours-display' not found.");
+    console.error("Element with ID 'daily-hours-table-body' not found.");
   }
 }
 
-export function updateWeeklyHoursDisplay(userId) {
-  const weeklyHoursElement = document.getElementById('weekly-hours-display');
-  if (weeklyHoursElement) {
-    const weeklyHours = calculateWeeklyHours(userId);
-    weeklyHoursElement.textContent = `${weeklyHours} hours`;
+export function updateWeeklyHoursSummary(userId, startDate, endDate) {
+  const weeklyHoursSummaryElement = document.getElementById('weekly-hours-summary');
+  if (weeklyHoursSummaryElement) {
+    getTimecardForDateRange(userId, startDate, endDate)
+      .then(timecard => {
+        const dailyHours = calculateDailyHours(timecard, startDate, endDate);
+        const weeklyHours = calculateWeeklyHours(dailyHours);
+        weeklyHoursSummaryElement.innerHTML = `
+          <p>Regular Hours: ${weeklyHours.regularHours}</p>
+          <p>Overtime Hours: ${weeklyHours.overtimeHours}</p>
+          <p>Double-time Hours: ${weeklyHours.doubleTimeHours}</p>
+          <p>Total Hours: ${weeklyHours.totalHours}</p>
+        `;
+      })
+      .catch(error => {
+        console.error('Error updating weekly hours summary:', error);
+      });
   } else {
-    console.error("Element with ID 'weekly-hours-display' not found.");
+    console.error("Element with ID 'weekly-hours-summary' not found.");
   }
 }
 
