@@ -1,11 +1,11 @@
-import { californiaRegulations } from './stateRegulations/california.js';
-import { coloradoRegulations } from './stateRegulations/colorado.js';
-import { nevadaRegulations } from './stateRegulations/nevada.js';
-import { oregonRegulations } from './stateRegulations/oregon.js';
-import { washingtonRegulations } from './stateRegulations/washington.js';
-import { montanaRegulations } from './stateRegulations/montana.js';
-import { wyomingRegulations } from './stateRegulations/wyoming.js';
-import { idahoRegulations } from './stateRegulations/idaho.js';
+import { californiaRegulations, californiaOvertimeRegulations } from './stateRegulations/california.js';
+import { coloradoRegulations, coloradoOvertimeRegulations } from './stateRegulations/colorado.js';
+import { nevadaRegulations, nevadaOvertimeRegulations } from './stateRegulations/nevada.js';
+import { oregonRegulations, oregonOvertimeRegulations } from './stateRegulations/oregon.js';
+import { washingtonRegulations, washingtonOvertimeRegulations } from './stateRegulations/washington.js';
+import { montanaRegulations, montanaOvertimeRegulations } from './stateRegulations/montana.js';
+import { wyomingRegulations, wyomingOvertimeRegulations } from './stateRegulations/wyoming.js';
+import { idahoRegulations, idahoOvertimeRegulations } from './stateRegulations/idaho.js';
 
 // Function to calculate hours based on state regulations
 export function calculateHours(state, timecard) {
@@ -21,32 +21,45 @@ export function calculateHours(state, timecard) {
   const hourlyRate = timecard.hourlyRate || 0;
 
   switch (state) {
-case 'California':
-  // Apply California regulations
-  regularHours = californiaRegulations(dailyHours, weeklyHours);
-  ({ overtimeHours, doubleTimeHours } = californiaOvertimeRegulations(dailyHours, weeklyHours));
-  break;
+    case 'California':
+      // Apply California regulations
+      regularHours = californiaRegulations(dailyHours, weeklyHours);
+      ({ overtimeHours, doubleTimeHours } = californiaOvertimeRegulations(dailyHours, weeklyHours));
+      break;
     case 'Colorado':
       // Apply Colorado regulations
-  regularHours = coloradoRegulations(dailyHours, weeklyHours);
-  ({ overtimeHours, doubleTimeHours } = coloradoOvertimeRegulations(dailyHours, weeklyHours));
-  break;
+      regularHours = coloradoRegulations(dailyHours, weeklyHours);
+      ({ overtimeHours, doubleTimeHours } = coloradoOvertimeRegulations(dailyHours, weeklyHours));
+      break;
     case 'Nevada':
       // Apply Nevada regulations
-  regularHours = nevadaRegulations(dailyHours, weeklyHours);
-  ({ overtimeHours, doubleTimeHours } = nevadaOvertimeRegulations(dailyHours, weeklyHours));
-  break;
+      regularHours = nevadaRegulations(dailyHours, weeklyHours);
+      ({ overtimeHours, doubleTimeHours } = nevadaOvertimeRegulations(dailyHours, weeklyHours));
+      break;
     case 'Oregon':
+      // Apply Oregon regulations
+      regularHours = oregonRegulations(dailyHours, weeklyHours);
+      ({ overtimeHours, doubleTimeHours } = oregonOvertimeRegulations(dailyHours, weeklyHours));
+      break;
     case 'Washington':
+      // Apply Washington regulations
+      regularHours = washingtonRegulations(dailyHours, weeklyHours);
+      ({ overtimeHours, doubleTimeHours } = washingtonOvertimeRegulations(dailyHours, weeklyHours));
+      break;
     case 'Montana':
-      // Apply Oregon, Washington, and Montana regulations
-  regularHours = nevadaRegulations(dailyHours, weeklyHours);
-  ({ overtimeHours, doubleTimeHours } = nevadaOvertimeRegulations(dailyHours, weeklyHours));
-  break;
+      // Apply Montana regulations
+      regularHours = montanaRegulations(dailyHours, weeklyHours);
+      ({ overtimeHours, doubleTimeHours } = montanaOvertimeRegulations(dailyHours, weeklyHours));
+      break;
     case 'Wyoming':
+      // Apply Wyoming regulations
+      regularHours = wyomingRegulations(dailyHours, weeklyHours);
+      ({ overtimeHours, doubleTimeHours } = wyomingOvertimeRegulations(dailyHours, weeklyHours));
+      break;
     case 'Idaho':
-      // Apply Wyoming and Idaho regulations (follow FLSA)
-      ({ regularHours, overtimeHours } = wyomingRegulations(weeklyHours));
+      // Apply Idaho regulations
+      regularHours = idahoRegulations(dailyHours, weeklyHours);
+      ({ overtimeHours, doubleTimeHours } = idahoOvertimeRegulations(dailyHours, weeklyHours));
       break;
     default:
       // Default labor regulations (follow FLSA)
@@ -61,7 +74,7 @@ case 'California':
 }
 
 // Function to calculate daily hours
-export function calculateDailyHours(userId, date) {
+export function calculateDailyHours(timecard, startDate, endDate) {
   // Calculate daily hours based on timecard data for the specified user and date
   const timecardEntries = JSON.parse(localStorage.getItem('timecardEntries')) || [];
   const userTimecardEntries = timecardEntries.filter(entry => entry.userId === userId && entry.startTime.includes(date));
@@ -80,7 +93,7 @@ export function calculateDailyHours(userId, date) {
 }
 
 // Function to calculate weekly hours
-export function calculateWeeklyHours(userId) {
+export function calculateWeeklyHours(dailyHours) {
   // Calculate weekly hours based on timecard data for the specified user
   const timecardEntries = JSON.parse(localStorage.getItem('timecardEntries')) || [];
   const userTimecardEntries = timecardEntries.filter(entry => entry.userId === userId);
