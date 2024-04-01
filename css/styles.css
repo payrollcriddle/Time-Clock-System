@@ -2,9 +2,9 @@
 
 @import "base.css";
 @import "buttons.css";
-@import "forms.css";
-@import "dashboard.css";
 @import "calendar.css";
+@import "dashboard.css";
+@import "forms.css";
 @import "timeclock.css";
 @import "utilities.css";
 
