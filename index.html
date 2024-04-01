@@ -68,11 +68,74 @@
       <button id="supervisor-logout-btn" class="btn logout-btn">Logout</button>
     </main>
 
-    <!-- Admin Dashboard -->
-    <main id="admin-dashboard" class="dashboard" style="display: none;">
-      <!-- ... -->
-      <button id="admin-logout-btn" class="btn logout-btn">Logout</button>
-    </main>
+<!-- Admin Dashboard -->
+<main id="admin-dashboard" class="dashboard" style="display: none;">
+  <h2>Admin Dashboard</h2>
+  
+  <!-- Employee Management -->
+  <section id="employee-management">
+    <h3>Employee Management</h3>
+    <form id="create-employee-form">
+      <input type="text" id="employee-name-input" placeholder="Employee Name" required>
+      <input type="email" id="employee-email-input" placeholder="Email Address" required>
+      <button type="submit" class="btn">Create Employee</button>
+    </form>
+    <table id="employee-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Employee data will be dynamically populated here -->
+      </tbody>
+    </table>
+  </section>
+
+  <!-- Activity Type Management -->
+  <section id="activity-type-management">
+    <h3>Activity Type Management</h3>
+    <form id="create-activity-type-form">
+      <input type="text" id="activity-type-name-input" placeholder="Activity Type Name" required>
+      <button type="submit" class="btn">Create Activity Type</button>
+    </form>
+    <table id="activity-type-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Activity type data will be dynamically populated here -->
+      </tbody>
+    </table>
+  </section>
+
+  <!-- Job Management -->
+  <section id="job-management">
+    <h3>Job Management</h3>
+    <form id="create-job-form">
+      <input type="text" id="job-name-input" placeholder="Job Name" required>
+      <button type="submit" class="btn">Create Job</button>
+    </form>
+    <table id="job-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Job data will be dynamically populated here -->
+      </tbody>
+    </table>
+  </section>
+
+  <button id="admin-logout-btn" class="btn logout-btn">Logout</button>
+</main>
 
     <footer>
       <p>&copy; 2024 payrollcriddle's Time Clock System. All rights reserved.</p>
