@@ -52,19 +52,6 @@ export function renderEmployeeDashboard() {
       console.error("Required DOM elements not found.");
       return;
     }
-
-    const EMPLOYEES_KEY = 'employees';
-
-export function getEmployees() {
-  return getData(EMPLOYEES_KEY) || [];
-}
-
-export function addEmployee(employee) {
-  const employees = getEmployees();
-  employees.push(employee);
-  saveData(EMPLOYEES_KEY, employees);
-  return employee;
-}
     
     // Render welcome message
     employeeDashboardElements.welcomeMessage.textContent = `Welcome, ${employee.name}!`;
@@ -132,41 +119,41 @@ export function addEmployee(employee) {
     };
     employeeDashboardElements.logoutButton.addEventListener('click', handleLogout);
 
-// Handle clock in button click
-const handleClockIn = () => {
-  const dayStatus = employeeDashboardElements.dayStatusDropdown.value;
-  const activityTypeId = employeeDashboardElements.activityDropdown.value;
-  const jobId = employeeDashboardElements.jobDropdown.value;
-  const timecardNote = employeeDashboardElements.timecardNoteInput.value;
-  clockIn(employee.id, dayStatus, activityTypeId, jobId, timecardNote, new Date());
-  updateTimeClockDisplay(employee.id);
-  displayNotification('Clocked in successfully!');
-};
-employeeDashboardElements.clockInButton.addEventListener('click', handleClockIn);
+    // Handle clock in button click
+    const handleClockIn = () => {
+      const dayStatus = employeeDashboardElements.dayStatusDropdown.value;
+      const activityTypeId = employeeDashboardElements.activityDropdown.value;
+      const jobId = employeeDashboardElements.jobDropdown.value;
+      const timecardNote = employeeDashboardElements.timecardNoteInput.value;
+      clockIn(employee.id, dayStatus, activityTypeId, jobId, timecardNote, new Date());
+      updateTimeClockDisplay(employee.id);
+      displayNotification('Clocked in successfully!');
+    };
+    employeeDashboardElements.clockInButton.addEventListener('click', handleClockIn);
 
-// Handle clock out button click
-const handleClockOut = () => {
-  clockOut(employee.id, new Date());
-  updateTimeClockDisplay(employee.id);
-  displayNotification('Clocked out successfully!');
-};
-employeeDashboardElements.clockOutButton.addEventListener('click', handleClockOut);
+    // Handle clock out button click
+    const handleClockOut = () => {
+      clockOut(employee.id, new Date());
+      updateTimeClockDisplay(employee.id);
+      displayNotification('Clocked out successfully!');
+    };
+    employeeDashboardElements.clockOutButton.addEventListener('click', handleClockOut);
 
-// Handle meal start button click
-const handleMealStart = () => {
-  startMeal(employee.id, 'meal', new Date());
-  updateTimeClockDisplay(employee.id);
-  displayNotification('Meal started successfully!');
-};
-employeeDashboardElements.mealStartButton.addEventListener('click', handleMealStart);
+    // Handle meal start button click
+    const handleMealStart = () => {
+      startMeal(employee.id, new Date());
+      updateTimeClockDisplay(employee.id);
+      displayNotification('Meal started successfully!');
+    };
+    employeeDashboardElements.mealStartButton.addEventListener('click', handleMealStart);
 
-// Handle meal end button click
-const handleMealEnd = () => {
-  endMeal(employee.id, 'meal', new Date());
-  updateTimeClockDisplay(employee.id);
-  displayNotification('Meal ended successfully!');
-};
-employeeDashboardElements.mealEndButton.addEventListener('click', handleMealEnd);
+    // Handle meal end button click
+    const handleMealEnd = () => {
+      endMeal(employee.id, new Date());
+      updateTimeClockDisplay(employee.id);
+      displayNotification('Meal ended successfully!');
+    };
+    employeeDashboardElements.mealEndButton.addEventListener('click', handleMealEnd);
 
     // Render the calendar
     new Calendar(employeeDashboardElements.calendarContainer, payPeriodStart, payPeriodEnd);
@@ -182,7 +169,7 @@ employeeDashboardElements.mealEndButton.addEventListener('click', handleMealEnd)
       employeeDashboardElements.timecardNoteInput.value = savedTimecard.timecardNote;
       employeeDashboardElements.mealPeriodWaiverCheckbox.checked = savedTimecard.mealPeriodWaived;
     }
-  } else {    
+  } else {
     console.error("User object is null.");
     // Display the login section if it exists
     const loginSection = document.getElementById('login-section');
