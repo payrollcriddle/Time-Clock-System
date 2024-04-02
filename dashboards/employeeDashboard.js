@@ -10,7 +10,7 @@ import { Calendar } from './employeeDashboardModules/calendarFunctions.js';
 import { initializeTimeClockDisplay, updateDailyHoursTable, updateWeeklyHoursSummary, displayNotification } from './employeeDashboardModules/displayFunctions.js';
 import { handleDayStatusChange, handleLeaveTypeChange } from './employeeDashboardModules/eventHandlers.js';
 import { validateForm } from './employeeDashboardModules/formValidation.js';
-import { saveData, getData } from './dataStorage.js';
+import { saveData, getData } from '../dataStorage.js';
 
 const employeeDashboardElements = {
   welcomeMessage: document.getElementById('welcome-message'),
@@ -119,6 +119,7 @@ export function addEmployee(employee) {
         updateTimecard(employee.id, updatedTimecard);
         submitTimecard(employee.id);
         displayNotification('Timecard submitted successfully!');
+        saveData('timecard', updatedTimecard); // Save timecard data to local storage
       }
     };
     employeeDashboardElements.submitButton.addEventListener('click', handleSubmit);
@@ -126,6 +127,7 @@ export function addEmployee(employee) {
     // Handle logout
     const handleLogout = () => {
       logout();
+      saveData('timecard', null); // Clear timecard data from local storage on logout
       window.location.href = '/';
     };
     employeeDashboardElements.logoutButton.addEventListener('click', handleLogout);
@@ -168,7 +170,19 @@ employeeDashboardElements.mealEndButton.addEventListener('click', handleMealEnd)
 
     // Render the calendar
     new Calendar(employeeDashboardElements.calendarContainer, payPeriodStart, payPeriodEnd);
-  } else {
+    
+    // Load timecard data from local storage if available
+    const savedTimecard = getData('timecard');
+    if (savedTimecard) {
+      employeeDashboardElements.dayStatusDropdown.value = savedTimecard.dayStatus;
+      employeeDashboardElements.activityDropdown.value = savedTimecard.activityType;
+      employeeDashboardElements.jobDropdown.value = savedTimecard.job;
+      employeeDashboardElements.leaveTypeDropdown.value = savedTimecard.leaveType;
+      employeeDashboardElements.leaveHoursInput.value = savedTimecard.leaveHours;
+      employeeDashboardElements.timecardNoteInput.value = savedTimecard.timecardNote;
+      employeeDashboardElements.mealPeriodWaiverCheckbox.checked = savedTimecard.mealPeriodWaived;
+    }
+  } else {    
     console.error("User object is null.");
     // Display the login section if it exists
     const loginSection = document.getElementById('login-section');
