@@ -7,19 +7,19 @@
 }
 
 .calendar-header {
-  background-color: transparent;
+  background-color: #f0f0f0;
   color: #333;
-  padding: 0;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: none;
-  margin-bottom: 10px;
+  padding: 10px 0;
+  text-align: center;
+  display: block; /* Change from flex to block for centering the title */
+  border-bottom: 1px solid #ccc; /* Restored border */
+  margin-bottom: 5px;
 }
 
 .calendar-title {
-  font-size: 18px;
+  font-size: 24px; /* Made it larger for the header */
   font-weight: bold;
+  text-transform: uppercase; /* Optional: Style preference */
 }
 
 .prev-month-button,
@@ -34,19 +34,15 @@
 .calendar-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 1px;
-  padding: 0;
+  gap: 1px; /* Smaller gap for a tighter grid look */
 }
 
 .days-of-week {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  background-color: transparent;
+  background-color: #e0e0e0; /* Different background for day headers */
+  color: #333;
   padding: 5px 0;
   text-align: center;
   font-weight: bold;
-  border-bottom: 1px solid #ccc;
-  margin-bottom: 5px;
 }
 
 .day-of-week {
@@ -55,16 +51,15 @@
 
 .calendar-day {
   background-color: #fff;
-  padding: 5px;
-  text-align: right;
-  padding-right: 5px;
-  border: 1px solid #ccc;
+  text-align: center; /* Center the numbers */
+  padding: 20px 0; /* More padding for a larger box */
+  border: 1px solid #ccc; /* Solid border for each day */
   font-size: 14px;
   color: #333;
-  min-height: 30px;
+  min-height: 30px; /* Ensure there's enough space for the numbers */
   display: flex;
-  justify-content: flex-end;
-  align-items: flex-end;
+  justify-content: center; /* Center content horizontally */
+  align-items: center; /* Center content vertically */
 }
 
 .calendar-day:hover {
