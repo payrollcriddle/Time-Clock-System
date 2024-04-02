@@ -9,10 +9,11 @@
 .calendar-header {
   background-color: #f0f0f0;
   color: #333;
-  padding: 10px 0;
-  text-align: center;
-  display: block; /* Change from flex to block for centering the title */
-  border-bottom: 1px solid #ccc; /* Restored border */
+  padding: 10px;
+  display: flex; /* Changed to flex for horizontal alignment */
+  justify-content: space-between; /* Aligns items on the left and right ends */
+  align-items: center; /* Centers items vertically */
+  border-bottom: 1px solid #ccc;
   margin-bottom: 5px;
 }
 
@@ -24,6 +25,7 @@
 
 .prev-month-button,
 .next-month-button {
+  padding: 5px; /* Add padding for better clickability */
   background: none;
   border: none;
   color: #333;
