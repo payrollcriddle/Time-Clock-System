@@ -1,30 +1,22 @@
 // displayFunctions.js
 
 import { calculateDailyHours, calculateWeeklyHours } from '../../hoursCalculation.js';
-import { getTimecard, getTimecardForDateRange } from '../../timecard.js';
+import { getTimecardForDateRange } from '../../timecard.js';
 import { stateTimeZones } from '../../config/stateTimeZones.js';
 
-// Ensures functions are called after the DOM is fully loaded
-document.addEventListener('DOMContentLoaded', () => {
-    // Place any code here that can execute after DOM is ready
-    // For example, initialize UI components or display the current time
-    // updateCurrentTime('California'); // Uncomment and replace 'California' with dynamic user state if available on load
-});
+export function initializeTimeClockDisplay(state) {
+  const currentTimeElement = document.getElementById('current-time-display');
+  if (currentTimeElement) {
+    const updateTime = () => {
+      const currentTime = getCurrentTimeForState(state);
+      currentTimeElement.textContent = currentTime;
+    };
 
-// This function might be called after dynamic content loading, e.g., upon user login
-export function initializeDynamicContent(userState) {
-    updateCurrentTime(userState);
-    // Add calls to other functions that depend on dynamically loaded content here
-}
-
-export function updateCurrentTime(userState) {
-    const currentTimeElement = document.getElementById('current-time-display');
-    if (currentTimeElement) {
-        const currentTime = getCurrentTimeForState(userState);
-        currentTimeElement.textContent = currentTime;
-    } else {
-        console.error("Element with ID 'current-time-display' not found.");
-    }
+    updateTime();
+    setInterval(updateTime, 1000);
+  } else {
+    console.error("Element with ID 'current-time-display' not found.");
+  }
 }
 
 export function updateDailyHoursTable(userId, startDate, endDate) {
@@ -32,7 +24,7 @@ export function updateDailyHoursTable(userId, startDate, endDate) {
   if (dailyHoursTableBody) {
     getTimecardForDateRange(userId, startDate, endDate)
       .then(timecard => {
-        const dailyHours = calculateDailyHours(timecard, startDate, endDate);
+        const dailyHours = calculateDailyHours(userId, timecard, startDate, endDate);
         dailyHoursTableBody.innerHTML = '';
         dailyHours.forEach(day => {
           const row = document.createElement('tr');
@@ -58,7 +50,7 @@ export function updateWeeklyHoursSummary(userId, startDate, endDate) {
   if (weeklyHoursSummaryElement) {
     getTimecardForDateRange(userId, startDate, endDate)
       .then(timecard => {
-        const dailyHours = calculateDailyHours(timecard, startDate, endDate);
+        const dailyHours = calculateDailyHours(userId, timecard, startDate, endDate);
         const weeklyHours = calculateWeeklyHours(dailyHours);
         weeklyHoursSummaryElement.innerHTML = `
           <p>Regular Hours: ${weeklyHours.regularHours}</p>
@@ -119,20 +111,6 @@ export function displayNotification(message) {
     }, 3000);
   } else {
     console.error("Element with ID 'notification' not found.");
-  }
-}
-
-export function updateEmployeeList(employees) {
-  const employeeListElement = document.getElementById('employee-list');
-  if (employeeListElement) {
-    employeeListElement.innerHTML = '';
-    employees.forEach(employee => {
-      const listItem = document.createElement('li');
-      listItem.textContent = employee.name;
-      employeeListElement.appendChild(listItem);
-    });
-  } else {
-    console.error("Element with ID 'employee-list' not found.");
   }
 }
 
