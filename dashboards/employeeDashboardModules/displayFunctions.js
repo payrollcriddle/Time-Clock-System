@@ -137,9 +137,9 @@ export function updateEmployeeList(employees) {
 }
 
 // Function to get current time adjusted for state time zone
-function getCurrentTimeForState(state) {
+export function getCurrentTimeForState(state) {
   const currentTime = new Date();
   const offset = stateTimeZones[state] || 0;
   const adjustedTime = new Date(currentTime.getTime() + offset * 60 * 60 * 1000);
-  return adjustedTime.toLocaleTimeString();
+  return adjustedTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
 }
