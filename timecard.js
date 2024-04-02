@@ -10,8 +10,8 @@ export function clockIn(userId, dayStatus, activityTypeId, jobId, timecardNote, 
     activityTypeId,
     jobId,
     timecardNote,
-    startTime: timestamp,
-    endTime: null,
+    clockInTime: timestamp,
+    clockOutTime: null,
     status: 'pending', // Set initial status as "pending"
   };
 
@@ -38,10 +38,10 @@ export async function saveTimecardEntry(entry) {
 export function clockOut(userId, timestamp) {
   // Record clock out entry in the database or data store
   const timecardEntries = JSON.parse(localStorage.getItem('timecardEntries')) || [];
-  const lastEntry = timecardEntries.find(entry => entry.userId === userId && !entry.endTime);
+  const lastEntry = timecardEntries.find(entry => entry.userId === userId && !entry.clockOutTime);
 
   if (lastEntry) {
-    lastEntry.endTime = timestamp;
+    lastEntry.clockOutTime = timestamp;
     localStorage.setItem('timecardEntries', JSON.stringify(timecardEntries));
     console.log(`Clocked out at ${new Date(timestamp).toLocaleString()}`);
   }
@@ -54,8 +54,8 @@ export function startMeal(userId, timestamp) {
     id: generateEntryId(), // Generate a unique ID for the entry
     userId,
     activityTypeId: 'meal',
-    startTime: timestamp,
-    endTime: null,
+    mealStartTime: timestamp,
+    mealEndTime: null,
     status: 'pending', // Set initial status as "pending"
   };
 
@@ -67,10 +67,10 @@ export function startMeal(userId, timestamp) {
 export function endMeal(userId, timestamp) {
   // Record meal end entry in the database or data store
   const timecardEntries = JSON.parse(localStorage.getItem('timecardEntries')) || [];
-  const lastEntry = timecardEntries.find(entry => entry.userId === userId && entry.activityTypeId === 'meal' && !entry.endTime);
+  const lastEntry = timecardEntries.find(entry => entry.userId === userId && entry.activityTypeId === 'meal' && !entry.mealEndTime);
 
   if (lastEntry) {
-    lastEntry.endTime = timestamp;
+    lastEntry.mealEndTime = timestamp;
     localStorage.setItem('timecardEntries', JSON.stringify(timecardEntries));
     console.log(`Meal ended at ${new Date(timestamp).toLocaleString()}`);
   }
@@ -90,8 +90,8 @@ export async function getTimecardForDateRange(userId, startDate, endDate) {
   const timecardEntries = JSON.parse(localStorage.getItem('timecardEntries')) || [];
   const timecard = timecardEntries.filter(entry => 
     entry.userId === userId &&
-    new Date(entry.startTime) >= startDate &&
-    new Date(entry.startTime) <= endDate
+    new Date(entry.clockInTime) >= startDate &&
+    new Date(entry.clockInTime) <= endDate
   );
   return timecard;
 }
