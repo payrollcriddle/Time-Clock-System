@@ -162,15 +162,19 @@
   <!-- Include the Calendar class script -->
     <script src="path/to/calendarFunctions.js"></script>
 
-    <!-- Instantiate the Calendar -->
-    <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const calendarEl = document.getElementById('calendar'); // The ID of your calendar container
-        const payPeriodStartDate = new Date(/* Your start date */);
-        const payPeriodEndDate = new Date(/* Your end date */);
-        new Calendar(calendarEl, payPeriodStartDate, payPeriodEndDate);
+  <!-- Initialize the Calendar -->
+  <script type="module">
+    import { Calendar } from './path/to/calendarFunctions.js';
+    
+    window.addEventListener('DOMContentLoaded', () => {
+      const calendarContainer = document.getElementById('calendar-container');
+      const payPeriodStartDate = new Date(/* logic to determine start date */);
+      const payPeriodEndDate = new Date(/* logic to determine end date */);
+      
+      if (calendarContainer) {
+        new Calendar(calendarContainer, payPeriodStartDate, payPeriodEndDate);
+      }
     });
-    </script>
-
+  </script>
 </body>
 </html>
