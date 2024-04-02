@@ -1,6 +1,6 @@
 // formValidation.js
 
-import { getMealPeriodPolicy } from '../mealPeriodPolicies/mealPeriodPolicyUtils.js';
+import { getMealPeriodPolicy } from '../../mealPeriodPolicies/mealPeriodPolicyUtils.js';
 
 export function validateForm(userId, dailyTimecard) {
   const dayStatusDropdown = document.getElementById('day-status-dropdown');
