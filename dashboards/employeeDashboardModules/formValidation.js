@@ -18,6 +18,7 @@ export function validateForm() {
       alert('Please select an activity.');
       return false;
     }
+
     if (jobDropdown.value === '') {
       alert('Please select a job.');
       return false;
@@ -29,17 +30,23 @@ export function validateForm() {
       alert('Please select a leave type.');
       return false;
     }
+
     if (leaveHoursInput.value === '') {
       alert('Please enter leave hours.');
       return false;
     }
+
+    const leaveHours = parseFloat(leaveHoursInput.value);
+    if (isNaN(leaveHours) || leaveHours <= 0) {
+      alert('Please enter a valid number for leave hours.');
+      return false;
+    }
   }
 
-  if (timecardNoteInput.value === '') {
+  if (timecardNoteInput.value.trim() === '') {
     alert('Please enter a timecard note.');
     return false;
   }
 
   return true;
 }
-
