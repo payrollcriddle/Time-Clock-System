@@ -4,6 +4,7 @@ import { isAuthenticated, getUser, login, logout } from './auth.js';
 import { renderEmployeeDashboard } from './dashboards/employeeDashboard.js';
 import { renderSupervisorDashboard } from './dashboards/supervisorDashboard.js';
 import { renderAdminDashboard } from './dashboards/adminDashboard.js';
+import { Calendar } from './calendarFunctions.js';
 
 const loginSection = document.getElementById('login-section');
 const employeeDashboard = document.getElementById('employee-dashboard');
@@ -50,8 +51,10 @@ function handleLoginFormSubmit(event) {
   const password = document.getElementById('password').value;
   console.log('Username:', username);
   console.log('Password:', password);
+
   const userRole = login(username, password);
   console.log('User role after login:', userRole);
+
   if (userRole) {
     renderDashboard(userRole);
   } else {
@@ -95,6 +98,18 @@ function initializeApp() {
   } else {
     console.log('User not authenticated');
     renderDashboard(null);
+  }
+
+  // Calendar updates
+  const calendarContainer = document.getElementById('calendar-container');
+  const currentDate = new Date();
+  const payPeriodStartDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+  const payPeriodEndDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
+
+  if (calendarContainer) {
+    new Calendar(calendarContainer, payPeriodStartDate, payPeriodEndDate);
+  } else {
+    console.error('Calendar container not found');
   }
 }
 
