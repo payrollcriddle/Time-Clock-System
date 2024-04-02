@@ -7,7 +7,7 @@ import { getTimecardForDateRange, submitTimecard, updateTimecard, clockIn, clock
 import { calculateDailyHours, calculateWeeklyHours } from '../hoursCalculation.js';
 import { getPayPeriodStartDate, getPayPeriodEndDate } from './employeeDashboardModules/timesheetFunctions.js';
 import { Calendar } from './employeeDashboardModules/calendarFunctions.js';
-import { updateCurrentTime, updateTimeClockDisplay, updateDailyHoursTable, updateWeeklyHoursSummary, displayNotification } from './employeeDashboardModules/displayFunctions.js';
+import { initializeTimeClockDisplay, updateDailyHoursTable, updateWeeklyHoursSummary, displayNotification } from './employeeDashboardModules/displayFunctions.js';
 import { handleDayStatusChange, handleLeaveTypeChange } from './employeeDashboardModules/eventHandlers.js';
 import { validateForm } from './employeeDashboardModules/formValidation.js';
 
@@ -37,7 +37,6 @@ const employeeDashboardElements = {
 export function renderEmployeeDashboard() {
   const employee = getUser();
   if (employee) {
-    console.log('Employee state:', employee.state);
     // Check if all required DOM elements are found
     if (!employeeDashboardElements.welcomeMessage || !employeeDashboardElements.currentDateTime ||
       !employeeDashboardElements.dayStatusDropdown || !employeeDashboardElements.timeClock ||
@@ -56,16 +55,12 @@ export function renderEmployeeDashboard() {
     // Render welcome message
     employeeDashboardElements.welcomeMessage.textContent = `Welcome, ${employee.name}!`;
 
-    // Show the current date and time
-    updateCurrentTime(employee.state);
-    setInterval(() => updateCurrentTime(employee.state), 1000);
+    // Initialize the time clock display
+    initializeTimeClockDisplay(employee.state);
 
     // Populate the day status dropdown
     const dayStatusOptions = ['Select', 'Working', 'Off', 'Leave'];
     employeeDashboardElements.dayStatusDropdown.innerHTML = dayStatusOptions.map(option => `<option value="${option}">${option}</option>`).join('');
-
-    // Initialize the time clock display
-    initializeTimeClockDisplay(employee.state);
 
     // Populate the activity and job dropdowns
     const activityTypes = getActivityTypes();
