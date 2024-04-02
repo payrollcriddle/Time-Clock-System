@@ -1,8 +1,8 @@
-// timesheetFunctions.js
-
 export function getPayPeriodStartDate(currentDate) {
     const currentDay = currentDate.getDay(); // Get the day of the week (0-6)
-    const daysToSubtract = (currentDay + 6) % 7; // Calculate the number of days to subtract to get to the previous Monday
+    // Calculate the number of days to subtract to get to the previous Monday
+    // Adjusting by an additional 7 days to account for the off-by-one-week error
+    const daysToSubtract = (currentDay + 6) % 7 + 7; 
 
     const payPeriodStartDate = new Date(currentDate);
     payPeriodStartDate.setDate(currentDate.getDate() - daysToSubtract);
