@@ -1,91 +1,60 @@
 .calendar {
-  margin-bottom: 20px;
-  background-color: #fff;
-  border: 1px solid #ccc;
   font-family: Arial, sans-serif;
-  padding: 10px;
+  max-width: 600px;
+  margin: 0 auto;
 }
 
 .calendar-header {
-  background-color: #f0f0f0;
-  color: #333;
-  padding: 10px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid #ccc;
-  margin-bottom: 5px;
+  margin-bottom: 10px;
 }
 
 .calendar-title {
   font-size: 24px;
   font-weight: bold;
-  text-transform: uppercase;
 }
 
 .prev-month-button,
 .next-month-button {
-  padding: 5px;
   background: none;
   border: none;
-  color: #333;
-  font-size: 16px;
+  font-size: 18px;
   cursor: pointer;
 }
 
-.calendar-grid {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 1px;
+.calendar-table {
+  width: 100%;
+  border-collapse: collapse;
 }
 
-.days-of-week {
-  background-color: #e0e0e0;
-  color: #333;
-  padding: 5px 0;
+.calendar-table th,
+.calendar-table td {
+  padding: 10px;
   text-align: center;
+  border: 1px solid #ccc;
+}
+
+.calendar-table th {
+  background-color: #f0f0f0;
   font-weight: bold;
 }
 
-.day-of-week {
-  color: #333;
-}
-
 .calendar-day {
-  background-color: #fff;
-  text-align: center;
-  padding: 20px 0;
-  border: 1px solid #ccc;
-  font-size: 14px;
-  color: #333;
-  min-height: 30px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  cursor: pointer;
 }
 
 .calendar-day:hover {
   background-color: #f2f2f2;
 }
 
-.empty-day {
-  background-color: #f9f9f9;
-  border: none;
-}
-
 .current-day {
   background-color: #e0e0e0;
-  color: #333;
   font-weight: bold;
 }
 
 .pay-period-day {
   background-color: #d4ebf2;
-  color: #333;
   font-weight: bold;
-}
-
-.week-row {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
 }
