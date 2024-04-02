@@ -10,22 +10,22 @@
   background-color: #f0f0f0;
   color: #333;
   padding: 10px;
-  display: flex; /* Changed to flex for horizontal alignment */
-  justify-content: space-between; /* Aligns items on the left and right ends */
-  align-items: center; /* Centers items vertically */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   border-bottom: 1px solid #ccc;
   margin-bottom: 5px;
 }
 
 .calendar-title {
-  font-size: 24px; /* Made it larger for the header */
+  font-size: 24px;
   font-weight: bold;
-  text-transform: uppercase; /* Optional: Style preference */
+  text-transform: uppercase;
 }
 
 .prev-month-button,
 .next-month-button {
-  padding: 5px; /* Add padding for better clickability */
+  padding: 5px;
   background: none;
   border: none;
   color: #333;
@@ -36,11 +36,11 @@
 .calendar-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 1px; /* Smaller gap for a tighter grid look */
+  gap: 1px;
 }
 
 .days-of-week {
-  background-color: #e0e0e0; /* Different background for day headers */
+  background-color: #e0e0e0;
   color: #333;
   padding: 5px 0;
   text-align: center;
@@ -53,15 +53,15 @@
 
 .calendar-day {
   background-color: #fff;
-  text-align: center; /* Center the numbers */
-  padding: 20px 0; /* More padding for a larger box */
-  border: 1px solid #ccc; /* Solid border for each day */
+  text-align: center;
+  padding: 20px 0;
+  border: 1px solid #ccc;
   font-size: 14px;
   color: #333;
-  min-height: 30px; /* Ensure there's enough space for the numbers */
+  min-height: 30px;
   display: flex;
-  justify-content: center; /* Center content horizontally */
-  align-items: center; /* Center content vertically */
+  justify-content: center;
+  align-items: center;
 }
 
 .calendar-day:hover {
@@ -69,18 +69,18 @@
 }
 
 .empty-day {
-  background-color: #fff;
+  background-color: #f9f9f9;
   border: none;
 }
 
 .current-day {
-  background-color: transparent;
+  background-color: #e0e0e0;
   color: #333;
   font-weight: bold;
 }
 
 .pay-period-day {
-  background-color: transparent;
+  background-color: #d4ebf2;
   color: #333;
   font-weight: bold;
 }
