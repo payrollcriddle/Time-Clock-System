@@ -159,18 +159,27 @@
   <!-- Include app.js -->
   <script type="module" src="app.js"></script>
     
+<!-- Import modules and initialize calendar -->
 <script type="module">
+  // Import the Calendar class and functions from your modules
   import { Calendar } from './dashboards/employeeDashboardModules/calendarFunctions.js';
-  import { getPayPeriodStartDate, getPayPeriodEndDate } from './dashboards/employeeDashboardModules/timesheetFunctions.js'; // Update the path to where timesheetFunctions.js is located
+  import { getPayPeriodStartDate, getPayPeriodEndDate } from './dashboards/employeeDashboardModules/timesheetFunctions.js';
   
   window.addEventListener('DOMContentLoaded', () => {
+    // Get the container where the calendar will be rendered
     const calendarContainer = document.getElementById('calendar-container');
-    const currentDate = new Date(); // Use the current date or another date if needed
+    
+    // Determine the current date and calculate pay period start and end dates
+    const currentDate = new Date(); // or your logic to find the current date
     const payPeriodStartDate = getPayPeriodStartDate(currentDate);
     const payPeriodEndDate = getPayPeriodEndDate(payPeriodStartDate);
     
+    // Check if the calendar container is found in the DOM
     if (calendarContainer) {
+      // Initialize the calendar with the pay period dates
       new Calendar(calendarContainer, payPeriodStartDate, payPeriodEndDate);
+    } else {
+      console.error('Calendar container not found');
     }
   });
 </script>
