@@ -1,5 +1,5 @@
 import { getStates as fetchStates } from './stateConfig.js';
-import { users } from './userData.js';
+import { users, getUserById } from './userData.js';
 
 export function login(username, password) {
   const user = users.find(user => user.username === username);
