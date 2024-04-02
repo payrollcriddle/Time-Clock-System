@@ -1,6 +1,8 @@
 // formValidation.js
 
-export function validateForm() {
+import { getMealPeriodPolicy } from './mealPeriodPolicies/mealPeriodPolicyUtils.js';
+
+export function validateForm(userId, dailyTimecard) {
   const dayStatusDropdown = document.getElementById('day-status-dropdown');
   const activityDropdown = document.getElementById('activity-dropdown');
   const jobDropdown = document.getElementById('job-dropdown');
@@ -18,6 +20,7 @@ export function validateForm() {
       alert('Please select an activity.');
       return false;
     }
+
     if (jobDropdown.value === '') {
       alert('Please select a job.');
       return false;
@@ -29,15 +32,27 @@ export function validateForm() {
       alert('Please select a leave type.');
       return false;
     }
+
     if (leaveHoursInput.value === '') {
       alert('Please enter leave hours.');
       return false;
     }
   }
 
-  if (timecardNoteInput.value === '') {
-    alert('Please enter a timecard note.');
-    return false;
+  const state = getUserState(userId);
+  const mealPeriodPolicy = getMealPeriodPolicy(state);
+
+  if (mealPeriodPolicy) {
+    const { shouldPromptForMealPeriodWaiver } = mealPeriodPolicy;
+
+    if (shouldPromptForMealPeriodWaiver(dailyTimecard)) {
+      const mealPeriodWaiverCheckbox = document.getElementById('meal-period-waiver-checkbox');
+
+      if (!mealPeriodWaiverCheckbox.checked) {
+        alert('Please select the meal period waiver checkbox.');
+        return false;
+      }
+    }
   }
 
   return true;
