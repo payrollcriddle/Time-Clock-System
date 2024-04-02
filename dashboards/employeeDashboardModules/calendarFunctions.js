@@ -1,5 +1,3 @@
-// calendarFunctions.js
-
 export class Calendar {
   constructor(calendarElement, payPeriodStartDate, payPeriodEndDate) {
     this.calendarElement = calendarElement;
@@ -19,10 +17,10 @@ export class Calendar {
     this.calendarElement.innerHTML = '';
 
     const calendarHeader = this.renderCalendarHeader();
-    const calendarGrid = this.renderCalendarGrid();
+    const calendarTable = this.renderCalendarTable();
 
     this.calendarElement.appendChild(calendarHeader);
-    this.calendarElement.appendChild(calendarGrid);
+    this.calendarElement.appendChild(calendarTable);
   }
 
   renderCalendarHeader() {
@@ -50,22 +48,36 @@ export class Calendar {
     return calendarHeader;
   }
 
-  renderCalendarGrid() {
-    const calendarGrid = document.createElement('div');
-    calendarGrid.classList.add('calendar-grid');
+  renderCalendarTable() {
+    const calendarTable = document.createElement('table');
+    calendarTable.classList.add('calendar-table');
 
-    const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    const calendarHeader = this.renderCalendarTableHeader();
+    const calendarBody = this.renderCalendarTableBody();
 
-    // Create a row for days of the week
-    const daysOfWeekRow = document.createElement('div');
-    daysOfWeekRow.classList.add('days-of-week');
+    calendarTable.appendChild(calendarHeader);
+    calendarTable.appendChild(calendarBody);
+
+    return calendarTable;
+  }
+
+  renderCalendarTableHeader() {
+    const calendarHeader = document.createElement('thead');
+    const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+    const headerRow = document.createElement('tr');
     daysOfWeek.forEach(day => {
-      const dayElement = document.createElement('div');
-      dayElement.classList.add('day-of-week');
-      dayElement.textContent = day;
-      daysOfWeekRow.appendChild(dayElement);
+      const th = document.createElement('th');
+      th.textContent = day;
+      headerRow.appendChild(th);
     });
-    calendarGrid.appendChild(daysOfWeekRow);
+
+    calendarHeader.appendChild(headerRow);
+    return calendarHeader;
+  }
+
+  renderCalendarTableBody() {
+    const calendarBody = document.createElement('tbody');
 
     const startDate = new Date(this.currentDate.getFullYear(), this.currentDate.getMonth(), 1);
     const endDate = new Date(this.currentDate.getFullYear(), this.currentDate.getMonth() + 1, 0);
@@ -73,38 +85,35 @@ export class Calendar {
 
     let dayCount = 1;
     for (let i = 0; i < 6; i++) {
-      const weekRow = document.createElement('div');
-      weekRow.classList.add('week-row');
+      const weekRow = document.createElement('tr');
 
       for (let j = 0; j < 7; j++) {
-        const dayElement = document.createElement('div');
-        dayElement.classList.add('calendar-day');
+        const dayCell = document.createElement('td');
+        dayCell.classList.add('calendar-day');
 
         if ((i === 0 && j < startDate.getDay()) || dayCount > numDays) {
-          // Render empty days for days before the start of the month or after the end of the month
-          dayElement.classList.add('empty-day');
+          dayCell.textContent = '';
         } else {
-          // Render actual calendar days
-          dayElement.textContent = dayCount;
+          dayCell.textContent = dayCount;
 
           if (this.isCurrentDate(dayCount)) {
-            dayElement.classList.add('current-day');
+            dayCell.classList.add('current-day');
           }
 
           if (this.isPayPeriodDay(dayCount)) {
-            dayElement.classList.add('pay-period-day');
+            dayCell.classList.add('pay-period-day');
           }
 
           dayCount++;
         }
 
-        weekRow.appendChild(dayElement);
+        weekRow.appendChild(dayCell);
       }
 
-      calendarGrid.appendChild(weekRow);
+      calendarBody.appendChild(weekRow);
     }
 
-    return calendarGrid;
+    return calendarBody;
   }
 
   getCalendarTitle() {
@@ -137,13 +146,10 @@ export class Calendar {
   }
 
   addEventListeners() {
-    // Add any necessary event listeners here
-    // For example, you can add click events to calendar days
     const calendarDays = this.calendarElement.querySelectorAll('.calendar-day');
     calendarDays.forEach(day => {
       day.addEventListener('click', () => {
         console.log('Clicked on day:', day.textContent);
-        // Handle the click event based on your requirements
       });
     });
   }
