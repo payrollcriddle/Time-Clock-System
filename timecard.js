@@ -161,5 +161,3 @@ export async function rejectTimecardEntry(entryId) {
   });
   localStorage.setItem('timecardEntries', JSON.stringify(updatedEntries));
 }
-
-export { getTimecardForDateRange, submitTimecard };
