@@ -3,6 +3,6 @@ export const montanaPolicy = {
   waivable: false,
 
   shouldPromptForMealPeriodWaiver: function(dailyTimecard) {
-    return false; // Meal periods are not waivable in Montana
+    return false;
   }
 };
