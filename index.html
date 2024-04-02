@@ -159,14 +159,15 @@
   <!-- Include app.js -->
   <script type="module" src="app.js"></script>
     
-<!-- Initialize the Calendar -->
 <script type="module">
-  import { Calendar } from 'dashboards/employeeDashboardModules/calendarFunctions.js'; // Updated path
+  import { Calendar } from 'dashboards/employeeDashboardModules/calendarFunctions.js';
+  import { getPayPeriodStartDate, getPayPeriodEndDate } from 'dashboards/employeeDashboardModules/timesheetFunctions.js'; // Update the path to where timesheetFunctions.js is located
   
   window.addEventListener('DOMContentLoaded', () => {
     const calendarContainer = document.getElementById('calendar-container');
-    const payPeriodStartDate = new Date(/* logic to determine start date */);
-    const payPeriodEndDate = new Date(/* logic to determine end date */);
+    const currentDate = new Date(); // Use the current date or another date if needed
+    const payPeriodStartDate = getPayPeriodStartDate(currentDate);
+    const payPeriodEndDate = getPayPeriodEndDate(payPeriodStartDate);
     
     if (calendarContainer) {
       new Calendar(calendarContainer, payPeriodStartDate, payPeriodEndDate);
