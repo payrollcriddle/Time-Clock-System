@@ -10,6 +10,7 @@ import { Calendar } from './employeeDashboardModules/calendarFunctions.js';
 import { initializeTimeClockDisplay, updateDailyHoursTable, updateWeeklyHoursSummary, displayNotification } from './employeeDashboardModules/displayFunctions.js';
 import { handleDayStatusChange, handleLeaveTypeChange } from './employeeDashboardModules/eventHandlers.js';
 import { validateForm } from './employeeDashboardModules/formValidation.js';
+import { saveData, getData } from './dataStorage.js';
 
 const employeeDashboardElements = {
   welcomeMessage: document.getElementById('welcome-message'),
@@ -52,6 +53,19 @@ export function renderEmployeeDashboard() {
       return;
     }
 
+    const EMPLOYEES_KEY = 'employees';
+
+export function getEmployees() {
+  return getData(EMPLOYEES_KEY) || [];
+}
+
+export function addEmployee(employee) {
+  const employees = getEmployees();
+  employees.push(employee);
+  saveData(EMPLOYEES_KEY, employees);
+  return employee;
+}
+    
     // Render welcome message
     employeeDashboardElements.welcomeMessage.textContent = `Welcome, ${employee.name}!`;
 
