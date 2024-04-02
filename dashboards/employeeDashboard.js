@@ -64,9 +64,8 @@ export function renderEmployeeDashboard() {
     const dayStatusOptions = ['Select', 'Working', 'Off', 'Leave'];
     employeeDashboardElements.dayStatusDropdown.innerHTML = dayStatusOptions.map(option => `<option value="${option}">${option}</option>`).join('');
 
-    // Initialize the time clock
-    updateTimeClockDisplay(employee.id);
-    setInterval(() => updateTimeClockDisplay(employee.id), 1000);
+    // Initialize the time clock display
+    initializeTimeClockDisplay(employee.state);
 
     // Populate the activity and job dropdowns
     const activityTypes = getActivityTypes();
