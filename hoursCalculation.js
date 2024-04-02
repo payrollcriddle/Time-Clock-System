@@ -1,3 +1,5 @@
+// hoursCalculation.js
+
 import { californiaRegulations, californiaOvertimeRegulations } from './stateRegulations/california.js';
 import { coloradoRegulations, coloradoOvertimeRegulations } from './stateRegulations/colorado.js';
 import { nevadaRegulations, nevadaOvertimeRegulations } from './stateRegulations/nevada.js';
@@ -85,22 +87,29 @@ export function calculateDailyHours(userId, timecard, startDate, endDate) {
     // Filter timecard entries for the current date and user ID
     const filteredEntries = timecard.filter(entry => entry.userId === userId && entry.startTime.includes(formattedDate));
 
-    // Calculate total hours for the current date
-    const totalHours = filteredEntries.reduce((total, entry) => {
+    // Calculate total working hours and meal period hours for the current date
+    let totalWorkingHours = 0;
+    let totalMealPeriodHours = 0;
+    filteredEntries.forEach(entry => {
       if (entry.endTime) {
         const startTime = new Date(entry.startTime);
         const endTime = new Date(entry.endTime);
         const duration = (endTime - startTime) / 3600000; // Convert milliseconds to hours
-        return total + duration;
+
+        if (entry.activityTypeId === 'meal') {
+          totalMealPeriodHours += duration;
+        } else {
+          totalWorkingHours += duration;
+        }
       }
-      return total;
-    }, 0);
+    });
 
     // Add daily hours data to the array
     dailyHours.push({
       date: formattedDate,
-      hoursWorked: totalHours,
+      hoursWorked: totalWorkingHours,
       leaveHours: 0, // Add logic to calculate leave hours if applicable
+      mealPeriodHours: totalMealPeriodHours,
       mealPeriodWaived: false // Add logic to determine if meal period was waived
     });
 
@@ -117,13 +126,15 @@ export function calculateWeeklyHours(dailyHours) {
     regularHours: 0,
     overtimeHours: 0,
     doubleTimeHours: 0,
-    totalHours: 0
+    totalWorkingHours: 0,
+    totalMealPeriodHours: 0
   };
 
   // Sum up the hours from daily hours data
   dailyHours.forEach(day => {
     weeklyHours.regularHours += day.hoursWorked;
-    weeklyHours.totalHours += day.hoursWorked;
+    weeklyHours.totalWorkingHours += day.hoursWorked;
+    weeklyHours.totalMealPeriodHours += day.mealPeriodHours;
   });
 
   // Apply state-specific regulations to calculate overtime and double-time hours
