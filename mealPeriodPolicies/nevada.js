@@ -1,21 +1,6 @@
-import { calculateTotalHours } from './mealPeriodPolicyUtils.js';
-
+// mealPeriodPolicies/nevada.js
 export const nevadaPolicy = {
   mealPeriodDuration: 30,
   mealPeriodThreshold: 8,
   waivable: true,
-
-  shouldPromptForMealPeriodWaiver: function(dailyTimecard) {
-    const totalHours = calculateTotalHours(dailyTimecard);
-
-    if (totalHours > this.mealPeriodThreshold) {
-      const hasTakenMealPeriod = dailyTimecard.some(entry => entry.activityTypeId === 'meal');
-
-      if (!hasTakenMealPeriod) {
-        return true;
-      }
-    }
-
-    return false;
-  }
 };
