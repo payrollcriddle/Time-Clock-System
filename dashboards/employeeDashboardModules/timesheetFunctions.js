@@ -1,11 +1,19 @@
 export function getPayPeriodStartDate(currentDate) {
-    const currentDay = currentDate.getDay(); // Get the day of the week (0-6)
-    // Calculate the number of days to subtract to get to the previous Monday
-    // Adjusting by an additional 7 days to account for the off-by-one-week error
-    const daysToSubtract = (currentDay + 6) % 7 + 7; 
+    // Reference start date for pay periods (March 25th, 2024)
+    const referenceStartDate = new Date('2024-03-25');
+    const oneDay = 24 * 60 * 60 * 1000; // milliseconds in one day
+    const difference = currentDate - referenceStartDate;
 
-    const payPeriodStartDate = new Date(currentDate);
-    payPeriodStartDate.setDate(currentDate.getDate() - daysToSubtract);
+    // Calculate the number of fortnights (two-week periods) since the reference start date
+    const fortnightsSinceReference = Math.floor(difference / (14 * oneDay));
+
+    // Calculate the start date of the current pay period
+    const payPeriodStartDate = new Date(referenceStartDate.getTime() + fortnightsSinceReference * 14 * oneDay);
+
+    // If the current date is before the start date of the current pay period, move back one pay period
+    if (currentDate < payPeriodStartDate) {
+        payPeriodStartDate.setTime(payPeriodStartDate.getTime() - 14 * oneDay);
+    }
 
     return payPeriodStartDate;
 }
@@ -13,6 +21,5 @@ export function getPayPeriodStartDate(currentDate) {
 export function getPayPeriodEndDate(startDate) {
     const payPeriodEndDate = new Date(startDate);
     payPeriodEndDate.setDate(startDate.getDate() + 13); // Add 13 days to the start date to get the end date (14 days total)
-
     return payPeriodEndDate;
 }
