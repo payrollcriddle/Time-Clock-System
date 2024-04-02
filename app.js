@@ -4,7 +4,7 @@ import { isAuthenticated, getUser, login, logout } from './auth.js';
 import { renderEmployeeDashboard } from './dashboards/employeeDashboard.js';
 import { renderSupervisorDashboard } from './dashboards/supervisorDashboard.js';
 import { renderAdminDashboard } from './dashboards/adminDashboard.js';
-import { Calendar } from './calendarFunctions.js';
+import { Calendar } from './dashboards/employeeDashboardModules/calendarFunctions.js';
 
 const loginSection = document.getElementById('login-section');
 const employeeDashboard = document.getElementById('employee-dashboard');
