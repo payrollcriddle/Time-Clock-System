@@ -1,11 +1,11 @@
-import { californiaRegulations, californiaOvertimeRegulations } from './stateRegulations/california.js';
-import { coloradoRegulations, coloradoOvertimeRegulations } from './stateRegulations/colorado.js';
-import { nevadaRegulations, nevadaOvertimeRegulations } from './stateRegulations/nevada.js';
-import { oregonRegulations, oregonOvertimeRegulations } from './stateRegulations/oregon.js';
-import { washingtonRegulations, washingtonOvertimeRegulations } from './stateRegulations/washington.js';
-import { montanaRegulations, montanaOvertimeRegulations } from './stateRegulations/montana.js';
-import { wyomingRegulations, wyomingOvertimeRegulations } from './stateRegulations/wyoming.js';
-import { idahoRegulations, idahoOvertimeRegulations } from './stateRegulations/idaho.js';
+import { californiaRegulations, californiaOvertimeRegulations } from 'stateRegulations/california.js';
+import { coloradoRegulations, coloradoOvertimeRegulations } from 'stateRegulations/colorado.js';
+import { nevadaRegulations, nevadaOvertimeRegulations } from 'stateRegulations/nevada.js';
+import { oregonRegulations, oregonOvertimeRegulations } from 'stateRegulations/oregon.js';
+import { washingtonRegulations, washingtonOvertimeRegulations } from 'stateRegulations/washington.js';
+import { montanaRegulations, montanaOvertimeRegulations } from 'stateRegulations/montana.js';
+import { wyomingRegulations, wyomingOvertimeRegulations } from 'stateRegulations/wyoming.js';
+import { idahoRegulations, idahoOvertimeRegulations } from 'stateRegulations/idaho.js';
 
 // Function to calculate hours based on state regulations
 export function calculateHours(state, timecard) {
