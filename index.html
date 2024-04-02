@@ -159,22 +159,19 @@
   <!-- Include app.js -->
   <script type="module" src="app.js"></script>
     
-  <!-- Include the Calendar class script -->
-    <script src="path/to/calendarFunctions.js"></script>
-
-  <!-- Initialize the Calendar -->
-  <script type="module">
-    import { Calendar } from './path/to/calendarFunctions.js';
+<!-- Initialize the Calendar -->
+<script type="module">
+  import { Calendar } from 'dashboards/employeeDashboardModules/calendarFunctions.js'; // Updated path
+  
+  window.addEventListener('DOMContentLoaded', () => {
+    const calendarContainer = document.getElementById('calendar-container');
+    const payPeriodStartDate = new Date(/* logic to determine start date */);
+    const payPeriodEndDate = new Date(/* logic to determine end date */);
     
-    window.addEventListener('DOMContentLoaded', () => {
-      const calendarContainer = document.getElementById('calendar-container');
-      const payPeriodStartDate = new Date(/* logic to determine start date */);
-      const payPeriodEndDate = new Date(/* logic to determine end date */);
-      
-      if (calendarContainer) {
-        new Calendar(calendarContainer, payPeriodStartDate, payPeriodEndDate);
-      }
-    });
-  </script>
+    if (calendarContainer) {
+      new Calendar(calendarContainer, payPeriodStartDate, payPeriodEndDate);
+    }
+  });
+</script>
 </body>
 </html>
