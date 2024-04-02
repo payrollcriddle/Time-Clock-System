@@ -31,6 +31,7 @@ export function updateDailyHoursTable(userId, startDate, endDate) {
           row.innerHTML = `
             <td>${formatDate(day.date)}</td>
             <td>${day.hoursWorked}</td>
+            <td>${day.mealPeriodHours}</td>
             <td>${day.leaveHours || '-'}</td>
             <td>${day.mealPeriodWaived ? 'Yes' : 'No'}</td>
           `;
@@ -56,6 +57,8 @@ export function updateWeeklyHoursSummary(userId, startDate, endDate) {
           <p>Regular Hours: ${weeklyHours.regularHours}</p>
           <p>Overtime Hours: ${weeklyHours.overtimeHours}</p>
           <p>Double-time Hours: ${weeklyHours.doubleTimeHours}</p>
+          <p>Total Working Hours: ${weeklyHours.totalWorkingHours}</p>
+          <p>Total Meal Period Hours: ${weeklyHours.totalMealPeriodHours}</p>
           <p>Total Hours: ${weeklyHours.totalHours}</p>
         `;
       })
@@ -67,34 +70,7 @@ export function updateWeeklyHoursSummary(userId, startDate, endDate) {
   }
 }
 
-export function updateTimeClockDisplay(userId) {
-  const timecard = getTimecard(userId);
-  const timeclockElement = document.getElementById('time-clock');
-  if (timeclockElement) {
-    if (timecard && timecard.entries) {
-      const lastEntry = timecard.entries[timecard.entries.length - 1];
-      const clockInTime = lastEntry.startTime ? formatDateTime(lastEntry.startTime) : '-';
-      const clockOutTime = lastEntry.endTime ? formatDateTime(lastEntry.endTime) : '-';
-      const mealStartTime = lastEntry.activityTypeId === 'meal' && lastEntry.startTime ? formatDateTime(lastEntry.startTime) : '-';
-      const mealEndTime = lastEntry.activityTypeId === 'meal' && lastEntry.endTime ? formatDateTime(lastEntry.endTime) : '-';
-      timeclockElement.innerHTML = `
-        <p>Clock In: ${clockInTime}</p>
-        <p>Clock Out: ${clockOutTime}</p>
-        <p>Meal Start: ${mealStartTime}</p>
-        <p>Meal End: ${mealEndTime}</p>
-      `;
-    } else {
-      timeclockElement.innerHTML = `
-        <p>Clock In: -</p>
-        <p>Clock Out: -</p>
-        <p>Meal Start: -</p>
-        <p>Meal End: -</p>
-      `;
-    }
-  } else {
-    console.error("Element with ID 'time-clock' not found.");
-  }
-}
+// Rest of the code remains the same...
 
 export function formatDateTime(dateTimeString) {
   const dateTime = new Date(dateTimeString);
